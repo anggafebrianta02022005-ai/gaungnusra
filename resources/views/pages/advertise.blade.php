@@ -278,7 +278,7 @@
             <div class="border-t border-slate-200 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
                 <p class="text-sm text-slate-500 font-medium">&copy; {{ date('Y') }} {{ $company->name ?? 'Gaung Nusra' }}. All rights reserved.</p>
                 <div class="flex items-center gap-1 text-xs text-slate-400">
-                    <span>Made with <i class="ph-fill ph-heart text-red-400 mx-0.5"></i> by Angga Febrianta</span>
+                    <span>Dibuat Oleh Udayana Digital Data</span>
                 </div>
             </div>
         </div>

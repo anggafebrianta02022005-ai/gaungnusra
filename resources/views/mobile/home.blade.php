@@ -198,7 +198,7 @@
 
     </main>
 
-    <footer class="bg-brand-misty pt-10 pb-8 border-t border-slate-200 mt-8">
+   <footer class="bg-brand-misty pt-10 pb-8 border-t border-slate-200 mt-8">
         <div class="container mx-auto px-6">
             
             <div class="text-center mb-8">
@@ -209,8 +209,6 @@
                         <h2 class="font-display font-extrabold text-xl text-brand-dark">GAUNG<span class="text-brand-red">NUSRA</span></h2>
                     @endif
                 </div>
-                <p class="text-slate-500 text-xs leading-relaxed max-w-xs mx-auto mb-4">
-                    {{ $company->description ? Str::limit(strip_tags($company->description), 100) : 'Informasi terkini.' }}
                 </p>
                 <div class="flex justify-center gap-3">
                     <a href="#" class="w-8 h-8 rounded-lg bg-white shadow-sm border border-slate-100 flex items-center justify-center text-slate-400 hover:bg-brand-red hover:text-white transition-all"><i class="ph-fill ph-instagram-logo text-lg"></i></a>
@@ -239,7 +237,7 @@
                     <div>
                         <h3 class="font-display font-bold text-brand-dark mb-3 text-xs tracking-wide uppercase">Layanan</h3>
                         <ul class="space-y-2 text-slate-500 text-xs font-medium">
-     <li><a href="{{ route('pages.advertise') }}" class="hover:text-brand-red transition-colors">Pasang Iklan</a></li>
+                             <li><a href="{{ route('pages.advertise') }}" class="hover:text-brand-red transition-colors">Pasang Iklan</a></li>
                             
                         </ul>
                     </div>
@@ -251,7 +249,7 @@
                     &copy; {{ date('Y') }} {{ $company->name ?? 'Gaung Nusra' }}. All rights reserved.
                 </p>
                 <div class="mt-1 text-[10px] text-slate-400">
-                    Made with Angga Febrianta
+                    Dibuat Oleh Udayana Digital Data
                 </div>
             </div>
 

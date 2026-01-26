@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#F1F5F9">
     <meta name="description" content="{{ $company->description ?? 'Portal Berita Terkini' }}">
     
-    <title>{{ $company->name ?? 'Portal Berita' }} - Terkini & Terpercaya</title>
+    <title>{{ $company->name ?? 'Portal Berita' }} </title>
     
     <link rel="icon" type="image/png" href="{{ asset('gaungnusra.png') }}?v=3">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -221,7 +221,7 @@
         </div>
     </main>
 
-    <footer class="bg-brand-misty border-t border-slate-200 pt-20 pb-10 mt-20 animate-fade-in-up" style="animation-delay: 0.5s;">
+<footer class="bg-brand-misty border-t border-slate-200 pt-20 pb-10 mt-20 animate-fade-in-up" style="animation-delay: 0.5s;">
         <div class="container mx-auto px-4 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
                 
@@ -272,7 +272,7 @@
             <div class="border-t border-slate-200 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
                 <p class="text-sm text-slate-500 font-medium">&copy; {{ date('Y') }} {{ $company->name ?? 'Gaung Nusra' }}. All rights reserved.</p>
                 <div class="flex items-center gap-1 text-xs text-slate-400">
-                    <span>Made with <i class="ph-fill ph-heart text-red-400 mx-0.5"></i> by Angga Febrianta</span>
+                    <span>Dibuat Oleh Udayana Digital Data</span>
                 </div>
             </div>
         </div>

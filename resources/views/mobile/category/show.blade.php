@@ -217,7 +217,7 @@
                     &copy; {{ date('Y') }} {{ $company->name ?? 'Gaung Nusra' }}. All rights reserved.
                 </p>
                 <div class="mt-1 text-[10px] text-slate-400">
-                    Made with Angga Febrianta
+                    Dibuat Oleh Udayana Digital Data
                 </div>
             </div>
 
