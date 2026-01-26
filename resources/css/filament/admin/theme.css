@@ -1,0 +1,70 @@
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+@config '../../../../tailwind.config.js';
+
+/* === TEMA V1.5 "GARUDA HORIZON" === */
+
+/* 1. GLOBAL & FONT */
+.fi-body {
+    background-color: #f8fafc !important;
+    background-image: linear-gradient(180deg, #eef2ff 0%, #f8fafc 400px) !important;
+    font-family: 'Outfit', sans-serif !important; /* Font Baru */
+}
+
+/* 2. SIDEBAR GLASSMORPHISM (Efek Kaca) */
+.fi-sidebar {
+    background-color: rgba(255, 255, 255, 0.7) !important;
+    backdrop-filter: blur(20px);
+    border-right: 1px solid rgba(255, 255, 255, 0.5) !important;
+    box-shadow: 20px 0 40px -10px rgba(0,0,0,0.03) !important;
+}
+
+.fi-brand {
+    font-weight: 800 !important;
+    letter-spacing: 1px !important;
+    color: #4338ca !important;
+    text-transform: uppercase;
+}
+
+/* 3. MENU NAVIGASI (Pill Style) */
+.fi-sidebar-item {
+    margin: 6px 16px;
+    border-radius: 50px !important; /* Membulat penuh */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fi-sidebar-item:hover {
+    background: linear-gradient(90deg, #e0e7ff 0%, transparent 100%) !important;
+    transform: translateX(5px);
+}
+
+.fi-sidebar-item-active {
+    background: #4f46e5 !important; /* Solid Indigo */
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3) !important;
+}
+
+.fi-sidebar-item-active span,
+.fi-sidebar-item-active svg {
+    color: 4f46e5 !important;
+    font-weight: 600 !important;
+}
+
+/* 4. KARTU WIDGET (Clean & Pop) */
+.fi-wi-stats-overview-stat,
+.fi-wi-chart,
+.fi-wi-table {
+    background: white !important;
+    border-radius: 20px !important;
+    border: 1px solid #f1f5f9 !important;
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05) !important;
+}
+
+.fi-wi-stats-overview-stat:hover {
+    transform: translateY(-5px);
+    border-color: #c7d2fe !important;
+}
+
+/* 5. JUDUL WIDGET (Heading) */
+h3, .fi-header-heading {
+    color: #1e293b !important;
+    font-weight: 700 !important;
+}       
