@@ -110,19 +110,19 @@
     </nav>
 
     <div class="bg-white border-b border-slate-100 animate-fade-in-up" style="animation-delay: 0.2s;">
-    <div class="container mx-auto px-4 lg:px-8 py-6 flex flex-col items-center">
-    @if($headerAd && $headerAd->image)
-        <a href="{{ $headerAd->link ?? '#' }}" target="_blank" class="relative group block w-fit mx-auto rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-500 hover:-translate-y-1">
-            
-            <div class="absolute top-0 right-0 bg-brand-misty text-slate-600 text-[10px] font-bold px-3 py-1 rounded-bl-xl backdrop-blur-sm z-20 border-l border-b border-white">SPONSORED</div>
-            
-            <img src="{{ Storage::url($headerAd->image) }}" 
-                 alt="Iklan Header" 
-                 class="block w-auto h-auto max-w-full max-h-[250px] md:max-h-[350px] object-contain rounded-xl shadow-card border border-slate-100">
-        </a>
-    @endif
-</div>
-</div>
+        <div class="container mx-auto px-4 lg:px-8 py-6 flex flex-col items-center">
+            @if($headerAd && $headerAd->image)
+                <a href="{{ $headerAd->link ?? '#' }}" target="_blank" class="relative group block w-fit mx-auto rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-500 hover:-translate-y-1">
+                    
+                    <div class="absolute top-0 right-0 bg-brand-misty text-slate-600 text-[10px] font-bold px-3 py-1 rounded-bl-xl backdrop-blur-sm z-20 border-l border-b border-white">SPONSORED</div>
+                    
+                    <img src="{{ Storage::url($headerAd->image) }}" 
+                         alt="Iklan Header" 
+                         class="block w-auto h-auto max-w-full max-h-[250px] md:max-h-[350px] object-contain rounded-xl shadow-card border border-slate-100">
+                </a>
+            @endif
+        </div>
+    </div>
 
     <main class="container mx-auto px-4 lg:px-8 py-10 flex-grow bg-white">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
@@ -138,12 +138,31 @@
                 <div class="flex flex-col gap-8" id="news-container">
                     @foreach($latestNews as $news)
                         <article class="group flex flex-col md:flex-row gap-6 border-b border-slate-100 pb-8 last:border-0">
-                            <a href="{{ route('news.show', $news->slug) }}" class="w-full md:w-1/3 aspect-video md:aspect-[4/3] rounded-2xl overflow-hidden bg-slate-100 relative shrink-0 shadow-sm group-hover:shadow-md transition-all">
+                            
+                            {{-- ============================================================== --}}
+                            {{-- UPDATE MULAI: Tampilan Gambar dengan Efek Blur (Supaya tidak terpotong) --}}
+                            {{-- ============================================================== --}}
+                            <a href="{{ route('news.show', $news->slug) }}" class="w-full md:w-1/3 aspect-video md:aspect-[4/3] rounded-2xl overflow-hidden bg-slate-200 relative shrink-0 shadow-sm group-hover:shadow-md transition-all">
+                                
+                                {{-- Headline Badge --}}
                                 @if($news->pin_order)
-                                    <div class="absolute top-2 left-2 bg-brand-red text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm z-10">HEADLINE</div>
+                                    <div class="absolute top-2 left-2 bg-brand-red text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm z-30">HEADLINE</div>
                                 @endif
-                                <img src="{{ Storage::url($news->thumbnail) }}" alt="{{ $news->title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+
+                                {{-- Layer 1: Background Blur (Estetik) --}}
+                                <div class="absolute inset-0 bg-cover bg-center blur-md opacity-60 scale-110 transition-transform duration-700 group-hover:scale-125"
+                                     style="background-image: url('{{ Storage::url($news->thumbnail) }}');">
+                                </div>
+
+                                {{-- Layer 2: Gambar Utama (Utuh / Tidak Crop) --}}
+                                <img src="{{ Storage::url($news->thumbnail) }}" 
+                                     alt="{{ $news->title }}" 
+                                     class="relative w-full h-full object-contain z-20 transition-transform duration-500 group-hover:scale-105">
                             </a>
+                            {{-- ============================================================== --}}
+                            {{-- UPDATE SELESAI --}}
+                            {{-- ============================================================== --}}
+
                             <div class="flex-1 flex flex-col justify-center">
                                 <div class="flex items-center gap-2 mb-2">
                                     <span class="text-xs font-bold text-brand-red uppercase tracking-wide bg-red-50 px-2 py-0.5 rounded-full">{{ $news->categories->first()->name ?? 'Umum' }}</span>
