@@ -63,14 +63,58 @@
         .article-content p { margin-bottom: 1.5em; }
         .article-content h2, .article-content h3 { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; color: #1E3A8A; margin-top: 2em; margin-bottom: 0.75em; }
         
-       /* === UPDATE: UKURAN 50% (SETENGAHNYA) & RATA TENGAH === */
+       /* === PERBAIKAN TOTAL: GAYA ARTIKEL & GAMBAR === */
+        
+        /* 1. Gaya Tulisan Artikel (Standar Jurnalisme Modern) */
+        .article-content { 
+            font-family: 'Inter', sans-serif;   /* Font bersih & modern */
+            font-size: 1.125rem;                /* Ukuran 18px (Enak dibaca) */
+            line-height: 1.8;                   /* Spasi baris lega */
+            color: #334155;                     /* Abu tua (Slate 700) biar mata tidak sakit */
+            text-align: left;                   /* Rata kiri (Lebih nyaman di HP daripada Justify) */
+        }
+
+        /* Jarak antar paragraf */
+        .article-content p { 
+            margin-bottom: 1.8em; 
+        }
+
+        /* Heading (Sub-judul dalam artikel) */
+        .article-content h2, .article-content h3 { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            font-weight: 800; 
+            color: #1E3A8A; 
+            margin-top: 2.5em; 
+            margin-bottom: 1em; 
+            font-size: 1.5rem;
+        }
+
+        /* 2. Gambar (Ukuran 50% & Tengah) */
         .article-content img { 
-            width: 50% !important;       /* Ukuran dipangkas jadi 50% */
+            width: 50% !important;       
             height: auto !important;     
-            border-radius: 8px;          /* Lengkungan sudut diperhalus */
-            margin: 20px auto;           /* AUTO = Gambar otomatis duduk di tengah */
+            border-radius: 8px;          
+            margin: 35px auto 10px auto; /* Margin bawah kecil (10px) biar dekat sama caption */
             box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
             display: block; 
+        }
+
+        /* 3. Caption / Tulisan Keterangan Gambar (Rapi di Tengah) */
+        /* Menargetkan tag figcaption atau text miring (em) di dalam artikel */
+        .article-content figcaption,
+        .article-content em,
+        .article-content i { 
+            display: block;             /* Wajib block biar bisa di-tengahin */
+            text-align: center;         /* Rata Tengah */
+            font-size: 0.9rem;          /* Ukuran lebih kecil dari text berita */
+            color: #64748B;             /* Warna abu-abu pudar */
+            font-style: italic;         /* Miring */
+            margin-bottom: 30px;        /* Jarak aman ke paragraf berikutnya */
+            margin-top: 5px;            /* Nempel dikit ke gambar */
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            width: 50%;                 /* Lebar caption samakan dengan gambar */
+            margin-left: auto;          /* Auto biar tengah */
+            margin-right: auto;         /* Auto biar tengah */
         }
         
         #search-results { display: none; }
