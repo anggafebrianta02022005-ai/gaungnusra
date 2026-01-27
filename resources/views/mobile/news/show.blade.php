@@ -37,6 +37,15 @@
                         'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
                         'card': '0 0 0 1px rgba(0,0,0,0.03), 0 2px 8px rgba(0,0,0,0.04)',
                         'misty-glow': '0 10px 40px -10px rgba(148, 163, 184, 0.4)', 
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
                     }
                 }
             }
@@ -50,7 +59,7 @@
         ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; border: 2px solid #fff; }
         .img-wrapper { overflow: hidden; position: relative; background-color: #e2e8f0; }
         
-        /* === STYLE KONTEN BERITA (PERBAIKAN MOBILE) === */
+        /* === STYLE KONTEN BERITA === */
         .article-content { font-size: 1.05rem; line-height: 1.8; color: #334155; }
         .article-content p { margin-bottom: 1.5em; }
         
@@ -96,20 +105,26 @@
 </head>
 <body class="bg-white text-slate-800 flex flex-col min-h-screen selection:bg-brand-misty selection:text-brand-dark" x-data="{ mobileMenu: false, searchOpen: false }">
 
+    {{-- ============================================================== --}}
+    {{-- UPDATE 1: HEADER MOBILE (LOGO TENGAH) --}}
+    {{-- ============================================================== --}}
     <header class="bg-white border-b border-gray-100 py-3 md:py-4 relative z-50">
-        <div class="container mx-auto px-4 lg:px-8 flex justify-between items-center gap-4">
-            <a href="/" class="flex items-center gap-3 group select-none shrink-0">
+        <div class="container mx-auto px-4 lg:px-8 flex justify-between items-center relative">
+            
+            {{-- LOGO: Menggunakan Absolute Center pada Mobile (left-1/2) dan Static pada Desktop --}}
+            <a href="/" class="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 flex items-center gap-3 group select-none shrink-0 z-10">
                 @if($company && $company->logo)
                     <img src="{{ Storage::url($company->logo) }}" alt="{{ $company->name }}" class="block h-8 md:h-12 w-auto object-contain">
                 @else
-                    <div class="flex flex-col leading-none">
+                    <div class="flex flex-col leading-none text-center md:text-left">
                         <span class="font-serif text-xl md:text-2xl font-bold text-brand-red tracking-tight">Gaung</span>
                         <span class="font-display text-[10px] md:text-sm font-extrabold text-brand-dark tracking-widest uppercase -mt-0.5 md:-mt-1">NUSRA</span>
                     </div>
                 @endif
             </a>
             
-            <div class="hidden md:block w-full max-w-md relative group">
+            {{-- SEARCH (Desktop Only) --}}
+            <div class="hidden md:block w-full max-w-md relative group ml-auto mr-4">
                 <div class="relative transition-all duration-300 transform origin-left" :class="{ 'scale-105': searchOpen }">
                     <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400 group-focus-within:text-brand-red transition-colors"><i class="ph ph-magnifying-glass text-lg"></i></span>
                     <input type="text" id="search-input" autocomplete="off" @focus="searchOpen = true" @blur="setTimeout(() => searchOpen = false, 200)" placeholder="Cari berita..." class="w-full bg-brand-misty text-slate-800 border border-transparent rounded-full py-2.5 pl-10 pr-4 text-sm focus:bg-white focus:border-brand-red focus:ring-4 focus:ring-brand-red/10 focus:outline-none transition-all shadow-sm placeholder:text-gray-400">
@@ -117,12 +132,16 @@
                 </div>
             </div>
 
-            <button @click="mobileMenu = !mobileMenu" class="md:hidden w-9 h-9 flex items-center justify-center rounded-full bg-brand-misty text-brand-dark hover:bg-brand-red hover:text-white transition-all active:scale-95">
+            {{-- TOMBOL MENU MOBILE (Pojok Kanan - ml-auto memaksanya ke kanan) --}}
+            <button @click="mobileMenu = !mobileMenu" class="md:hidden ml-auto w-9 h-9 flex items-center justify-center rounded-full bg-brand-misty text-brand-dark hover:bg-brand-red hover:text-white transition-all active:scale-95 z-20">
                 <i class="ph ph-list text-xl" x-show="!mobileMenu"></i>
                 <i class="ph ph-x text-xl" x-show="mobileMenu" x-cloak></i>
             </button>
         </div>
     </header>
+    {{-- ============================================================== --}}
+    {{-- UPDATE 1 SELESAI --}}
+    {{-- ============================================================== --}}
 
     <nav class="sticky top-0 z-40 bg-brand-misty/90 backdrop-blur-xl border-b border-gray-200/50 shadow-sm transition-all hidden md:block">
         <div class="container mx-auto px-4 lg:px-8">
@@ -208,27 +227,59 @@
 
                 <div class="article-content font-sans">
                     @php
-                        // TRIK: Hapus domain localhost/127.0.0.1 dari link gambar di database
-                        // agar linknya menjadi relatif (misal: /storage/...) dan bisa dibaca di HP
                         $fixedContent = str_replace(
                             ['http://localhost:8000', 'http://127.0.0.1:8000'], 
                             '', 
                             $news->content
                         );
-                @endphp
-                {!! $fixedContent !!}
+                    @endphp
+                    {!! $fixedContent !!}
                 </div>
 
-                <div class="mt-8 pt-6 border-t border-slate-100">
-                    <div class="flex items-center gap-3">
-                        <span class="text-xs font-bold text-slate-500 uppercase">Share:</span>
-                        <div class="flex gap-2">
-                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(request()->fullUrl()) }}" target="_blank" class="w-8 h-8 rounded-full bg-[#1877F2] text-white flex items-center justify-center hover:scale-110 transition-transform"><i class="ph-fill ph-facebook-logo"></i></a>
-                            <a href="https://wa.me/?text={{ urlencode($news->title . ' ' . request()->fullUrl()) }}" target="_blank" class="w-8 h-8 rounded-full bg-[#25D366] text-white flex items-center justify-center hover:scale-110 transition-transform"><i class="ph-fill ph-whatsapp-logo"></i></a>
-                            <a href="https://twitter.com/intent/tweet?text={{ urlencode($news->title) }}&url={{ urlencode(request()->fullUrl()) }}" target="_blank" class="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center hover:scale-110 transition-transform"><i class="ph-fill ph-x-logo"></i></a>
+                {{-- ============================================================== --}}
+                {{-- UPDATE 2: SHARE BUTTON BARU (ANIMASI + SCRIPT IG/COPY) --}}
+                {{-- ============================================================== --}}
+                <div class="mt-10 pt-8 border-t border-slate-100 mb-10 animate-fade-in-up" style="animation-delay: 0.2s;">
+                    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                        
+                        <div class="flex items-center gap-2">
+                            <span class="w-1 h-6 bg-brand-red rounded-full"></span>
+                            <span class="font-display font-bold text-slate-700 text-lg">Bagikan Berita Ini:</span>
+                        </div>
+
+                        <div class="flex items-center gap-3">
+                            
+                            <a href="https://api.whatsapp.com/send?text={{ urlencode($news->title . ' ' . request()->fullUrl()) }}" target="_blank" 
+                               class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#25D366]/10 text-[#25D366] flex items-center justify-center hover:bg-[#25D366] hover:text-white transition-all duration-300 hover:scale-110 shadow-sm"
+                               title="Bagikan ke WhatsApp">
+                                <i class="ph-fill ph-whatsapp-logo text-xl md:text-2xl"></i>
+                            </a>
+
+                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(request()->fullUrl()) }}" target="_blank" 
+                               class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#1877F2]/10 text-[#1877F2] flex items-center justify-center hover:bg-[#1877F2] hover:text-white transition-all duration-300 hover:scale-110 shadow-sm"
+                               title="Bagikan ke Facebook">
+                                <i class="ph-fill ph-facebook-logo text-xl md:text-2xl"></i>
+                            </a>
+
+                            <button onclick="copyToClipboard('IG')" 
+                               class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] text-white opacity-90 flex items-center justify-center hover:opacity-100 transition-all duration-300 hover:scale-110 shadow-sm"
+                               title="Post ke Instagram">
+                                <i class="ph-fill ph-instagram-logo text-xl md:text-2xl"></i>
+                            </button>
+
+                            <button onclick="copyToClipboard('Link')" 
+                               class="group relative w-10 h-10 md:w-12 md:h-12 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center hover:bg-slate-800 hover:text-white transition-all duration-300 hover:scale-110 shadow-sm"
+                               title="Salin Link">
+                                <i class="ph-bold ph-link text-xl md:text-2xl"></i>
+                                <span class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] font-bold py-1 px-3 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                                    Salin Link
+                                </span>
+                            </button>
+
                         </div>
                     </div>
                 </div>
+                {{-- UPDATE 2 SELESAI --}}
 
                 <div class="mt-12">
                     <h3 class="font-display font-bold text-lg text-brand-dark mb-4 flex items-center gap-2 border-l-4 border-brand-red pl-3">
@@ -332,7 +383,6 @@
                         <h3 class="font-display font-bold text-brand-dark mb-3 text-xs tracking-wide uppercase">Layanan</h3>
                         <ul class="space-y-2 text-slate-500 text-xs font-medium">
                              <li><a href="{{ route('pages.advertise') }}" class="hover:text-brand-red transition-colors">Pasang Iklan</a></li>
-                            
                         </ul>
                     </div>
                 </div>
@@ -351,6 +401,24 @@
     </footer>
 
     <script>
+        // Fungsi Copy Link
+        function copyToClipboard(type) {
+            var dummy = document.createElement('input'),
+                text = window.location.href;
+            
+            document.body.appendChild(dummy);
+            dummy.value = text;
+            dummy.select();
+            document.execCommand('copy');
+            document.body.removeChild(dummy);
+
+            if(type === 'IG') {
+                alert('Link disalin! Paste di Story atau Post Instagram Anda.');
+            } else {
+                alert('Link berita berhasil disalin!');
+            }
+        }
+
         $(document).ready(function() {
             var searchInput = $('#search-input');
             var searchResults = $('#search-results');
