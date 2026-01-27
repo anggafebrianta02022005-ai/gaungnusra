@@ -66,7 +66,7 @@
         /* === UPDATE: GAMBAR KONTEN DIPERBESAR SEDIKIT (92%) === */
         .article-content img { 
             width: auto !important;       
-            max-width: 92%;               /* <-- Naik dari 85% jadi 92% biar lebih lega */
+            max-width: 98%;               /* <-- Naik dari 85% jadi 92% biar lebih lega */
             height: auto !important;      
             border-radius: 12px; 
             margin: 25px auto;            /* Jarak atas-bawah sedikit diperlebar biar napas */
