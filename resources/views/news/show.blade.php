@@ -64,13 +64,14 @@
         .article-content h2, .article-content h3 { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; color: #1E3A8A; margin-top: 2em; margin-bottom: 0.75em; }
         
         /* === PERBAIKAN 2: GAMBAR KONTEN DIPERBESAR (FULL WIDTH) === */
+        /* === PERBAIKAN: GAMBAR KONTEN LEBIH RAPI & MANIS === */
         .article-content img { 
-            width: 100% !important;     /* Memaksa lebar penuh */
-            max-width: 100%; 
-            height: auto !important;    /* Menjaga proporsi */
+            width: auto !important;       /* Biarkan ikut ukuran aslinya */
+            max-width: 85%;               /* Batasi maksimal 85% agar ada sisa ruang kiri-kanan */
+            height: auto !important;      /* Jaga proporsi agar tidak gepeng */
             border-radius: 12px; 
-            margin: 30px auto; 
-            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1); 
+            margin: 20px auto;            /* Auto kiri-kanan = Posisi Tengah (Center) */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08); /* Shadow halus */
             display: block; 
         }
         
