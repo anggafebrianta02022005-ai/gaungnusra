@@ -59,11 +59,7 @@
             border-bottom-color: transparent; 
         }
 
-        .article-content { font-size: 1.125rem; line-height: 1.8; color: #334155; }
-        .article-content p { margin-bottom: 1.5em; }
-        .article-content h2, .article-content h3 { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; color: #1E3A8A; margin-top: 2em; margin-bottom: 0.75em; }
-        
-       /* === PERBAIKAN TOTAL: GAYA ARTIKEL & GAMBAR === */
+        /* === PERBAIKAN TOTAL: GAYA ARTIKEL & GAMBAR === */
         
         /* 1. Gaya Tulisan Artikel (Standar Jurnalisme Modern) */
         .article-content { 
@@ -100,7 +96,6 @@
         }
 
         /* 3. Caption / Tulisan Keterangan Gambar (Rapi di Tengah) */
-        /* Menargetkan tag figcaption atau text miring (em) di dalam artikel */
         .article-content figcaption,
         .article-content em,
         .article-content i { 
@@ -214,6 +209,51 @@
                 <div class="article-content font-sans">
                     {!! $news->content !!}
                 </div>
+
+                {{-- ============================================================== --}}
+                {{-- UPDATE MULAI: FITUR SHARE BUTTONS (VIRALKAN BERITA) --}}
+                {{-- ============================================================== --}}
+                <div class="border-t border-slate-200 mt-10 pt-8 mb-10 animate-fade-in-up" style="animation-delay: 0.2s;">
+                    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                        
+                        <div class="flex items-center gap-2">
+                            <span class="w-1 h-6 bg-brand-red rounded-full"></span>
+                            <span class="font-display font-bold text-slate-700 text-lg">Bagikan Berita Ini:</span>
+                        </div>
+
+                        <div class="flex items-center gap-3">
+                            
+                            <a href="https://api.whatsapp.com/send?text={{ urlencode($news->title . ' ' . request()->url()) }}" target="_blank" 
+                               class="w-12 h-12 rounded-full bg-[#25D366]/10 text-[#25D366] flex items-center justify-center hover:bg-[#25D366] hover:text-white transition-all duration-300 hover:scale-110 shadow-sm"
+                               title="Bagikan ke WhatsApp">
+                                <i class="ph-fill ph-whatsapp-logo text-2xl"></i>
+                            </a>
+
+                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(request()->url()) }}" target="_blank" 
+                               class="w-12 h-12 rounded-full bg-[#1877F2]/10 text-[#1877F2] flex items-center justify-center hover:bg-[#1877F2] hover:text-white transition-all duration-300 hover:scale-110 shadow-sm"
+                               title="Bagikan ke Facebook">
+                                <i class="ph-fill ph-facebook-logo text-2xl"></i>
+                            </a>
+
+                            <button onclick="copyToClipboard('IG')" 
+                               class="w-12 h-12 rounded-full bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] text-white opacity-90 flex items-center justify-center hover:opacity-100 transition-all duration-300 hover:scale-110 shadow-sm"
+                               title="Post ke Instagram">
+                                <i class="ph-fill ph-instagram-logo text-2xl"></i>
+                            </button>
+
+                            <button onclick="copyToClipboard('Link')" 
+                               class="group relative w-12 h-12 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center hover:bg-slate-800 hover:text-white transition-all duration-300 hover:scale-110 shadow-sm"
+                               title="Salin Link">
+                                <i class="ph-bold ph-link text-2xl"></i>
+                                <span class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] font-bold py-1 px-3 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                                    Salin Link
+                                </span>
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+                {{-- UPDATE SELESAI --}}
 
                 <div class="mt-16">
                     <div class="flex items-center gap-3 mb-8">
@@ -345,6 +385,24 @@
     </footer>
 
     <script>
+        // Fungsi Copy Link
+        function copyToClipboard(type) {
+            var dummy = document.createElement('input'),
+                text = window.location.href;
+            
+            document.body.appendChild(dummy);
+            dummy.value = text;
+            dummy.select();
+            document.execCommand('copy');
+            document.body.removeChild(dummy);
+
+            if(type === 'IG') {
+                alert('Link disalin! Paste di Story atau Post Instagram Anda.');
+            } else {
+                alert('Link berita berhasil disalin!');
+            }
+        }
+
         $(document).ready(function() {
             // Sticky Header Glass
             $(window).scroll(function() {
