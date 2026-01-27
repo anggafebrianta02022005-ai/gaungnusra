@@ -63,15 +63,14 @@
         .article-content p { margin-bottom: 1.5em; }
         .article-content h2, .article-content h3 { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; color: #1E3A8A; margin-top: 2em; margin-bottom: 0.75em; }
         
-        /* === UPDATE: GAMBAR KONTEN DIPERBESAR SEDIKIT (92%) === */
+        /* === PERBAIKAN: GAMBAR FULL LEBAR (BESAR) & RAPI === */
         .article-content img { 
-            width: auto !important;       
-            max-width: 98%;               /* <-- Naik dari 85% jadi 92% biar lebih lega */
-            height: auto !important;      
-            border-radius: 12px; 
-            margin: 25px auto;            /* Jarak atas-bawah sedikit diperlebar biar napas */
-            box-shadow: 0 8px 20px -5px rgba(0,0,0,0.1); /* Shadow dipertegas sedikit */
-            display: block; 
+            width: 100% !important;      /* Memaksa gambar selebar teks (Paling Besar) */
+            height: auto !important;     /* Tinggi menyesuaikan biar tidak gepeng */
+            border-radius: 10px;         /* Sudut dilengkungkan sedikit biar manis (Rapi) */
+            margin: 24px 0;              /* Memberi jarak napas atas-bawah */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* Memberi efek timbul sedikit */
+            display: block;
         }
         
         #search-results { display: none; }
