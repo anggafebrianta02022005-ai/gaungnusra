@@ -40,27 +40,40 @@
 </head>
 <body class="bg-white text-slate-800 flex flex-col min-h-screen" x-data="{ mobileMenu: false, searchOpen: false }">
 
-    <header class="bg-white border-b border-gray-100 shadow-sm py-3 px-4 sticky top-0 z-50 flex justify-between items-center">
-        <a href="/" class="flex items-center gap-2 group select-none shrink-0">
-            @if($company && $company->logo)
-                <img src="{{ Storage::url($company->logo) }}" alt="Logo" class="block h-8 w-auto object-contain">
-            @else
-                <div class="flex flex-col leading-none">
-                    <span class="font-serif text-xl font-bold text-brand-red tracking-tight">Gaung</span>
-                    <span class="font-display text-[10px] font-extrabold text-brand-dark tracking-widest uppercase -mt-0.5">NUSRA</span>
+    <header class="bg-white border-b border-gray-100 py-3 md:py-4 relative z-50">
+        <div class="container mx-auto px-4 lg:px-8 flex justify-between items-center relative">
+            
+            {{-- LOGO: Menggunakan Absolute Center pada Mobile (left-1/2) dan Static pada Desktop --}}
+            <a href="/" class="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 flex items-center gap-3 group select-none shrink-0 z-10">
+                @if($company && $company->logo)
+                    <img src="{{ Storage::url($company->logo) }}" alt="{{ $company->name }}" class="block h-8 md:h-12 w-auto object-contain">
+                @else
+                    <div class="flex flex-col leading-none text-center md:text-left">
+                        <span class="font-serif text-xl md:text-2xl font-bold text-brand-red tracking-tight">Gaung</span>
+                        <span class="font-display text-[10px] md:text-sm font-extrabold text-brand-dark tracking-widest uppercase -mt-0.5 md:-mt-1">NUSRA</span>
+                    </div>
+                @endif
+            </a>
+            
+            {{-- SEARCH (Desktop Only) --}}
+            <div class="hidden md:block w-full max-w-md relative group ml-auto mr-4">
+                <div class="relative transition-all duration-300 transform origin-left" :class="{ 'scale-105': searchOpen }">
+                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400 group-focus-within:text-brand-red transition-colors"><i class="ph ph-magnifying-glass text-lg"></i></span>
+                    <input type="text" id="search-input" autocomplete="off" @focus="searchOpen = true" @blur="setTimeout(() => searchOpen = false, 200)" placeholder="Cari berita..." class="w-full bg-brand-misty text-slate-800 border border-transparent rounded-full py-2.5 pl-10 pr-4 text-sm focus:bg-white focus:border-brand-red focus:ring-4 focus:ring-brand-red/10 focus:outline-none transition-all shadow-sm placeholder:text-gray-400">
+                    <div id="search-results" class="absolute top-full left-0 w-full mt-2 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden z-50"></div>
                 </div>
-            @endif
-        </a>
+            </div>
 
-        <div class="flex items-center gap-3">
-            <button @click="searchOpen = !searchOpen" class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-50 text-slate-600 hover:bg-slate-100">
-                <i class="ph-bold ph-magnifying-glass text-lg"></i>
-            </button>
-            <button @click="mobileMenu = !mobileMenu" class="w-8 h-8 flex items-center justify-center rounded-full bg-brand-red text-white shadow-sm active:scale-95 transition-transform">
-                <i class="ph-bold ph-list text-lg"></i>
+            {{-- TOMBOL MENU MOBILE (Pojok Kanan - ml-auto memaksanya ke kanan) --}}
+            <button @click="mobileMenu = !mobileMenu" class="md:hidden ml-auto w-9 h-9 flex items-center justify-center rounded-full bg-brand-misty text-brand-dark hover:bg-brand-red hover:text-white transition-all active:scale-95 z-20">
+                <i class="ph ph-list text-xl" x-show="!mobileMenu"></i>
+                <i class="ph ph-x text-xl" x-show="mobileMenu" x-cloak></i>
             </button>
         </div>
     </header>
+    {{-- ============================================================== --}}
+    {{-- UPDATE 1 SELESAI --}}
+    {{-- ============================================================== --}}
 
     <div x-show="searchOpen" class="px-4 py-3 bg-white border-b border-slate-100" x-transition style="display: none;">
         <div class="relative">
