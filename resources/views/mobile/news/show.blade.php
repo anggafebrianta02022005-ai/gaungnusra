@@ -52,7 +52,7 @@
         }
     </script>
 
-    <style>
+<style>
         body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; background-color: #ffffff; }
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
@@ -75,15 +75,15 @@
         .article-content ol { list-style-type: decimal; margin-left: 1.5em; margin-bottom: 1.5em; }
         .article-content a { color: #D32F2F; text-decoration: underline; text-underline-offset: 2px; }
         
-        /* === REVISI GAMBAR DI DALAM ARTIKEL === */
+        /* === REVISI GAMBAR DI DALAM ARTIKEL (UPDATED) === */
         .article-content img { 
-            width: 100% !important;      /* Paksa lebar penuh container */
-            max-width: 100% !important;  /* Jangan dibatasi pixel */
-            height: auto !important;     /* Tinggi proporsional */
+            width: auto !important;       /* Biarkan lebar aslinya (jangan dipaksa 100%) */
+            max-width: 85% !important;    /* TAPI batasi maksimal 85% agar lebih kecil dari gambar utama */
+            height: auto !important;      /* Tinggi proporsional */
             border-radius: 8px;
-            margin: 24px 0;              /* Margin atas bawah */
+            margin: 24px auto;            /* Margin Atas/Bawah 24px, Kiri/Kanan AUTO (biar ke tengah) */
             box-shadow: 0 4px 10px -1px rgba(0, 0, 0, 0.1); 
-            display: block;
+            display: block;               /* Wajib block agar margin auto berfungsi */
         }
 
         .article-content figcaption {
