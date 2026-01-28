@@ -29,3 +29,4 @@ Route::get('epaper/download/{epaper}', [EpaperController::class, 'download'])->n
 // 2. Route untuk Admin (Upload, Edit, Hapus)
 // Catatan: Nanti sebaiknya ini dimasukkan ke dalam Middleware Auth (Login) biar aman
 Route::resource('epapers', EpaperController::class);
+Route::get('/epaper/terbaru', [App\Http\Controllers\EpaperController::class, 'downloadLatest'])->name('epaper.latest');

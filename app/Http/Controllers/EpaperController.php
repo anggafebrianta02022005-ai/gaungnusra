@@ -8,28 +8,27 @@ use Illuminate\Support\Facades\Storage;
 
 class EpaperController extends Controller
 {
-    // === BAGIAN ADMIN (Untuk Upload & Hapus) ===
+    // === BAGIAN ADMIN (Dibiarkan saja atau bisa dihapus jika 100% pakai Filament) ===
+    // Karena Mas pakai Filament, bagian index/create/store di bawah ini sebenarnya
+    // tidak terpakai lagi, tapi saya biarkan dulu biar tidak error kalau ada sisa route lama.
 
     public function index()
     {
-        // Menampilkan daftar koran di halaman Admin
         $epapers = Epaper::latest('edition_date')->paginate(10);
         return view('admin.epapers.index', compact('epapers'));
     }
 
     public function create()
     {
-        // Menampilkan form upload
         return view('admin.epapers.create');
     }
 
     public function store(Request $request)
     {
-        // Proses simpan PDF
         $request->validate([
             'title' => 'required|string|max:255',
             'edition_date' => 'required|date',
-            'file' => 'required|mimes:pdf|max:10240', // Max 10MB
+            'file' => 'required|mimes:pdf|max:10240',
         ]);
 
         $path = $request->file('file')->store('epapers', 'public');
@@ -45,7 +44,6 @@ class EpaperController extends Controller
 
     public function destroy(Epaper $epaper)
     {
-        // Hapus PDF & Data
         if ($epaper->file) {
             Storage::disk('public')->delete($epaper->file);
         }
@@ -54,14 +52,31 @@ class EpaperController extends Controller
         return back()->with('success', 'E-Paper berhasil dihapus.');
     }
 
-    // === BAGIAN FRONTEND (Untuk Download Pengunjung) ===
+    // === BAGIAN FRONTEND (DOWNLOAD PENGUNJUNG) ===
     
+    // 1. Download Edisi Tertentu (Berdasarkan ID)
     public function download(Epaper $epaper)
     {
-        // Fungsi supaya pengunjung bisa download
         if (! $epaper->file || ! Storage::disk('public')->exists($epaper->file)) {
             abort(404);
         }
-        return Storage::disk('public')->download($epaper->file, 'GaungNusra-'.$epaper->edition_date->format('Y-m-d').'.pdf');
+        // Nama file saat didownload: "Koran-GaungNusra-2026-01-28.pdf"
+        return Storage::disk('public')->download($epaper->file, 'Koran-GaungNusra-'.$epaper->edition_date->format('Y-m-d').'.pdf');
+    }
+
+    // 2. Download Edisi TERBARU (Otomatis) - INI YANG BARU DITAMBAHKAN
+    public function downloadLatest()
+    {
+        // Cari koran yang tanggalnya paling baru DAN statusnya aktif
+        $latest = Epaper::where('is_active', true)->latest('edition_date')->first();
+
+        // Cek apakah datanya ada & filenya eksis di penyimpanan
+        if (!$latest || !$latest->file || !Storage::disk('public')->exists($latest->file)) {
+            // Kalau belum ada koran sama sekali, kembalikan user ke halaman sebelumnya
+            return back()->with('error', 'Mohon maaf, E-Paper edisi hari ini belum tersedia.');
+        }
+
+        // Kalau ada, langsung download otomatis
+        return Storage::disk('public')->download($latest->file, 'Koran-GaungNusra-Terbaru.pdf');
     }
 }
