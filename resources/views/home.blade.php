@@ -235,9 +235,23 @@
                     </div>
                     </p>
                     <div class="flex gap-3">
-                        <a href="#" class="w-10 h-10 rounded-xl bg-white shadow-sm border border-slate-100 flex items-center justify-center text-slate-400 hover:bg-brand-red hover:text-white transition-all duration-300"><i class="ph-fill ph-instagram-logo text-xl"></i></a>
-                        <a href="#" class="w-10 h-10 rounded-xl bg-white shadow-sm border border-slate-100 flex items-center justify-center text-slate-400 hover:bg-blue-600 hover:text-white transition-all duration-300"><i class="ph-fill ph-facebook-logo text-xl"></i></a>
-                        <a href="#" class="w-10 h-10 rounded-xl bg-white shadow-sm border border-slate-100 flex items-center justify-center text-slate-400 hover:bg-black hover:text-white transition-all duration-300"><i class="ph-fill ph-x-logo text-xl"></i></a>
+                       <div class="flex space-x-4">
+    <a href="https://www.instagram.com/gaungnusra?igsh=cDJqMmJ3Zm9pMmpt" target="_blank" class="text-slate-400 hover:text-brand-red transition-colors">
+        <i class="ph-fill ph-instagram-logo text-lg"></i>
+    </a>
+
+    <a href="https://www.facebook.com/share/1DvqTnVEtY/?mibextid=wwXIfr" target="_blank" class="text-slate-400 hover:text-blue-600 transition-colors">
+        <i class="ph-fill ph-facebook-logo text-lg"></i>
+    </a>
+
+    <a href="https://www.threads.com/@gaungnusra?igshid=NTc4MTIwNjQ2YQ==" target="_blank" class="text-slate-400 hover:text-black transition-colors">
+        <i class="ph-fill ph-threads-logo text-lg"></i>
+    </a>
+
+    <a href="#" class="text-slate-400 hover:text-black transition-colors">
+        <i class="ph-fill ph-x-logo text-lg"></i>
+    </a>
+</div>
                     </div>
                 </div>
 
