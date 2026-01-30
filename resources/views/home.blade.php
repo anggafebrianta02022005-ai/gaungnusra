@@ -101,10 +101,22 @@
                     @endforeach
                 </div>
                 <div class="hidden md:flex items-center gap-2 pl-6 border-l border-gray-300 h-6">
-                    <a href="#" class="text-slate-400 hover:text-brand-red transition-colors"><i class="ph-fill ph-instagram-logo text-lg"></i></a>
-                    <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i class="ph-fill ph-facebook-logo text-lg"></i></a>
-                    <a href="#" class="text-slate-400 hover:text-black transition-colors"><i class="ph-fill ph-x-logo text-lg"></i></a>
-                </div>
+    <a href="https://www.instagram.com/gaungnusra?igsh=cDJqMmJ3Zm9pMmpt" target="_blank" class="text-slate-400 hover:text-brand-red transition-colors">
+        <i class="ph-fill ph-instagram-logo text-lg"></i>
+    </a>
+
+    <a href="https://www.facebook.com/share/1DvqTnVEtY/?mibextid=wwXIfr" target="_blank" class="text-slate-400 hover:text-blue-600 transition-colors">
+        <i class="ph-fill ph-facebook-logo text-lg"></i>
+    </a>
+
+    <a href="https://www.threads.com/@gaungnusra?igshid=NTc4MTIwNjQ2YQ==" target="_blank" class="text-slate-400 hover:text-black transition-colors">
+        <i class="ph-fill ph-threads-logo text-lg"></i>
+    </a>
+
+    <a href="#" class="text-slate-400 hover:text-black transition-colors">
+        <i class="ph-fill ph-x-logo text-lg"></i>
+    </a>
+</div>
             </div>
         </div>
     </nav>
