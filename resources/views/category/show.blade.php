@@ -75,7 +75,6 @@
                     </div>
                 @endif
             </a>
-
             <div class="hidden md:block w-full max-w-md relative group animate-fade-in-up" style="animation-delay: 0.1s;">
                 <div class="relative transition-all duration-300">
                     <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400 group-focus-within:text-brand-red transition-colors"><i class="ph ph-magnifying-glass text-lg"></i></span>
@@ -83,51 +82,55 @@
                     <div id="search-results" class="absolute top-full left-0 w-full mt-2 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden z-50"></div>
                 </div>
             </div>
-
-            <div class="hidden md:flex items-center gap-2 pl-6 border-l border-gray-300 h-6 animate-fade-in-up" style="animation-delay: 0.1s;">
-                <a href="https://www.instagram.com/gaungnusra?igsh=cDJqMmJ3Zm9pMmpt" target="_blank" class="text-slate-400 hover:text-brand-red transition-colors">
-                    <i class="ph-fill ph-instagram-logo text-lg"></i>
-                </a>
-                <a href="https://www.facebook.com/share/1DvqTnVEtY/?mibextid=wwXIfr" target="_blank" class="text-slate-400 hover:text-blue-600 transition-colors">
-                    <i class="ph-fill ph-facebook-logo text-lg"></i>
-                </a>
-                <a href="https://www.threads.com/@gaungnusra?igshid=NTc4MTIwNjQ2YQ==" target="_blank" class="text-slate-400 hover:text-black transition-colors">
-                    <i class="ph-fill ph-threads-logo text-lg"></i>
-                </a>
-                <a href="#" class="text-slate-400 hover:text-black transition-colors">
-                    <i class="ph-fill ph-x-logo text-lg"></i>
-                </a>
-            </div>
         </div>
     </header>
 
-    <nav class="sticky top-0 z-40 bg-brand-misty/90 backdrop-blur-xl border-b border-gray-200/50 shadow-sm transition-all animate-fade-in-up" style="animation-delay: 0.15s;">
+        <nav class="sticky top-0 z-40 bg-brand-misty/90 backdrop-blur-xl border-b border-gray-200/50 shadow-sm transition-all animate-fade-in-up" style="animation-delay: 0.15s;">
         <div class="container mx-auto px-4 lg:px-8">
             <div class="flex items-center justify-between h-14">
                 <div class="flex items-center gap-1 h-full overflow-x-auto no-scrollbar">
-                    <a href="/" class="relative h-full flex items-center px-4 text-sm font-medium text-slate-600 hover:text-brand-dark transition-all duration-300 group"><i class="ph-fill ph-house mr-2"></i> Home</a>
-                    @foreach($categories as $cat)
-                        <a href="{{ route('category.show', $cat->slug) }}" class="relative h-full flex items-center px-4 text-sm font-medium {{ $category->id == $cat->id ? 'text-brand-red font-bold border-b-[3px] border-brand-red bg-white/50' : 'text-slate-600' }} hover:text-brand-dark transition-all duration-300 group">
-                            {{ $cat->name }}
+                    <a href="/" class="relative h-full flex items-center px-4 text-sm font-bold text-brand-red border-b-[3px] border-brand-red bg-white/50"><i class="ph-fill ph-house mr-2"></i> Home</a>
+                    @foreach($categories as $category)
+                        <a href="{{ route('category.show', $category->slug) }}" class="relative h-full flex items-center px-4 text-sm font-medium text-slate-600 hover:text-brand-dark transition-all duration-300 group">
+                            {{ $category->name }}
                             <span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[3px] bg-brand-red/20 rounded-t-full transition-all duration-300 group-hover:w-1/2 opacity-0 group-hover:opacity-100"></span>
                         </a>
                     @endforeach
                 </div>
+                <div class="hidden md:flex items-center gap-2 pl-6 border-l border-gray-300 h-6">
+    <a href="https://www.instagram.com/gaungnusra?igsh=cDJqMmJ3Zm9pMmpt" target="_blank" class="text-slate-400 hover:text-brand-red transition-colors">
+        <i class="ph-fill ph-instagram-logo text-lg"></i>
+    </a>
+
+    <a href="https://www.facebook.com/share/1DvqTnVEtY/?mibextid=wwXIfr" target="_blank" class="text-slate-400 hover:text-blue-600 transition-colors">
+        <i class="ph-fill ph-facebook-logo text-lg"></i>
+    </a>
+
+    <a href="https://www.threads.com/@gaungnusra?igshid=NTc4MTIwNjQ2YQ==" target="_blank" class="text-slate-400 hover:text-black transition-colors">
+        <i class="ph-fill ph-threads-logo text-lg"></i>
+    </a>
+
+    <a href="#" class="text-slate-400 hover:text-black transition-colors">
+        <i class="ph-fill ph-x-logo text-lg"></i>
+    </a>
+</div>
             </div>
         </div>
     </nav>
 
     <div class="bg-white border-b border-slate-100 animate-fade-in-up" style="animation-delay: 0.2s;">
         <div class="container mx-auto px-4 lg:px-8 py-6 flex flex-col items-center">
-            @if($headerAd && $headerAd->image)
-                <a href="{{ $headerAd->link ?? '#' }}" target="_blank" class="relative group block w-fit mx-auto rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-500 hover:-translate-y-1">
-                    <div class="absolute top-0 right-0 bg-brand-misty text-slate-600 text-[10px] font-bold px-3 py-1 rounded-bl-xl backdrop-blur-sm z-20 border-l border-b border-white">SPONSORED</div>
-                    <img src="{{ Storage::url($headerAd->image) }}" 
-                         alt="Iklan Header" 
-                         class="block w-auto h-auto max-w-full max-h-[250px] md:max-h-[350px] object-contain rounded-xl shadow-card border border-slate-100">
-                </a>
-            @endif
-        </div>
+    @if($headerAd && $headerAd->image)
+        <a href="{{ $headerAd->link ?? '#' }}" target="_blank" class="relative group block w-fit mx-auto rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-500 hover:-translate-y-1">
+            
+            <div class="absolute top-0 right-0 bg-brand-misty text-slate-600 text-[10px] font-bold px-3 py-1 rounded-bl-xl backdrop-blur-sm z-20 border-l border-b border-white">SPONSORED</div>
+            
+            <img src="{{ Storage::url($headerAd->image) }}" 
+                 alt="Iklan Header" 
+                 class="block w-auto h-auto max-w-full max-h-[250px] md:max-h-[350px] object-contain rounded-xl shadow-card border border-slate-100">
+        </a>
+    @endif
+</div>
     </div>
 
     <main class="container mx-auto px-4 lg:px-8 py-10 flex-grow bg-white">
@@ -222,10 +225,11 @@
                     </div>
                 </div>
             </aside>
+
         </div>
     </main>
 
-    <footer class="bg-brand-misty border-t border-slate-200 pt-20 pb-10 mt-20 animate-fade-in-up" style="animation-delay: 0.5s;">
+<footer class="bg-brand-misty border-t border-slate-200 pt-20 pb-10 mt-20 animate-fade-in-up" style="animation-delay: 0.5s;">
         <div class="container mx-auto px-4 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
                 
@@ -237,21 +241,24 @@
                             <h2 class="font-display font-extrabold text-2xl text-brand-dark">GAUNG<span class="text-brand-red">NUSRA</span></h2>
                         @endif
                     </div>
-                    
-                    <div class="flex space-x-4">
-                        <a href="https://www.instagram.com/gaungnusra?igsh=cDJqMmJ3Zm9pMmpt" target="_blank" class="text-slate-400 hover:text-brand-red transition-colors">
-                            <i class="ph-fill ph-instagram-logo text-lg"></i>
-                        </a>
-                        <a href="https://www.facebook.com/share/1DvqTnVEtY/?mibextid=wwXIfr" target="_blank" class="text-slate-400 hover:text-blue-600 transition-colors">
-                            <i class="ph-fill ph-facebook-logo text-lg"></i>
-                        </a>
-                        <a href="https://www.threads.com/@gaungnusra?igshid=NTc4MTIwNjQ2YQ==" target="_blank" class="text-slate-400 hover:text-black transition-colors">
-                            <i class="ph-fill ph-threads-logo text-lg"></i>
-                        </a>
-                        <a href="#" class="text-slate-400 hover:text-black transition-colors">
-                            <i class="ph-fill ph-x-logo text-lg"></i>
-                        </a>
-                    </div>
+                    </p>
+                   <div class="flex space-x-4">
+    <a href="https://www.instagram.com/gaungnusra?igsh=cDJqMmJ3Zm9pMmpt" target="_blank" class="text-slate-400 hover:text-brand-red transition-colors">
+        <i class="ph-fill ph-instagram-logo text-lg"></i>
+    </a>
+
+    <a href="https://www.facebook.com/share/1DvqTnVEtY/?mibextid=wwXIfr" target="_blank" class="text-slate-400 hover:text-blue-600 transition-colors">
+        <i class="ph-fill ph-facebook-logo text-lg"></i>
+    </a>
+
+    <a href="https://www.threads.com/@gaungnusra?igshid=NTc4MTIwNjQ2YQ==" target="_blank" class="text-slate-400 hover:text-black transition-colors">
+        <i class="ph-fill ph-threads-logo text-lg"></i>
+    </a>
+
+    <a href="#" class="text-slate-400 hover:text-black transition-colors">
+        <i class="ph-fill ph-x-logo text-lg"></i>
+    </a>
+</div>
                 </div>
 
                 <div>
@@ -275,23 +282,27 @@
                 </div>
 
                 <div>
-                    <h3 class="font-display font-bold text-brand-dark mb-6 text-sm tracking-widest uppercase border-b-2 border-brand-red inline-block pb-1">Layanan</h3>
-                    <ul class="space-y-4 text-slate-500 text-sm font-medium">
-                        <li>
-                            <a href="{{ route('pages.advertise') }}" class="hover:text-brand-red transition-colors">
-                                Pasang Iklan
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('epaper.latest') }}" target="_blank" class="hover:text-brand-red transition-colors flex items-center gap-2">
-                                <span>Koran Cetak (E-Paper)</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                </svg>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+    <h3 class="font-display font-bold text-brand-dark mb-6 text-sm tracking-widest uppercase border-b-2 border-brand-red inline-block pb-1">Layanan</h3>
+    <ul class="space-y-4 text-slate-500 text-sm font-medium">
+        {{-- Menu Pasang Iklan --}}
+        <li>
+            <a href="{{ route('pages.advertise') }}" class="hover:text-brand-red transition-colors">
+                Pasang Iklan
+            </a>
+        </li>
+        
+        {{-- Menu Koran Cetak (Otomatis Download Terbaru) --}}
+        <li>
+            <a href="{{ route('epaper.latest') }}" target="_blank" class="hover:text-brand-red transition-colors flex items-center gap-2">
+                <span>Koran Cetak (E-Paper)</span>
+                {{-- Ikon Download kecil biar user tahu ini file --}}
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+            </a>
+        </li>
+    </ul>
+</div>
             </div>
 
             <div class="border-t border-slate-200 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
