@@ -111,7 +111,7 @@
                     {{-- HOME (Logic Aktif) --}}
                     <a href="/" class="relative h-full flex items-center px-4 text-sm font-medium transition-all duration-300 
                         {{ request()->is('/') ? 'text-brand-red font-bold border-b-[3px] border-brand-red bg-white/50' : 'text-slate-600 hover:text-brand-dark' }}">
-                        <i class="ph-fill ph-house mr-2"></i> Home
+                        <i class="ph-fill ph-house mr-2"></i> Berita Utama
                     </a>
 
                     {{-- LOOP KATEGORI (Logic Aktif) --}}

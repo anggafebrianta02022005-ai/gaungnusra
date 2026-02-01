@@ -82,7 +82,7 @@
                 <div class="flex items-center gap-1 h-full overflow-x-auto no-scrollbar">
                     
                     <a href="/" class="relative h-full flex items-center px-4 text-sm font-medium text-slate-600 hover:text-brand-red transition-all duration-300 group">
-                        <i class="ph-fill ph-house mr-2"></i> Home
+                        <i class="ph-fill ph-house mr-2"></i> Berita Utama
                         <span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[3px] bg-brand-red rounded-t-full transition-all duration-300 group-hover:w-1/2 opacity-0 group-hover:opacity-100"></span>
                     </a>
 

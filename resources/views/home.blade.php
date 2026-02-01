@@ -5,17 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#F1F5F9">
     <meta name="description" content="{{ $company->description ?? 'Portal Berita Terkini' }}">
-    
     <title>{{ $company->name ?? 'Portal Berita' }} </title>
-    
     <link rel="icon" type="image/png" href="{{ asset('gaungnusra.png') }}?v=3">
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-    
     <script>
         tailwind.config = {
             theme: {
@@ -92,7 +88,7 @@
         <div class="container mx-auto px-4 lg:px-8">
             <div class="flex items-center justify-between h-14">
                 <div class="flex items-center gap-1 h-full overflow-x-auto no-scrollbar">
-                    <a href="/" class="relative h-full flex items-center px-4 text-sm font-bold text-brand-red border-b-[3px] border-brand-red bg-white/50"><i class="ph-fill ph-house mr-2"></i> Home</a>
+                    <a href="/" class="relative h-full flex items-center px-4 text-sm font-bold text-brand-red border-b-[3px] border-brand-red bg-white/50"><i class="ph-fill ph-house mr-2"></i>Berita Utama</a>
                     @foreach($categories as $category)
                         <a href="{{ route('category.show', $category->slug) }}" class="relative h-full flex items-center px-4 text-sm font-medium text-slate-600 hover:text-brand-dark transition-all duration-300 group">
                             {{ $category->name }}
