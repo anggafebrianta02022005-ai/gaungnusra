@@ -44,10 +44,11 @@
 </head>
 <body class="bg-white text-slate-800 flex flex-col min-h-screen" x-data="{ mobileMenu: false, searchOpen: false }">
 
+    {{-- HEADER --}}
     <header class="bg-white border-b border-gray-100 py-3 md:py-4 relative z-50">
-        <div class="container mx-auto px-4 lg:px-8 flex justify-between items-center relative">
+        <div class="container mx-auto px-4 lg:px-8 flex justify-between items-center relative min-h-[40px]">
             
-            {{-- LOGO: Menggunakan Absolute Center pada Mobile (left-1/2) dan Static pada Desktop --}}
+            {{-- 1. LOGO (Tetap di Tengah secara Absolute pada Mobile) --}}
             <a href="/" class="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 flex items-center gap-3 group select-none shrink-0 z-10">
                 @if($company && $company->logo)
                     <img src="{{ Storage::url($company->logo) }}" alt="{{ $company->name }}" class="block h-8 md:h-12 w-auto object-contain">
@@ -59,22 +60,91 @@
                 @endif
             </a>
             
-            {{-- SEARCH (Desktop Only) --}}
+            {{-- 2. SEARCH BAR (Desktop Only - Tidak Berubah) --}}
             <div class="hidden md:block w-full max-w-md relative group ml-auto mr-4">
-                <div class="relative transition-all duration-300 transform origin-left" :class="{ 'scale-105': searchOpen }">
+                <div class="relative transition-all duration-300 transform origin-left">
                     <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400 group-focus-within:text-brand-red transition-colors"><i class="ph ph-magnifying-glass text-lg"></i></span>
-                    <input type="text" id="search-input" autocomplete="off" @focus="searchOpen = true" @blur="setTimeout(() => searchOpen = false, 200)" placeholder="Cari berita..." class="w-full bg-brand-misty text-slate-800 border border-transparent rounded-full py-2.5 pl-10 pr-4 text-sm focus:bg-white focus:border-brand-red focus:ring-4 focus:ring-brand-red/10 focus:outline-none transition-all shadow-sm placeholder:text-gray-400">
-                    <div id="search-results" class="absolute top-full left-0 w-full mt-2 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden z-50"></div>
+                    <input type="text" autocomplete="off" placeholder="Cari berita..." class="w-full bg-brand-misty text-slate-800 border border-transparent rounded-full py-2.5 pl-10 pr-4 text-sm focus:bg-white focus:border-brand-red focus:ring-4 focus:ring-brand-red/10 focus:outline-none transition-all shadow-sm placeholder:text-gray-400">
                 </div>
             </div>
 
-            {{-- TOMBOL MENU MOBILE (Pojok Kanan - ml-auto memaksanya ke kanan) --}}
-            <button @click="mobileMenu = !mobileMenu" class="md:hidden ml-auto w-9 h-9 flex items-center justify-center rounded-full bg-brand-misty text-brand-dark hover:bg-brand-red hover:text-white transition-all active:scale-95 z-20">
-                <i class="ph ph-list text-xl" x-show="!mobileMenu"></i>
-                <i class="ph ph-x text-xl" x-show="mobileMenu" x-cloak></i>
-            </button>
+            {{-- 3. TOMBOL AKSI MOBILE (Search & Menu - Dikelompokkan di Kanan) --}}
+            <div class="flex items-center gap-2 ml-auto md:hidden z-20">
+                
+                {{-- TOMBOL SEARCH (BARU DITAMBAHKAN) --}}
+                <button 
+                    @click="searchOpen = !searchOpen; if(searchOpen) $nextTick(() => $refs.mobileSearchInput.focus())" 
+                    class="w-9 h-9 flex items-center justify-center rounded-full text-slate-600 hover:bg-slate-100 transition-all active:scale-95"
+                    :class="{ 'bg-brand-red/10 text-brand-red': searchOpen }">
+                    {{-- Ikon berubah jika search terbuka --}}
+                    <i class="ph text-xl" :class="searchOpen ? 'ph-x' : 'ph-magnifying-glass'"></i>
+                </button>
+
+                {{-- TOMBOL MENU --}}
+                <button @click="mobileMenu = !mobileMenu" class="w-9 h-9 flex items-center justify-center rounded-full bg-brand-misty text-brand-dark hover:bg-brand-red hover:text-white transition-all active:scale-95">
+                    <i class="ph ph-list text-xl" x-show="!mobileMenu"></i>
+                    <i class="ph ph-x text-xl" x-show="mobileMenu" x-cloak></i>
+                </button>
+            </div>
+
         </div>
     </header>
+
+    {{-- INPUT SEARCH MOBILE (Akan muncul saat tombol search diklik) --}}
+    <div x-show="searchOpen" 
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 -translate-y-2"
+         x-transition:enter-end="opacity-100 translate-y-0"
+         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave-start="opacity-100 translate-y-0"
+         x-transition:leave-end="opacity-0 -translate-y-2"
+         class="px-4 py-3 bg-white border-b border-slate-100 shadow-sm relative z-40 md:hidden">
+        
+        <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-brand-red"><i class="ph-bold ph-magnifying-glass"></i></span>
+            {{-- Tambahkan x-ref agar bisa auto focus --}}
+            <input x-ref="mobileSearchInput" type="text" id="mobile-search-input" placeholder="Ketik kata kunci berita..." class="w-full bg-brand-misty border-none rounded-lg py-2.5 pl-10 pr-4 text-sm focus:ring-2 focus:ring-brand-red outline-none shadow-inner">
+            
+            {{-- Hasil Search Dropdown --}}
+            <div id="search-results" class="absolute top-full left-0 w-full mt-2 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden z-50"></div>
+        </div>
+    </div>
+
+    {{-- MENU KATEGORI HORIZONTAL --}}
+    <div class="bg-white border-b border-slate-100 overflow-x-auto no-scrollbar">
+        <div class="flex items-center px-4 h-12 gap-2 min-w-max">
+            <a href="/" class="px-3 py-1.5 text-xs font-bold text-brand-red bg-brand-red/10 rounded-full border border-brand-red/20">Berita Utama</a>
+            @foreach($categories as $category)
+                <a href="{{ route('category.show', $category->slug) }}" class="px-3 py-1.5 text-xs font-medium text-slate-600 hover:text-brand-dark hover:bg-slate-50 rounded-full border border-transparent transition-all">
+                    {{ $category->name }}
+                </a>
+            @endforeach
+        </div>
+    </div>
+
+    {{-- SIDEBAR MENU MOBILE (Overlay) --}}
+    <div x-show="mobileMenu" class="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm" @click="mobileMenu = false" x-transition.opacity style="display: none;"></div>
+    <div x-show="mobileMenu" class="fixed top-0 right-0 h-full w-[80%] max-w-[300px] bg-white z-[70] shadow-2xl p-6 overflow-y-auto" 
+         x-transition:enter="transition transform ease-out duration-300"
+         x-transition:enter-start="translate-x-full"
+         x-transition:enter-end="translate-x-0"
+         x-transition:leave="transition transform ease-in duration-300"
+         x-transition:leave-start="translate-x-0"
+         x-transition:leave-end="translate-x-full" style="display: none;">
+        
+        <div class="flex justify-between items-center mb-8 border-b border-slate-100 pb-4">
+            <h3 class="font-display font-bold text-lg text-brand-dark">Menu</h3>
+            <button @click="mobileMenu = false" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500"><i class="ph-bold ph-x"></i></button>
+        </div>
+        <div class="space-y-2">
+            <a href="/" class="block px-3 py-2.5 text-sm font-bold text-brand-red bg-red-50 rounded-lg">Home</a>
+            @foreach($categories as $cat)
+                <a href="{{ route('category.show', $cat->slug) }}" class="block px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-lg">{{ $cat->name }}</a>
+            @endforeach
+        </div>
+    </div>
+    
+    {{-- ... sisa konten body ... --}}
     {{-- ============================================================== --}}
     {{-- UPDATE 1 SELESAI --}}
     {{-- ============================================================== --}}
