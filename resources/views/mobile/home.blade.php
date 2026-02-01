@@ -31,15 +31,13 @@
     <style>
         body { background-color: #ffffff; }
         .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
         
-        /* Hide Scrollbar but allow scroll */
+        /* Hide Scrollbar */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
         /* Search Styles */
-        #search-results { display: none; }
-        #search-results.active { display: block; }
+        .search-results-container { display: none; }
     </style>
 </head>
 <body class="bg-white text-slate-800 flex flex-col min-h-screen" x-data="{ mobileMenu: false, searchOpen: false }">
@@ -48,7 +46,7 @@
     <header class="bg-white border-b border-gray-100 py-3 md:py-4 relative z-50">
         <div class="container mx-auto px-4 lg:px-8 flex justify-between items-center relative min-h-[40px]">
             
-            {{-- 1. LOGO (Tetap di Tengah secara Absolute pada Mobile) --}}
+            {{-- 1. LOGO --}}
             <a href="/" class="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 flex items-center gap-3 group select-none shrink-0 z-10">
                 @if($company && $company->logo)
                     <img src="{{ Storage::url($company->logo) }}" alt="{{ $company->name }}" class="block h-8 md:h-12 w-auto object-contain">
@@ -60,37 +58,39 @@
                 @endif
             </a>
             
-            {{-- 2. SEARCH BAR (Desktop Only - Tidak Berubah) --}}
+            {{-- 2. SEARCH BAR (DESKTOP) --}}
             <div class="hidden md:block w-full max-w-md relative group ml-auto mr-4">
                 <div class="relative transition-all duration-300 transform origin-left">
                     <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400 group-focus-within:text-brand-red transition-colors"><i class="ph ph-magnifying-glass text-lg"></i></span>
-                    <input type="text" autocomplete="off" placeholder="Cari berita..." class="w-full bg-brand-misty text-slate-800 border border-transparent rounded-full py-2.5 pl-10 pr-4 text-sm focus:bg-white focus:border-brand-red focus:ring-4 focus:ring-brand-red/10 focus:outline-none transition-all shadow-sm placeholder:text-gray-400">
+                    
+                    {{-- Input Desktop --}}
+                    <input type="text" id="desktop-search-input" autocomplete="off" placeholder="Cari berita..." class="w-full bg-brand-misty text-slate-800 border border-transparent rounded-full py-2.5 pl-10 pr-4 text-sm focus:bg-white focus:border-brand-red focus:ring-4 focus:ring-brand-red/10 focus:outline-none transition-all shadow-sm placeholder:text-gray-400">
+                    
+                    {{-- Hasil Search Desktop --}}
+                    <div id="desktop-search-results" class="search-results-container absolute top-full left-0 w-full mt-2 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden z-50"></div>
                 </div>
             </div>
 
-            {{-- 3. TOMBOL AKSI MOBILE (Search & Menu - Dikelompokkan di Kanan) --}}
+            {{-- 3. TOMBOL AKSI MOBILE --}}
             <div class="flex items-center gap-2 ml-auto md:hidden z-20">
-                
-                {{-- TOMBOL SEARCH (BARU DITAMBAHKAN) --}}
+                {{-- Tombol Search Mobile --}}
                 <button 
                     @click="searchOpen = !searchOpen; if(searchOpen) $nextTick(() => $refs.mobileSearchInput.focus())" 
                     class="w-9 h-9 flex items-center justify-center rounded-full text-slate-600 hover:bg-slate-100 transition-all active:scale-95"
                     :class="{ 'bg-brand-red/10 text-brand-red': searchOpen }">
-                    {{-- Ikon berubah jika search terbuka --}}
                     <i class="ph text-xl" :class="searchOpen ? 'ph-x' : 'ph-magnifying-glass'"></i>
                 </button>
 
-                {{-- TOMBOL MENU --}}
+                {{-- Tombol Menu --}}
                 <button @click="mobileMenu = !mobileMenu" class="w-9 h-9 flex items-center justify-center rounded-full bg-brand-misty text-brand-dark hover:bg-brand-red hover:text-white transition-all active:scale-95">
                     <i class="ph ph-list text-xl" x-show="!mobileMenu"></i>
                     <i class="ph ph-x text-xl" x-show="mobileMenu" x-cloak></i>
                 </button>
             </div>
-
         </div>
     </header>
 
-    {{-- INPUT SEARCH MOBILE (Akan muncul saat tombol search diklik) --}}
+    {{-- INPUT SEARCH MOBILE (Overlay Dropdown) --}}
     <div x-show="searchOpen" 
          x-transition:enter="transition ease-out duration-200"
          x-transition:enter-start="opacity-0 -translate-y-2"
@@ -98,19 +98,20 @@
          x-transition:leave="transition ease-in duration-150"
          x-transition:leave-start="opacity-100 translate-y-0"
          x-transition:leave-end="opacity-0 -translate-y-2"
-         class="px-4 py-3 bg-white border-b border-slate-100 shadow-sm relative z-40 md:hidden">
+         class="px-4 py-3 bg-white border-b border-slate-100 shadow-sm relative z-40 md:hidden" style="display: none;">
         
         <div class="relative">
             <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-brand-red"><i class="ph-bold ph-magnifying-glass"></i></span>
-            {{-- Tambahkan x-ref agar bisa auto focus --}}
+            
+            {{-- Input Mobile --}}
             <input x-ref="mobileSearchInput" type="text" id="mobile-search-input" placeholder="Ketik kata kunci berita..." class="w-full bg-brand-misty border-none rounded-lg py-2.5 pl-10 pr-4 text-sm focus:ring-2 focus:ring-brand-red outline-none shadow-inner">
             
-            {{-- Hasil Search Dropdown --}}
-            <div id="search-results" class="absolute top-full left-0 w-full mt-2 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden z-50"></div>
+            {{-- Hasil Search Mobile --}}
+            <div id="mobile-search-results" class="search-results-container absolute top-full left-0 w-full mt-2 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden z-50"></div>
         </div>
     </div>
 
-    {{-- MENU KATEGORI HORIZONTAL --}}
+    {{-- MENU KATEGORI --}}
     <div class="bg-white border-b border-slate-100 overflow-x-auto no-scrollbar">
         <div class="flex items-center px-4 h-12 gap-2 min-w-max">
             <a href="/" class="px-3 py-1.5 text-xs font-bold text-brand-red bg-brand-red/10 rounded-full border border-brand-red/20">Berita Utama</a>
@@ -122,51 +123,7 @@
         </div>
     </div>
 
-    {{-- SIDEBAR MENU MOBILE (Overlay) --}}
-    <div x-show="mobileMenu" class="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm" @click="mobileMenu = false" x-transition.opacity style="display: none;"></div>
-    <div x-show="mobileMenu" class="fixed top-0 right-0 h-full w-[80%] max-w-[300px] bg-white z-[70] shadow-2xl p-6 overflow-y-auto" 
-         x-transition:enter="transition transform ease-out duration-300"
-         x-transition:enter-start="translate-x-full"
-         x-transition:enter-end="translate-x-0"
-         x-transition:leave="transition transform ease-in duration-300"
-         x-transition:leave-start="translate-x-0"
-         x-transition:leave-end="translate-x-full" style="display: none;">
-        
-        <div class="flex justify-between items-center mb-8 border-b border-slate-100 pb-4">
-            <h3 class="font-display font-bold text-lg text-brand-dark">Menu</h3>
-            <button @click="mobileMenu = false" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500"><i class="ph-bold ph-x"></i></button>
-        </div>
-        <div class="space-y-2">
-            <a href="/" class="block px-3 py-2.5 text-sm font-bold text-brand-red bg-red-50 rounded-lg">Home</a>
-            @foreach($categories as $cat)
-                <a href="{{ route('category.show', $cat->slug) }}" class="block px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-lg">{{ $cat->name }}</a>
-            @endforeach
-        </div>
-    </div>
-    
-    {{-- ... sisa konten body ... --}}
-    {{-- ============================================================== --}}
-    {{-- UPDATE 1 SELESAI --}}
-    {{-- ============================================================== --}}
-
-    <div x-show="searchOpen" class="px-4 py-3 bg-white border-b border-slate-100" x-transition>
-        <div class="relative">
-            <input type="text" id="search-input" placeholder="Cari berita..." class="w-full bg-brand-misty border-none rounded-lg py-2.5 px-4 text-sm focus:ring-2 focus:ring-brand-red outline-none">
-            <div id="search-results" class="absolute top-full left-0 w-full mt-2 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden z-50"></div>
-        </div>
-    </div>
-
-    <div class="bg-white border-b border-slate-100 overflow-x-auto no-scrollbar">
-        <div class="flex items-center px-4 h-12 gap-2 min-w-max">
-            <a href="/" class="px-3 py-1.5 text-xs font-bold text-brand-red bg-brand-red/10 rounded-full border border-brand-red/20">Berita Utama</a>
-            @foreach($categories as $category)
-                <a href="{{ route('category.show', $category->slug) }}" class="px-3 py-1.5 text-xs font-medium text-slate-600 hover:text-brand-dark hover:bg-slate-50 rounded-full border border-transparent transition-all">
-                    {{ $category->name }}
-                </a>
-            @endforeach
-        </div>
-    </div>
-
+    {{-- SIDEBAR MOBILE MENU --}}
     <div x-show="mobileMenu" class="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm" @click="mobileMenu = false" x-transition.opacity style="display: none;"></div>
     <div x-show="mobileMenu" class="fixed top-0 right-0 h-full w-[80%] max-w-[300px] bg-white z-[70] shadow-2xl p-6 overflow-y-auto" 
          x-transition:enter="transition transform ease-out duration-300"
@@ -188,6 +145,7 @@
         </div>
     </div>
 
+    {{-- IKLAN HEADER --}}
     <div class="px-4 pt-4 pb-2">
         @if($headerAd)
             <a href="{{ $headerAd->link ?? '#' }}" class="block rounded-xl overflow-hidden shadow-sm border border-slate-100">
@@ -196,6 +154,7 @@
         @endif
     </div>
 
+    {{-- KONTEN UTAMA --}}
     <main class="flex-grow bg-white">
         
         <div class="px-4 py-4">
@@ -244,6 +203,7 @@
 
         <div class="h-2 bg-slate-100 border-y border-slate-200"></div>
 
+        {{-- TRENDING --}}
         <div class="px-4 py-6 bg-white">
             <div class="flex items-center gap-2 mb-5">
                 <i class="ph-fill ph-trend-up text-brand-red text-xl"></i>
@@ -269,6 +229,7 @@
             </div>
         </div>
 
+        {{-- IKLAN SIDEBAR --}}
         <div class="px-4 pb-8 pt-2">
             @if($sidebarAd)
                 <div class="text-[10px] text-slate-400 text-center mb-1">SPONSORED</div>
@@ -280,6 +241,7 @@
 
     </main>
 
+    {{-- FOOTER --}}
    <footer class="bg-brand-misty pt-10 pb-8 border-t border-slate-200 mt-8">
         <div class="container mx-auto px-6">
             
@@ -291,24 +253,12 @@
                         <h2 class="font-display font-extrabold text-xl text-brand-dark">GAUNG<span class="text-brand-red">NUSRA</span></h2>
                     @endif
                 </div>
-                </p>
+                
                 <div class="flex justify-center gap-3">
-    <a href="https://www.instagram.com/gaungnusra?igsh=cDJqMmJ3Zm9pMmpt" target="_blank" class="w-8 h-8 rounded-lg bg-white shadow-sm border border-slate-100 flex items-center justify-center text-slate-400 hover:bg-brand-red hover:text-white transition-all">
-        <i class="ph-fill ph-instagram-logo text-lg"></i>
-    </a>
-
-    <a href="https://www.facebook.com/share/1DvqTnVEtY/?mibextid=wwXIfr" target="_blank" class="w-8 h-8 rounded-lg bg-white shadow-sm border border-slate-100 flex items-center justify-center text-slate-400 hover:bg-blue-600 hover:text-white transition-all">
-        <i class="ph-fill ph-facebook-logo text-lg"></i>
-    </a>
-
-    <a href="https://www.threads.com/@gaungnusra?igshid=NTc4MTIwNjQ2YQ==" target="_blank" class="w-8 h-8 rounded-lg bg-white shadow-sm border border-slate-100 flex items-center justify-center text-slate-400 hover:bg-black hover:text-white transition-all">
-        <i class="ph-fill ph-threads-logo text-lg"></i>
-    </a>
-
-    <a href="#" class="w-8 h-8 rounded-lg bg-white shadow-sm border border-slate-100 flex items-center justify-center text-slate-400 hover:bg-black hover:text-white transition-all">
-        <i class="ph-fill ph-x-logo text-lg"></i>
-    </a>
-</div>
+                    <a href="https://www.instagram.com/gaungnusra?igsh=cDJqMmJ3Zm9pMmpt" target="_blank" class="w-8 h-8 rounded-lg bg-white shadow-sm border border-slate-100 flex items-center justify-center text-slate-400 hover:bg-brand-red hover:text-white transition-all"><i class="ph-fill ph-instagram-logo text-lg"></i></a>
+                    <a href="https://www.facebook.com/share/1DvqTnVEtY/?mibextid=wwXIfr" target="_blank" class="w-8 h-8 rounded-lg bg-white shadow-sm border border-slate-100 flex items-center justify-center text-slate-400 hover:bg-blue-600 hover:text-white transition-all"><i class="ph-fill ph-facebook-logo text-lg"></i></a>
+                    <a href="#" class="w-8 h-8 rounded-lg bg-white shadow-sm border border-slate-100 flex items-center justify-center text-slate-400 hover:bg-black hover:text-white transition-all"><i class="ph-fill ph-x-logo text-lg"></i></a>
+                </div>
             </div>
 
             <div class="grid grid-cols-2 gap-6 border-t border-slate-200 pt-6 mb-6">
@@ -320,7 +270,6 @@
                         @endforeach
                     </ul>
                 </div>
-
                 <div class="space-y-6">
                     <div>
                         <h3 class="font-display font-bold text-brand-dark mb-3 text-xs tracking-wide uppercase">Redaksi</h3>
@@ -329,41 +278,81 @@
                         </ul>
                     </div>
                     <div>
-    <h3 class="font-display font-bold text-brand-dark mb-3 text-xs tracking-wide uppercase">Layanan</h3>
-    <ul class="space-y-2 text-slate-500 text-xs font-medium">
-        {{-- Menu Pasang Iklan --}}
-        <li>
-            <a href="{{ route('pages.advertise') }}" class="hover:text-brand-red transition-colors">
-                Pasang Iklan
-            </a>
-        </li>
-
-        {{-- Menu Koran Cetak (Langsung Download) --}}
-        <li>
-            <a href="{{ route('epaper.latest') }}" target="_blank" class="hover:text-brand-red transition-colors">
-                Koran Cetak
-            </a>
-        </li>
-    </ul>
-</div>
+                        <h3 class="font-display font-bold text-brand-dark mb-3 text-xs tracking-wide uppercase">Layanan</h3>
+                        <ul class="space-y-2 text-slate-500 text-xs font-medium">
+                            <li><a href="{{ route('pages.advertise') }}" class="hover:text-brand-red transition-colors">Pasang Iklan</a></li>
+                            <li><a href="{{ route('epaper.latest') }}" target="_blank" class="hover:text-brand-red transition-colors">Koran Cetak</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
 
             <div class="border-t border-slate-200 pt-6 text-center">
-                <p class="text-[10px] text-slate-400 font-medium">
-                    &copy; {{ date('Y') }} {{ $company->name ?? 'Gaung Nusra' }}. All rights reserved.
-                </p>
-                <div class="mt-1 text-[10px] text-slate-400">
-                    Dibuat Oleh Udayana Digital Data
-                </div>
+                <p class="text-[10px] text-slate-400 font-medium">&copy; {{ date('Y') }} {{ $company->name ?? 'Gaung Nusra' }}. All rights reserved.</p>
+                <div class="mt-1 text-[10px] text-slate-400">Dibuat Oleh Udayana Digital Data</div>
             </div>
-
         </div>
     </footer>
 
+    {{-- SCRIPTS (PERBAIKAN LOGIKA SEARCH) --}}
     <script>
+        // Fungsi Pencarian Cerdas untuk Menangani 2 Input Berbeda (Desktop & Mobile)
+        function initSearch(inputId, resultsId) {
+            var input = $(inputId);
+            var results = $(resultsId);
+            var timeout = null;
+
+            input.on('keyup', function() {
+                var query = $(this).val();
+                clearTimeout(timeout);
+                
+                // Jika input kosong atau kurang dari 2 huruf, sembunyikan hasil
+                if (query.length < 2) { 
+                    results.html('').hide(); 
+                    return; 
+                }
+                
+                timeout = setTimeout(function() {
+                    $.ajax({
+                        url: "{{ route('search.news') }}",
+                        type: 'GET',
+                        data: { q: query },
+                        success: function(data) {
+                            var html = '';
+                            if (data.length > 0) {
+                                html += '<div class="py-2">';
+                                $.each(data, function(index, item) {
+                                    html += `<a href="${item.url}" class="block px-4 py-3 border-b border-slate-50 hover:bg-slate-50 text-sm font-bold text-slate-700 flex items-center gap-3">
+                                                <img src="${item.image}" class="w-8 h-8 rounded object-cover shrink-0 bg-slate-100">
+                                                <span class="truncate">${item.title}</span>
+                                            </a>`;
+                                });
+                                html += '</div>';
+                                results.html(html).show();
+                            } else {
+                                results.html('<div class="p-4 text-center text-xs text-slate-400">Tidak ditemukan.</div>').show();
+                            }
+                        }
+                    });
+                }, 300); // Delay sedikit biar server ga berat
+            });
+
+            // Sembunyikan hasil kalau klik di luar area
+            $(document).on('click', function(e) {
+                if (!$(e.target).closest(inputId).length && !$(e.target).closest(resultsId).length) {
+                    results.hide();
+                }
+            });
+        }
+
         $(document).ready(function() {
-            // === LOAD MORE KHUSUS MOBILE ===
+            // Aktifkan Search untuk Desktop
+            initSearch('#desktop-search-input', '#desktop-search-results');
+
+            // Aktifkan Search untuk Mobile
+            initSearch('#mobile-search-input', '#mobile-search-results');
+
+            // === LOAD MORE LOGIC ===
             $('#btn-load-more').click(function() {
                 var page = $(this).data('page');
                 var btn = $(this);
@@ -389,39 +378,6 @@
                         }, 500);
                     }
                 });
-            });
-
-            // === SEARCH MOBILE ===
-            var searchInput = $('#search-input');
-            var searchResults = $('#search-results');
-            var timeout = null;
-            searchInput.on('keyup', function() {
-                var query = $(this).val();
-                clearTimeout(timeout);
-                if (query.length < 2) { searchResults.html('').hide(); return; }
-                timeout = setTimeout(function() {
-                    $.ajax({
-                        url: "{{ route('search.news') }}",
-                        type: 'GET',
-                        data: { q: query },
-                        success: function(data) {
-                            var html = '';
-                            if (data.length > 0) {
-                                html += '<div class="py-2">';
-                                $.each(data, function(index, item) {
-                                    html += `<a href="${item.url}" class="block px-4 py-3 border-b border-slate-50 hover:bg-slate-50 text-sm font-bold text-slate-700 flex items-center gap-3">
-                                            <img src="${item.image}" class="w-8 h-8 rounded object-cover">
-                                            <span class="truncate">${item.title}</span>
-                                        </a>`;
-                                });
-                                html += '</div>';
-                                searchResults.html(html).show();
-                            } else {
-                                searchResults.html('<div class="p-4 text-center text-xs text-slate-400">Tidak ditemukan.</div>').show();
-                            }
-                        }
-                    });
-                }, 300);
             });
         });
     </script>
