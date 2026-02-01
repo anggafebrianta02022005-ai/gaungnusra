@@ -47,7 +47,7 @@
     <header class="bg-white border-b border-gray-100 py-3 md:py-4 relative z-50">
         <div class="container mx-auto px-4 lg:px-8 flex justify-between items-center relative min-h-[40px]">
             
-            {{-- 1. LOGO --}}
+            {{-- 1. LOGO (Tengah di HP, Kiri di Desktop) --}}
             <a href="/" class="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 flex items-center gap-3 group select-none shrink-0 z-10">
                 @if($company && $company->logo)
                     <img src="{{ Storage::url($company->logo) }}" alt="{{ $company->name }}" class="block h-8 md:h-12 w-auto object-contain">
@@ -59,7 +59,7 @@
                 @endif
             </a>
             
-            {{-- 2. SEARCH BAR (DESKTOP) --}}
+            {{-- 2. SEARCH BAR (DESKTOP ONLY) --}}
             <div class="hidden md:block w-full max-w-md relative group ml-auto mr-4">
                 <div class="relative transition-all duration-300 transform origin-left">
                     <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400 group-focus-within:text-brand-red transition-colors"><i class="ph ph-magnifying-glass text-lg"></i></span>
@@ -70,7 +70,7 @@
 
             {{-- 3. TOMBOL AKSI MOBILE (Search & Menu) --}}
             <div class="flex items-center gap-2 ml-auto md:hidden z-20">
-                {{-- Tombol Search Mobile --}}
+                {{-- Tombol Search Mobile (INI YANG KEMARIN HILANG) --}}
                 <button 
                     @click="searchOpen = !searchOpen; if(searchOpen) $nextTick(() => $refs.mobileSearchInput.focus())" 
                     class="w-9 h-9 flex items-center justify-center rounded-full text-slate-600 hover:bg-slate-100 transition-all active:scale-95"
@@ -153,7 +153,7 @@
             </div>
             
             <div class="prose prose-sm text-slate-600 font-sans leading-relaxed mb-8">
-                <p>Tingkatkan jangkauan bisnis Anda bersama <strong>{{ $company->name ?? 'Gaung Nusra' }}</strong>. Kami menawarkan slot iklan premium yang strategis untuk mempromosikan produk dan layanan Anda kepada ribuan pembaca setia kami setiap harinya.</p>
+                <p>Tingkatkan jangkauan bisnis Anda bersama <strong>{{ $company->name ?? 'Gaung Nusra' }}</strong>. Kami menawarkan slot iklan premium yang strategis.</p>
             </div>
 
             <div class="space-y-4 mb-8">
