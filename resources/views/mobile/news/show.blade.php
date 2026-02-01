@@ -149,7 +149,7 @@
         <div class="container mx-auto px-4 lg:px-8">
             <div class="flex items-center justify-between h-14">
                 <div class="flex items-center gap-1 h-full overflow-x-auto no-scrollbar mask-gradient">
-                    <a href="/" class="relative h-full flex items-center px-4 text-sm font-medium text-slate-600 hover:text-brand-dark transition-all duration-300 group"><i class="ph-fill ph-house mr-2"></i> Home</a>
+                    <a href="/" class="relative h-full flex items-center px-4 text-sm font-medium text-slate-600 hover:text-brand-dark transition-all duration-300 group"><i class="ph-fill ph-house mr-2"></i>Berita Utama</a>
                     @foreach($categories as $category)
                         {{-- Logika Aktif: Jika berita ini masuk dalam kategori tersebut, maka warnanya merah --}}
                         <a href="{{ route('category.show', $category->slug) }}" class="relative h-full flex items-center px-4 text-sm font-medium {{ $news->categories->contains($category->id) ? 'text-brand-red font-bold border-b-2 border-brand-red' : 'text-slate-600' }} hover:text-brand-dark transition-all duration-300 group">

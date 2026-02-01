@@ -106,7 +106,7 @@
     {{-- NAVBAR KATEGORI --}}
     <div class="bg-white border-b border-slate-100 overflow-x-auto no-scrollbar">
         <div class="flex items-center px-4 h-12 gap-2 min-w-max">
-            <a href="/" class="px-3 py-1.5 text-xs font-medium text-slate-600 hover:text-brand-dark hover:bg-slate-50 rounded-full border border-transparent transition-all">Home</a>
+            <a href="/" class="px-3 py-1.5 text-xs font-medium text-slate-600 hover:text-brand-dark hover:bg-slate-50 rounded-full border border-transparent transition-all">Berita Utama</a>
             @foreach($categories as $cat)
                 <a href="{{ route('category.show', $cat->slug) }}" class="px-3 py-1.5 text-xs font-bold rounded-full border transition-all text-slate-600 border-transparent hover:bg-slate-50">
                     {{ $cat->name }}
