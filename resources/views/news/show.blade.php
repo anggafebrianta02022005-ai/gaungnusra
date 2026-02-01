@@ -6,13 +6,12 @@
     <meta name="theme-color" content="#F1F5F9">
     <meta name="description" content="{{ $news->subtitle ?? Str::limit(strip_tags($news->content), 150) }}">
     <meta name="author" content="{{ $news->author->name ?? 'Redaksi' }}">
-    <title>{{ $news->title }} - {{ $company->name ?? 'Portal Berita' }}</title>
-    
+   <title>{{ $company->name ?? 'Portal Berita' }} </title>
+    <link rel="icon" type="image/png" href="{{ asset('gaungnusra.png') }}?v=3">
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     
     <script>
