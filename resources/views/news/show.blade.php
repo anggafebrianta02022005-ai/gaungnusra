@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#F1F5F9">
     <meta name="description" content="{{ $news->subtitle ?? Str::limit(strip_tags($news->content), 150) }}">
     <meta name="author" content="{{ $news->author->name ?? 'Redaksi' }}">
-   <title>{{ $company->name ?? 'Portal Berita' }} </title>
+   <title>{{ $news->title }} - {{ $company->name ?? 'Portal Berita' }}</title>
     <link rel="icon" type="image/png" href="{{ asset('gaungnusra.png') }}?v=3">
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
