@@ -194,8 +194,6 @@
                                     </p>
                                     <div class="flex items-center gap-2 text-xs text-slate-400">
                                         <span class="font-bold text-slate-600">{{ $item->author->name ?? 'Redaksi' }}</span>
-                                        <span>•</span>
-                                        <span><i class="ph-fill ph-eye"></i> {{ number_format($item->views_count) }} Views</span>
                                     </div>
                                 </div>
                             </article>
@@ -237,9 +235,6 @@
                                     </div>
                                     <div class="flex-1 py-1">
                                         <h4 class="font-display text-sm font-bold text-brand-dark leading-snug line-clamp-3 group-hover:text-brand-red transition-colors duration-200 mb-2">{{ $sNews->title }}</h4>
-                                        <div class="flex items-center gap-2 text-[10px] text-slate-400 font-medium">
-                                            <i class="ph-fill ph-eye"></i> {{ number_format($sNews->views_count) }}
-                                        </div>
                                     </div>
                                 </a>
                             @endforeach
