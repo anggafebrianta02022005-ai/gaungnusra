@@ -172,23 +172,11 @@
                             <p class="font-bold text-brand-dark">{{ $company->address ?? '-' }}</p>
                         </div>
                     </div>
-                    <div class="md:col-span-2 flex gap-3 mt-2 flex-wrap">
-                        @if($company->instagram)
-                            <a href="{{ $company->instagram }}" target="_blank" class="flex items-center gap-2 px-4 py-2 bg-slate-50 rounded-lg text-sm font-bold text-slate-600 hover:text-brand-red transition-colors"><i class="ph-fill ph-instagram-logo text-lg"></i> Instagram</a>
-                        @endif
-                        @if($company->facebook)
-                            <a href="{{ $company->facebook }}" target="_blank" class="flex items-center gap-2 px-4 py-2 bg-slate-50 rounded-lg text-sm font-bold text-slate-600 hover:text-blue-600 transition-colors"><i class="ph-fill ph-facebook-logo text-lg"></i> Facebook</a>
-                        @endif
-                        @if($company->website)
-                            <a href="{{ $company->website }}" target="_blank" class="flex items-center gap-2 px-4 py-2 bg-slate-50 rounded-lg text-sm font-bold text-slate-600 hover:text-brand-dark transition-colors"><i class="ph-fill ph-globe text-lg"></i> Website</a>
-                        @endif
-                    </div>
                 </div>
             </div>
 
             <aside class="lg:col-span-4 space-y-10 pl-0 lg:pl-6 border-l border-transparent lg:border-slate-100 animate-fade-in-up" style="animation-delay: 0.4s;">
                 <div class="sticky top-24 space-y-8">
-                    
                     <div class="bg-white rounded-2xl p-6 shadow-card border border-slate-100">
                         <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-50">
                             <h3 class="font-display font-bold text-lg text-brand-dark flex items-center gap-2">
