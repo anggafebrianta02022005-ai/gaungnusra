@@ -141,37 +141,55 @@
     </header>
 
     <nav class="sticky top-0 z-40 bg-brand-misty/90 backdrop-blur-xl border-b border-gray-200/50 shadow-sm transition-all animate-fade-in-up" style="animation-delay: 0.15s;">
-        <div class="container mx-auto px-4 lg:px-8">
-            <div class="flex items-center justify-between h-14">
-                <div class="flex items-center gap-1 h-full overflow-x-auto no-scrollbar">
-                    <a href="/" class="relative h-full flex items-center px-4 text-sm font-medium text-slate-600 hover:text-brand-dark transition-all duration-300 group"><i class="ph-fill ph-house mr-2"></i> Berita Utama</a>
-                    @foreach($categories as $category)
-                        <a href="{{ route('category.show', $category->slug) }}" class="relative h-full flex items-center px-4 text-sm font-medium {{ $news->categories->contains($category->id) ? 'text-brand-red font-bold' : 'text-slate-600' }} hover:text-brand-dark transition-all duration-300 group">
-                            {{ $category->name }}
-                            <span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[3px] bg-brand-red/20 rounded-t-full transition-all duration-300 group-hover:w-1/2 opacity-0 group-hover:opacity-100"></span>
-                        </a>
-                    @endforeach
-                </div>
-               <div class="hidden md:flex items-center gap-2 pl-6 border-l border-gray-300 h-6">
-    <a href="https://www.instagram.com/gaungnusra?igsh=cDJqMmJ3Zm9pMmpt" target="_blank" class="text-slate-400 hover:text-brand-red transition-colors">
-        <i class="ph-fill ph-instagram-logo text-lg"></i>
-    </a>
+    <div class="container mx-auto px-4 lg:px-8">
+        <div class="flex items-center justify-between h-14">
+            
+            <div class="flex items-center gap-1 h-full overflow-x-auto no-scrollbar">
+                {{-- Link Home --}}
+                <a href="/" class="relative h-full flex items-center px-4 text-sm font-medium text-slate-600 hover:text-brand-dark transition-all duration-300 group">
+                    <i class="ph-fill ph-house mr-2"></i> Berita Utama
+                </a>
 
-    <a href="https://www.facebook.com/share/1DvqTnVEtY/?mibextid=wwXIfr" target="_blank" class="text-slate-400 hover:text-blue-600 transition-colors">
-        <i class="ph-fill ph-facebook-logo text-lg"></i>
-    </a>
+                {{-- LOGIKA BARU: Ambil ID Kategori Pertama Dulu --}}
+                @php
+                    $primaryCategoryId = $news->categories->first()?->id;
+                @endphp
 
-    <a href="https://www.threads.com/@gaungnusra?igshid=NTc4MTIwNjQ2YQ==" target="_blank" class="text-slate-400 hover:text-black transition-colors">
-        <i class="ph-fill ph-threads-logo text-lg"></i>
-    </a>
+                @foreach($categories as $category)
+                    <a href="{{ route('category.show', $category->slug) }}" 
+                       class="relative h-full flex items-center px-4 text-sm font-medium hover:text-brand-dark transition-all duration-300 group
+                       {{-- Cek: Apakah ID kategori ini SAMA dengan ID kategori pertama berita? --}}
+                       {{ $primaryCategoryId == $category->id ? 'text-brand-red font-bold' : 'text-slate-600' }}">
+                        
+                        {{ $category->name }}
 
-    <a href="#" class="text-slate-400 hover:text-black transition-colors">
-        <i class="ph-fill ph-x-logo text-lg"></i>
-    </a>
-</div>
+                        {{-- Garis Bawah (Underline): Nyala permanen jika aktif, muncul saat hover jika tidak aktif --}}
+                        <span class="absolute bottom-0 left-1/2 -translate-x-1/2 h-[3px] bg-brand-red/20 rounded-t-full transition-all duration-300
+                            {{ $primaryCategoryId == $category->id ? 'w-1/2 opacity-100' : 'w-0 opacity-0 group-hover:w-1/2 group-hover:opacity-100' }}">
+                        </span>
+                    </a>
+                @endforeach
             </div>
+
+            {{-- Sosmed Icon di Kanan --}}
+            <div class="hidden md:flex items-center gap-2 pl-6 border-l border-gray-300 h-6">
+                <a href="https://www.instagram.com/gaungnusra?igsh=cDJqMmJ3Zm9pMmpt" target="_blank" class="text-slate-400 hover:text-brand-red transition-colors">
+                    <i class="ph-fill ph-instagram-logo text-lg"></i>
+                </a>
+                <a href="https://www.facebook.com/share/1DvqTnVEtY/?mibextid=wwXIfr" target="_blank" class="text-slate-400 hover:text-blue-600 transition-colors">
+                    <i class="ph-fill ph-facebook-logo text-lg"></i>
+                </a>
+                <a href="https://www.threads.com/@gaungnusra?igshid=NTc4MTIwNjQ2YQ==" target="_blank" class="text-slate-400 hover:text-black transition-colors">
+                    <i class="ph-fill ph-threads-logo text-lg"></i>
+                </a>
+                <a href="#" class="text-slate-400 hover:text-black transition-colors">
+                    <i class="ph-fill ph-x-logo text-lg"></i>
+                </a>
+            </div>
+
         </div>
-    </nav>
+    </div>
+</nav>
 
     <main class="container mx-auto px-4 lg:px-8 py-10 flex-grow bg-white">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
