@@ -165,7 +165,6 @@
                                 </p>
                                 <div class="flex items-center gap-2 text-xs text-slate-400">
                                     <span class="font-bold text-slate-600">{{ $news->author->name ?? 'Redaksi' }}</span>
-                                    <span>•</span>
                                 </div>
                             </div>
                         </article>
