@@ -206,34 +206,47 @@
                     </p>
                 @endif
 
-                <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-500 mb-6 pb-6 border-b border-slate-100">
-    
-    {{-- 1. PENULIS --}}
-    <div class="flex items-center gap-2">
-        <div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-brand-misty flex items-center justify-center font-bold text-brand-dark border border-slate-200">
-            {{ substr($news->author->name ?? 'R', 0, 1) }}
+                <div class="border-b border-slate-100 pb-5 mb-6">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+
+        {{-- 1. BLOK KIRI: INFO PENULIS (Pasti di Kiri/Atas) --}}
+        <div class="flex items-center gap-3">
+            {{-- Avatar --}}
+            <div class="w-10 h-10 rounded-full bg-brand-misty flex items-center justify-center font-bold text-brand-dark border border-slate-200 shrink-0">
+                {{ substr($news->author->name ?? 'R', 0, 1) }}
+            </div>
+            {{-- Nama --}}
+            <div class="flex flex-col justify-center">
+                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider leading-none mb-1">Penulis</span>
+                <span class="font-bold text-sm text-slate-800 leading-none">{{ $news->author->name ?? 'Redaksi' }}</span>
+            </div>
         </div>
-        <span class="font-bold text-slate-700">{{ $news->author->name ?? 'Redaksi' }}</span>
+
+        {{-- 2. BLOK KANAN: TANGGAL & VIEWS (Pasti di Kanan/Bawah - STATIC BOX) --}}
+        <div class="flex items-center bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 gap-4 w-fit md:w-auto">
+            
+            {{-- Tanggal --}}
+            <div class="flex items-center gap-2">
+                <i class="ph-fill ph-calendar-blank text-lg text-slate-400"></i>
+                <span class="text-xs font-medium text-slate-600 whitespace-nowrap">
+                    {{ $news->published_at ? $news->published_at->timezone('Asia/Makassar')->format('d M Y, H:i') : now()->timezone('Asia/Makassar')->format('d M Y, H:i') }} WITA
+                </span>
+            </div>
+
+            {{-- Garis Pemisah Tegak --}}
+            <div class="w-px h-4 bg-slate-300"></div>
+
+            {{-- Views --}}
+            <div class="flex items-center gap-2">
+                <i class="ph-fill ph-eye text-lg text-slate-400"></i>
+                <span class="text-xs font-medium text-slate-600 whitespace-nowrap">
+                    {{ number_format($news->views_count) }}
+                </span>
+            </div>
+
+        </div>
+
     </div>
-
-    {{-- Separator --}}
-    <span class="text-slate-300">•</span>
-
-    {{-- 2. TANGGAL (WITA) --}}
-    <div class="flex items-center gap-1">
-        <i class="ph-fill ph-calendar-blank"></i>
-        <span>{{ $news->published_at ? $news->published_at->timezone('Asia/Makassar')->format('d M Y, H:i') : now()->timezone('Asia/Makassar')->format('d M Y, H:i') }} WITA</span>
-    </div>
-
-    {{-- Separator (Baru ditambahkan biar rapi) --}}
-    <span class="text-slate-300">•</span>
-
-    {{-- 3. VIEWS (PERBAIKAN: Hapus ml-auto agar tidak mojok kanan sendiri) --}}
-    <div class="flex items-center gap-1">
-        <i class="ph-fill ph-eye"></i>
-        <span>{{ number_format($news->views_count) }}</span>
-    </div>
-
 </div>
 
                 <figure class="w-full rounded-xl overflow-hidden shadow-sm mb-8 bg-slate-100">
