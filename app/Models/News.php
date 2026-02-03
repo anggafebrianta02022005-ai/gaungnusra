@@ -12,21 +12,21 @@ class News extends Model
     use HasFactory;
 
     // 1. Kolom yang diizinkan untuk diisi (Mass Assignment)
-    protected $fillable = [
-        'user_id',
-        'news_code',
-        'title',
-        'subtitle',
-        'slug',
-        'content',
-        'image',
-        'thumbnail',
-        'status',          // draft, review, published
-        'pin_order',       // 1, 2, 3 (Urutan Pinned)
-        'published_at',
-        'journalist_code', // Kode Jurnalis (Otomatis)
-        'views_count'
-    ];
+   protected $fillable = [
+    'news_code',
+    'title',
+    'slug',
+    'subtitle',
+    'content',
+    'image',
+    'image_caption', // <--- INI "SURAT IZIN MASUK"-NYA
+    'thumbnail',
+    'author_id',
+    'status',
+    'published_at',
+    'pin_order',
+    // ...
+];
 
     // 2. Konversi Tipe Data Otomatis
     protected $casts = [
