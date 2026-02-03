@@ -12,7 +12,7 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\DateTimePicker; // <--- UBAH INI (Dulu DatePicker)
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Form;
 use Filament\Forms\Set;
@@ -104,14 +104,14 @@ class NewsResource extends Resource
                                         ->imageResizeTargetWidth('1200')
                                         ->imageResizeTargetHeight('675')
                                         ->panelLayout('integrated'),
-                                        
+                                    
                                     FileUpload::make('thumbnail')
                                         ->label('Thumbnail Berita (Wajib 16:9)')
                                         ->image()
                                         ->directory('news-thumbnails')
-                                        ->imageEditor() // <--- 1. Aktifkan Editor
-                                        ->imageCropAspectRatio('16:9') // <--- 2. Kunci Rasio 16:9
-                                        ->imageResizeTargetWidth('1280') // <--- 3. Resize otomatis biar ringan
+                                        ->imageEditor()
+                                        ->imageCropAspectRatio('16:9')
+                                        ->imageResizeTargetWidth('1280')
                                         ->imageResizeTargetHeight('720')
                                         ->required()
                                         ->imageResizeMode('cover')
@@ -152,15 +152,12 @@ class NewsResource extends Resource
                                         2 => 'Pin Posisi 2',
                                         3 => 'Pin Posisi 3',
                                     ])
-                                    // Logic: Disable jika status bukan Published
                                     ->disabled(fn (Get $get) => $get('status') !== 'published')
-                                    // Logic: Reset jadi null jika status diubah jadi draft/review
                                     ->afterStateUpdated(function ($state, Set $set, Get $get) {
                                         if ($get('status') !== 'published') {
                                             $set('pin_order', null);
                                         }
                                     })
-                                    // Validasi: Tolak jika user maksa pilih pin tapi status draft
                                     ->rules([
                                         fn (Get $get) => function (string $attribute, $value, \Closure $fail) use ($get) {
                                             if ($value && $get('status') !== 'published') {
@@ -168,12 +165,13 @@ class NewsResource extends Resource
                                             }
                                         },
                                     ])
-                                    // Validasi: Pastikan Posisi 1 tidak ganda
                                     ->unique(ignoreRecord: true),
 
-                                DatePicker::make('published_at')
+                                // === PERBAIKAN DISINI: DateTimePicker + Default Now() ===
+                                DateTimePicker::make('published_at')
                                     ->label('Jadwal Tayang')
-                                    ->default(now())
+                                    ->seconds(false) // Detik disembunyikan biar rapi
+                                    ->default(now()) // <--- INI KUNCINYA: Otomatis isi jam sekarang
                                     ->required()
                                     ->native(false),
 
@@ -184,8 +182,6 @@ class NewsResource extends Resource
                                     ->preload()
                                     ->searchable()
                                     ->required(),
-                                
-                                // (Kode Jurnalis sudah dihapus karena otomatis diisi oleh Model)
                             ]),
 
                         Section::make('Info Sistem')
@@ -207,14 +203,11 @@ class NewsResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            // === LOGIKA SORTING FINAL ===
-            // 1. Pinned (1, 2, 3) paling atas
-            // 2. ID Terbesar (Berita inputan terakhir) langsung di bawah Pinned
             ->modifyQueryUsing(function (Builder $query) {
                 return $query
-                    ->orderByRaw('pin_order IS NULL asc') // Null taruh bawah
-                    ->orderBy('pin_order', 'asc')         // Urutkan 1, 2, 3
-                    ->orderBy('id', 'desc');              // ID Besar (Baru) di atas ID Kecil (Lama)
+                    ->orderByRaw('pin_order IS NULL asc')
+                    ->orderBy('pin_order', 'asc')
+                    ->orderBy('id', 'desc');
             })
             ->columns([
                 ImageColumn::make('thumbnail')
@@ -238,14 +231,13 @@ class NewsResource extends Resource
                         Str::limit($record->subtitle ?? '-', 30)
                     ),
 
-                // Tampilan Pin Baru (Badge #1, #2, #3)
                 TextColumn::make('pin_order')
                     ->label('Pin')
                     ->badge()
                     ->color(fn ($state) => match ($state) {
-                        1 => 'danger',   // Merah (Utama)
-                        2 => 'warning',  // Kuning
-                        3 => 'info',     // Biru
+                        1 => 'danger',
+                        2 => 'warning',
+                        3 => 'info',
                         default => 'gray',
                     })
                     ->formatStateUsing(fn ($state) => $state ? "#$state" : '-')
@@ -275,7 +267,7 @@ class NewsResource extends Resource
 
                 TextColumn::make('published_at')
                     ->label('Tanggal')
-                    ->dateTime('d M Y')
+                    ->dateTime('d M Y, H:i') // Update format tabel juga biar kelihatan jamnya
                     ->sortable(),
             ])
             ->filters([

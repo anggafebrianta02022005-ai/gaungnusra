@@ -207,7 +207,7 @@
                         <i class="ph-fill ph-calendar-blank text-xl text-slate-400"></i>
                         <div class="flex flex-col leading-tight">
                             <span class="text-[10px] font-bold text-slate-400 uppercase">Tanggal</span>
-                            <span>{{ $news->published_at->format('d M Y, H:i') }} WIB</span>
+                            <span>{{ $news->published_at->format('d M Y, H:i') }} WITA</span>
                         </div>
                     </div>
                 </div>
