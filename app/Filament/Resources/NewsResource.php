@@ -106,11 +106,14 @@ class NewsResource extends Resource
                                         ->panelLayout('integrated'),
 
                                     // === TAMBAHAN BARU: INPUT KETERANGAN GAMBAR ===
-                                    TextInput::make('image_caption')
+                                   TextInput::make('image_caption')
                                         ->label('Keterangan Gambar (Caption)')
                                         ->placeholder('Contoh: Suasana pelantikan pejabat di Kantor Gubernur...')
+                                        ->prefixIcon('heroicon-m-chat-bubble-bottom-center-text') // 1. Tambah Ikon Cantik
+                                        ->helperText('Teks ini akan muncul tepat di bawah gambar utama berita sebagai referensi pembaca.') // 2. Tambah Petunjuk
                                         ->maxLength(255)
-                                        ->columnSpanFull(), 
+                                        ->characterLimit(255) // 3. Tambah Penghitung Karakter (misal: 50/255)
+                                        ->columnSpanFull(),
                                     // ===============================================
                                     
                                     FileUpload::make('thumbnail')
