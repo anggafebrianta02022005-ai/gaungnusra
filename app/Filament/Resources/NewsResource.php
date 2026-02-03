@@ -12,7 +12,7 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\DateTimePicker; // <--- UBAH INI (Dulu DatePicker)
+use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Form;
 use Filament\Forms\Set;
@@ -104,6 +104,14 @@ class NewsResource extends Resource
                                         ->imageResizeTargetWidth('1200')
                                         ->imageResizeTargetHeight('675')
                                         ->panelLayout('integrated'),
+
+                                    // === TAMBAHAN BARU: INPUT KETERANGAN GAMBAR ===
+                                    TextInput::make('image_caption')
+                                        ->label('Keterangan Gambar (Caption)')
+                                        ->placeholder('Contoh: Suasana pelantikan pejabat di Kantor Gubernur...')
+                                        ->maxLength(255)
+                                        ->columnSpanFull(), 
+                                    // ===============================================
                                     
                                     FileUpload::make('thumbnail')
                                         ->label('Thumbnail Berita (Wajib 16:9)')
@@ -167,11 +175,10 @@ class NewsResource extends Resource
                                     ])
                                     ->unique(ignoreRecord: true),
 
-                                // === PERBAIKAN DISINI: DateTimePicker + Default Now() ===
                                 DateTimePicker::make('published_at')
                                     ->label('Jadwal Tayang')
-                                    ->seconds(false) // Detik disembunyikan biar rapi
-                                    ->default(now()) // <--- INI KUNCINYA: Otomatis isi jam sekarang
+                                    ->seconds(false)
+                                    ->default(now())
                                     ->required()
                                     ->native(false),
 
@@ -267,7 +274,7 @@ class NewsResource extends Resource
 
                 TextColumn::make('published_at')
                     ->label('Tanggal')
-                    ->dateTime('d M Y, H:i') // Update format tabel juga biar kelihatan jamnya
+                    ->dateTime('d M Y, H:i')
                     ->sortable(),
             ])
             ->filters([

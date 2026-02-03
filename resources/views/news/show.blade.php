@@ -248,10 +248,14 @@
                     </div>
                 </div>
 
-                <figure class="w-full rounded-2xl overflow-hidden shadow-sm mb-10 bg-slate-100 group">
-                    <img src="{{ Storage::url($news->image ?? $news->thumbnail) }}" alt="{{ $news->title }}" class="w-full aspect-video object-cover transition-transform duration-700 group-hover:scale-105">
-                    <figcaption class="text-center text-sm text-slate-400 mt-3 italic">Ilustrasi: {{ $news->title }}</figcaption>
-                </figure>
+                <figure class="w-full rounded-xl overflow-hidden shadow-sm mb-8 bg-slate-100">
+    <img src="{{ Storage::url($news->image ?? $news->thumbnail) }}" alt="{{ $news->title }}" class="w-full h-auto object-cover">
+    
+    {{-- LOGIKA BARU: Tampilkan Keterangan Manual Admin. Jika kosong, baru pakai Ilustrasi Judul --}}
+    <figcaption class="text-center text-[10px] md:text-xs text-slate-400 mt-2 italic px-4">
+        {{ $news->image_caption ?? 'Ilustrasi: ' . $news->title }}
+    </figcaption>
+</figure>
 
                 <div class="article-content font-sans">
                     {!! $news->content !!}
