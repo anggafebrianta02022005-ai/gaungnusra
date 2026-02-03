@@ -207,22 +207,34 @@
                 @endif
 
                 <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-500 mb-6 pb-6 border-b border-slate-100">
-                    <div class="flex items-center gap-2">
-                        <div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-brand-misty flex items-center justify-center font-bold text-brand-dark border border-slate-200">
-                            {{ substr($news->author->name ?? 'R', 0, 1) }}
-                        </div>
-                        <span class="font-bold text-slate-700">{{ $news->author->name ?? 'Redaksi' }}</span>
-                    </div>
-                    <span class="text-slate-300 hidden md:inline">•</span>
-                    <div class="flex items-center gap-1">
-                        <i class="ph-fill ph-calendar-blank"></i>
-                        <span>{{ $news->published_at->format('d M Y, H:i') }}</span>
-                    </div>
-                    <div class="flex items-center gap-1 ml-auto md:ml-0">
-                        <i class="ph-fill ph-eye"></i>
-                        <span>{{ number_format($news->views_count) }}</span>
-                    </div>
-                </div>
+    
+    {{-- 1. PENULIS --}}
+    <div class="flex items-center gap-2">
+        <div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-brand-misty flex items-center justify-center font-bold text-brand-dark border border-slate-200">
+            {{ substr($news->author->name ?? 'R', 0, 1) }}
+        </div>
+        <span class="font-bold text-slate-700">{{ $news->author->name ?? 'Redaksi' }}</span>
+    </div>
+
+    {{-- Separator --}}
+    <span class="text-slate-300">•</span>
+
+    {{-- 2. TANGGAL (WITA) --}}
+    <div class="flex items-center gap-1">
+        <i class="ph-fill ph-calendar-blank"></i>
+        <span>{{ $news->published_at ? $news->published_at->timezone('Asia/Makassar')->format('d M Y, H:i') : now()->timezone('Asia/Makassar')->format('d M Y, H:i') }} WITA</span>
+    </div>
+
+    {{-- Separator (Baru ditambahkan biar rapi) --}}
+    <span class="text-slate-300">•</span>
+
+    {{-- 3. VIEWS (PERBAIKAN: Hapus ml-auto agar tidak mojok kanan sendiri) --}}
+    <div class="flex items-center gap-1">
+        <i class="ph-fill ph-eye"></i>
+        <span>{{ number_format($news->views_count) }}</span>
+    </div>
+
+</div>
 
                 <figure class="w-full rounded-xl overflow-hidden shadow-sm mb-8 bg-slate-100">
                     <img src="{{ Storage::url($news->image ?? $news->thumbnail) }}" alt="{{ $news->title }}" class="w-full h-auto object-cover">
