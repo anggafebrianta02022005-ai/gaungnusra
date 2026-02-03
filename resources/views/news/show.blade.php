@@ -351,7 +351,8 @@
                         @endif
                     </div>
                     </p>
-                    <<div class="flex space-x-4">
+                    <div class="flex gap-3">
+                       <div class="flex space-x-4">
     <a href="https://www.instagram.com/gaungnusra?igsh=cDJqMmJ3Zm9pMmpt" target="_blank" class="text-slate-400 hover:text-brand-red transition-colors">
         <i class="ph-fill ph-instagram-logo text-lg"></i>
     </a>
@@ -368,6 +369,7 @@
         <i class="ph-fill ph-x-logo text-lg"></i>
     </a>
 </div>
+                    </div>
                 </div>
 
                 <div>
@@ -390,7 +392,7 @@
                     </ul>
                 </div>
 
-                <div>
+              <div>
     <h3 class="font-display font-bold text-brand-dark mb-6 text-sm tracking-widest uppercase border-b-2 border-brand-red inline-block pb-1">Layanan</h3>
     <ul class="space-y-4 text-slate-500 text-sm font-medium">
         {{-- Menu Pasang Iklan --}}
