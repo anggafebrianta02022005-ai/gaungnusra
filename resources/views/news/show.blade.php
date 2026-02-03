@@ -196,10 +196,28 @@
             
             <article class="lg:col-span-8 animate-fade-in-up" style="animation-delay: 0.3s;">
                 
-                <div class="flex items-center gap-2 mb-4">
-                    <span class="w-1.5 h-6 bg-brand-red rounded-full"></span>
-                    <span class="text-brand-red font-bold text-sm tracking-wide uppercase">{{ $news->categories->first()->name ?? 'Berita' }}</span>
-                </div>
+                <div class="flex items-center gap-3 mb-4">
+    {{-- Garis Merah Vertikal --}}
+    <span class="w-1.5 h-6 bg-brand-red rounded-full shrink-0"></span>
+
+    {{-- Looping Semua Kategori --}}
+    <div class="flex flex-wrap items-center gap-2">
+        @forelse($news->categories as $category)
+            <a href="{{ route('category.show', $category->slug) }}" 
+               class="text-brand-red font-bold text-sm tracking-wide uppercase hover:text-brand-dark hover:underline decoration-2 underline-offset-4 transition-all">
+                {{ $category->name }}
+            </a>
+            
+            {{-- Separator Garis Miring (Muncul selain di item terakhir) --}}
+            @if(!$loop->last)
+                <span class="text-slate-300 text-sm font-light">/</span>
+            @endif
+        @empty
+            {{-- Fallback jika tidak ada kategori --}}
+            <span class="text-brand-red font-bold text-sm tracking-wide uppercase">Berita</span>
+        @endforelse
+    </div>
+</div>
 
                 <h1 class="font-display font-extrabold text-3xl md:text-4xl lg:text-[42px] leading-tight text-brand-dark mb-4">
                     {{ $news->title }}
