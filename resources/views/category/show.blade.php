@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#F1F5F9">
-<title>Kategori {{ $category->name }} - {{ $company->name ?? 'Portal Berita' }}</title>
+    <title>Kategori {{ $category->name }} - Gaung Nusra - Media Online</title>
     <link rel="icon" type="image/png" href="{{ asset('gaungnusra.png') }}?v=3">
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
