@@ -74,7 +74,7 @@
 </head>
 <body class="bg-white text-slate-800 flex flex-col min-h-screen" x-data="{ mobileMenu: false, searchOpen: false }">
 
-    {{-- 1. HEADER (LOGO, SEARCH DESKTOP, BURGER MOBILE) --}}
+    {{-- 1. HEADER (SEIRAS) --}}
     <header id="main-header" class="bg-white border-b border-gray-100 py-3 md:py-4 relative z-50 transition-all duration-300">
         <div class="container mx-auto px-4 lg:px-8 flex justify-between items-center relative min-h-[40px]">
             
@@ -92,14 +92,14 @@
             
             {{-- SEARCH DESKTOP --}}
             <div class="hidden md:block w-full max-w-md relative group ml-auto mr-4">
-                <div class="relative transition-all duration-300">
+                <div class="relative transition-all duration-300 transform origin-left">
                     <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400 group-focus-within:text-brand-red transition-colors"><i class="ph ph-magnifying-glass text-lg"></i></span>
                     <input type="text" id="desktop-search-input" autocomplete="off" placeholder="Cari berita..." class="w-full bg-brand-misty text-slate-800 border border-transparent rounded-full py-2.5 pl-10 pr-4 text-sm focus:bg-white focus:border-brand-red focus:ring-4 focus:ring-brand-red/10 focus:outline-none transition-all shadow-sm placeholder:text-gray-400">
                     <div id="desktop-search-results" class="search-results-container absolute top-full left-0 w-full mt-2 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden z-50"></div>
                 </div>
             </div>
 
-            {{-- TOMBOL AKSI MOBILE (SEARCH & BURGER) --}}
+            {{-- TOMBOL AKSI MOBILE --}}
             <div class="flex items-center gap-2 ml-auto md:hidden z-20">
                 <button @click="searchOpen = !searchOpen; if(searchOpen) $nextTick(() => $refs.mobileSearchInput.focus())" class="w-9 h-9 flex items-center justify-center rounded-full text-slate-600 hover:bg-slate-100 transition-all active:scale-95" :class="{ 'bg-brand-red/10 text-brand-red': searchOpen }">
                     <i class="ph text-xl" :class="searchOpen ? 'ph-x' : 'ph-magnifying-glass'"></i>
@@ -121,40 +121,11 @@
         </div>
     </div>
 
-    {{-- 3. SIDEBAR MENU MOBILE (BURGER CONTENT) --}}
-    <div x-show="mobileMenu" class="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm" @click="mobileMenu = false" x-transition.opacity style="display: none;"></div>
-    <div x-show="mobileMenu" class="fixed top-0 right-0 h-full w-[80%] max-w-[300px] bg-white z-[70] shadow-2xl p-6 overflow-y-auto" 
-         x-transition:enter="transition transform ease-out duration-300"
-         x-transition:enter-start="translate-x-full"
-         x-transition:enter-end="translate-x-0"
-         x-transition:leave="transition transform ease-in duration-300"
-         x-transition:leave-start="translate-x-0"
-         x-transition:leave-end="translate-x-full" style="display: none;">
-        
-        <div class="flex justify-between items-center mb-8 border-b border-slate-100 pb-4">
-            <h3 class="font-display font-bold text-lg text-brand-dark">Menu</h3>
-            <button @click="mobileMenu = false" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500"><i class="ph-bold ph-x"></i></button>
-        </div>
-        <div class="space-y-2">
-            <a href="/" class="block px-3 py-2.5 text-sm font-bold text-slate-700 hover:text-brand-red rounded-lg hover:bg-red-50">Berita Utama</a>
-            @foreach($categories as $navCat)
-                @php
-                    $isNewsPageMobile = isset($news) && $news->categories->count() > 0 && $news->categories->first()->id == $navCat->id;
-                @endphp
-                <a href="{{ route('category.show', $navCat->slug) }}" 
-                   class="block px-3 py-2.5 text-sm font-medium rounded-lg transition-colors {{ $isNewsPageMobile ? 'text-brand-red font-bold bg-red-50' : 'text-slate-600 hover:bg-slate-50' }}">
-                    {{ $navCat->name }}
-                </a>
-            @endforeach
-        </div>
-    </div>
-
-    {{-- 4. NAVBAR DESKTOP (UNIVERSAL LOGIC) --}}
+    {{-- 3. NAVBAR KATEGORI (UNIVERSAL LOGIC) --}}
     <nav class="sticky top-0 z-40 bg-brand-misty/90 backdrop-blur-xl border-b border-gray-200/50 shadow-sm transition-all animate-fade-in-up" style="animation-delay: 0.15s;">
         <div class="container mx-auto px-4 lg:px-8">
             <div class="flex items-center justify-between h-14">
                 
-                {{-- Menu Kiri: Scrollable --}}
                 <div id="menu-container" class="flex items-center gap-1 h-full overflow-x-auto no-scrollbar w-full md:w-auto pb-[2px]">
                     <a href="/" class="relative h-full flex items-center px-3 text-[13px] whitespace-nowrap shrink-0 transition-all duration-300 font-medium text-slate-600 hover:text-brand-dark">
                         <i class="ph-fill ph-house mr-1.5 text-base"></i>Berita Utama
@@ -162,8 +133,10 @@
 
                     @foreach($categories as $navCat)
                         @php
-                            // Logika Navbar Universal
+                            // Logika Seiras:
+                            // 1. Cek jika di halaman kategori
                             $isCategoryPage = request()->url() == route('category.show', $navCat->slug);
+                            // 2. Cek jika baca berita dalam kategori ini (Pakai first() agar cuma 1 yg nyala)
                             $isNewsPage = isset($news) && $news->categories->count() > 0 && $news->categories->first()->id == $navCat->id;
                             $isActive = $isCategoryPage || $isNewsPage;
                         @endphp
@@ -188,6 +161,35 @@
             </div>
         </div> 
     </nav>
+
+    {{-- 4. SIDEBAR MOBILE MENU (SLIDE FROM RIGHT - SEIRAS) --}}
+    <div x-show="mobileMenu" class="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm" @click="mobileMenu = false" x-transition.opacity style="display: none;"></div>
+    <div x-show="mobileMenu" class="fixed top-0 right-0 h-full w-[80%] max-w-[300px] bg-white z-[70] shadow-2xl p-6 overflow-y-auto" 
+         x-transition:enter="transition transform ease-out duration-300"
+         x-transition:enter-start="translate-x-full"
+         x-transition:enter-end="translate-x-0"
+         x-transition:leave="transition transform ease-in duration-300"
+         x-transition:leave-start="translate-x-0"
+         x-transition:leave-end="translate-x-full" style="display: none;">
+        
+        <div class="flex justify-between items-center mb-8 border-b border-slate-100 pb-4">
+            <h3 class="font-display font-bold text-lg text-brand-dark">Menu</h3>
+            <button @click="mobileMenu = false" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 active:scale-95"><i class="ph-bold ph-x"></i></button>
+        </div>
+        
+        <div class="space-y-2">
+            <a href="/" class="block px-3 py-2.5 text-sm font-bold text-slate-700 hover:text-brand-red rounded-lg hover:bg-red-50">Berita Utama</a>
+            @foreach($categories as $navCat)
+                @php
+                    $isNewsPageMobile = isset($news) && $news->categories->count() > 0 && $news->categories->first()->id == $navCat->id;
+                @endphp
+                <a href="{{ route('category.show', $navCat->slug) }}" 
+                   class="block px-3 py-2.5 text-sm font-medium rounded-lg transition-colors {{ $isNewsPageMobile ? 'text-brand-red font-bold bg-red-50' : 'text-slate-600 hover:bg-slate-50' }}">
+                    {{ $navCat->name }}
+                </a>
+            @endforeach
+        </div>
+    </div>
 
     {{-- KONTEN UTAMA --}}
     <main class="container mx-auto px-4 lg:px-8 py-10 flex-grow bg-white">
