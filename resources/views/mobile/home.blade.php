@@ -43,7 +43,7 @@
 <body class="bg-white text-slate-800 flex flex-col min-h-screen" x-data="{ mobileMenu: false, searchOpen: false }">
 
     {{-- HEADER --}}
-    <header class="bg-white border-b border-gray-100 py-3 md:py-4 relative z-50">
+    <header class="bg-brand-red border-b border-white/10 py-3 md:py-4 relative z-50 shadow-md">
         <div class="container mx-auto px-4 lg:px-8 flex justify-between items-center relative min-h-[40px]">
             
             {{-- 1. LOGO --}}
