@@ -89,14 +89,9 @@
 
 <style>
     /* Sembunyikan scrollbar untuk Chrome, Safari dan Opera */
-    .no-scrollbar::-webkit-scrollbar {
-        display: none;
-    }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
     /* Sembunyikan scrollbar untuk IE, Edge dan Firefox */
-    .no-scrollbar {
-        -ms-overflow-style: none;  /* IE and Edge */
-        scrollbar-width: none;  /* Firefox */
-    }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 </style>
 
 <nav class="sticky top-0 z-40 bg-brand-misty/90 backdrop-blur-xl border-b border-gray-200/50 shadow-sm transition-all animate-fade-in-up" style="animation-delay: 0.15s;">
@@ -105,27 +100,38 @@
             
             <div id="menu-container" class="flex items-center gap-1 h-full overflow-x-auto no-scrollbar w-full md:w-auto pb-[2px]">
                 
-                {{-- 1. BERITA UTAMA (Cek URL: Jika root '/' maka Aktif) --}}
+                {{-- 1. TOMBOL BERITA UTAMA --}}
+                {{-- Logika: Nyala merah hanya jika URL adalah root '/' --}}
                 <a href="/" 
                    class="relative h-full flex items-center px-3 text-[13px] whitespace-nowrap shrink-0 transition-all duration-300
                    {{ request()->is('/') ? 'font-bold text-brand-red border-b-[3px] border-brand-red bg-white/50' : 'font-medium text-slate-600 hover:text-brand-dark' }}">
                     <i class="ph-fill ph-house mr-1.5 text-base"></i>Berita Utama
                 </a>
 
-                {{-- 2. LOOPING KATEGORI (Gunakan $navCategory agar aman dari bentrok variabel) --}}
-                @foreach($categories as $navCategory)
-                    {{-- Logic: Cek apakah URL sekarang sama dengan link kategori ini --}}
+                {{-- 2. LOOPING KATEGORI --}}
+                {{-- Gunakan '$navCat' agar aman dan tidak menimpa variabel halaman lain --}}
+                @foreach($categories as $navCat)
                     @php
-                        $isActive = request()->url() == route('category.show', $navCategory->slug);
+                        // A. Cek apakah user sedang di Halaman Kategori ini?
+                        $isCategoryPage = request()->url() == route('category.show', $navCat->slug);
+
+                        // B. Cek apakah user sedang Baca Berita ($news) DAN berita itu punya kategori ini?
+                        // Syarat: Variabel $news ada, punya kategori, dan ID kategori PERTAMA berita == ID tombol ini
+                        $isNewsPage = isset($news) && 
+                                      $news->categories->count() > 0 && 
+                                      $news->categories->first()->id == $navCat->id;
+
+                        // Gabungkan: Tombol Aktif jika salah satu kondisi benar
+                        $isActive = $isCategoryPage || $isNewsPage;
                     @endphp
 
-                    <a href="{{ route('category.show', $navCategory->slug) }}" 
+                    <a href="{{ route('category.show', $navCat->slug) }}" 
                        class="relative h-full flex items-center px-3 text-[13px] whitespace-nowrap shrink-0 transition-all duration-300 group
                        {{ $isActive ? 'font-bold text-brand-red border-b-[3px] border-brand-red bg-white/50' : 'font-medium text-slate-600 hover:text-brand-dark' }}">
                         
-                        {{ $navCategory->name }}
+                        {{ $navCat->name }}
 
-                        {{-- Garis Hover (Hanya muncul jika TIDAK sedang aktif) --}}
+                        {{-- Garis Hover (Hanya muncul jika tombol TIDAK SEDANG AKTIF) --}}
                         @if(!$isActive)
                             <span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[3px] bg-brand-red/20 rounded-t-full transition-all duration-300 group-hover:w-1/2 opacity-0 group-hover:opacity-100"></span>
                         @endif
@@ -134,23 +140,29 @@
             </div>
 
             <div class="hidden md:flex items-center gap-3 pl-4 border-l border-gray-300 h-6 shrink-0">
-                <a href="https://www.instagram.com/gaungnusra?igsh=cDJqMmJ3Zm9pMmpt" target="_blank" class="text-slate-400 hover:text-brand-red transition-colors">
-                    <i class="ph-fill ph-instagram-logo text-lg"></i>
-                </a>
-                <a href="https://www.facebook.com/share/1DvqTnVEtY/?mibextid=wwXIfr" target="_blank" class="text-slate-400 hover:text-blue-600 transition-colors">
-                    <i class="ph-fill ph-facebook-logo text-lg"></i>
-                </a>
-                <a href="https://www.threads.com/@gaungnusra?igshid=NTc4MTIwNjQ2YQ==" target="_blank" class="text-slate-400 hover:text-black transition-colors">
-                    <i class="ph-fill ph-threads-logo text-lg"></i>
-                </a>
-                <a href="#" class="text-slate-400 hover:text-black transition-colors">
-                    <i class="ph-fill ph-x-logo text-lg"></i>
-                </a>
+                <a href="https://www.instagram.com/gaungnusra?igsh=cDJqMmJ3Zm9pMmpt" target="_blank" class="text-slate-400 hover:text-brand-red transition-colors"><i class="ph-fill ph-instagram-logo text-lg"></i></a>
+                <a href="https://www.facebook.com/share/1DvqTnVEtY/?mibextid=wwXIfr" target="_blank" class="text-slate-400 hover:text-blue-600 transition-colors"><i class="ph-fill ph-facebook-logo text-lg"></i></a>
+                <a href="https://www.threads.com/@gaungnusra?igshid=NTc4MTIwNjQ2YQ==" target="_blank" class="text-slate-400 hover:text-black transition-colors"><i class="ph-fill ph-threads-logo text-lg"></i></a>
+                <a href="#" class="text-slate-400 hover:text-black transition-colors"><i class="ph-fill ph-x-logo text-lg"></i></a>
             </div>
 
         </div>
     </div> 
 </nav>
+
+{{-- SCRIPT: Agar user desktop bisa scroll menu samping pakai Mouse Wheel --}}
+<script>
+    const menuContainer = document.getElementById('menu-container');
+    if(menuContainer){
+        menuContainer.addEventListener('wheel', (evt) => {
+            // Hanya aktifkan jika kontennya memang panjang (overflow)
+            if (menuContainer.scrollWidth > menuContainer.clientWidth) {
+                evt.preventDefault();
+                menuContainer.scrollLeft += evt.deltaY * 2; // Angka 2 untuk kecepatan scroll
+            }
+        });
+    }
+</script>
 
 {{-- Opsional: Script Scroll Mouse Wheel --}}
 <script>
