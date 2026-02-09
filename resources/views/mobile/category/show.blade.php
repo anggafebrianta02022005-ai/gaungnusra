@@ -216,9 +216,6 @@
                         <span class="text-2xl font-black text-slate-200 w-6 text-center group-hover:text-brand-red/50 transition-colors">{{ $index + 1 }}</span>
                         <div class="flex-1">
                             <h4 class="text-sm font-bold text-slate-800 leading-snug line-clamp-2 mb-1 group-hover:text-brand-red transition-colors">{{ $sNews->title }}</h4>
-                            <div class="flex items-center gap-2">
-                                <span class="text-[10px] text-slate-400"><i class="ph-fill ph-eye"></i> {{ number_format($sNews->views_count) }}</span>
-                            </div>
                         </div>
                         <div class="w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-slate-100">
                             <img src="{{ Storage::url($sNews->thumbnail) }}" class="w-full h-full object-cover">
