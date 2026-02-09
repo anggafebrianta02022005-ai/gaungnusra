@@ -94,6 +94,18 @@
     </div>
 </header>
 
+<style>
+    /* Sembunyikan scrollbar untuk Chrome, Safari dan Opera */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    /* Sembunyikan scrollbar untuk IE, Edge dan Firefox */
+    .no-scrollbar {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+    }
+</style>
+
 <nav class="sticky top-0 z-40 bg-brand-misty/90 backdrop-blur-xl border-b border-gray-200/50 shadow-sm transition-all animate-fade-in-up" style="animation-delay: 0.15s;">
     <div class="container mx-auto px-4 lg:px-8">
         <div class="flex items-center justify-between h-14">
@@ -129,7 +141,7 @@
             </div>
 
         </div>
-    </div>
+    </div> 
 </nav>
 
     <div class="bg-white border-b border-slate-100 animate-fade-in-up" style="animation-delay: 0.2s;">
