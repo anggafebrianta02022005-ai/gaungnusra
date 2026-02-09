@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /login
+Disallow: /register
+Disallow: /storage/*.zip
+Disallow: /storage/*.pdf
+
+Sitemap: https://gaungnusra.co.id/sitemap.xml
