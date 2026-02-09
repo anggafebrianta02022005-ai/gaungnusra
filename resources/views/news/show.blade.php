@@ -165,11 +165,20 @@
                     <i class="ph-fill ph-house mr-1.5 text-base"></i>Berita Utama
                 </a>
 
-                {{-- 2. LOOPING KATEGORI (Gunakan $navCat agar aman) --}}
+                {{-- 2. LOOPING KATEGORI --}}
                 @foreach($categories as $navCat)
-                    {{-- Cek: Apakah URL sekarang == Link Kategori ini? --}}
                     @php
-                        $isActive = request()->url() == route('category.show', $navCat->slug);
+                        // A. Cek Halaman Kategori: Apakah URL sekarang == Link Kategori ini?
+                        $isCategoryPage = request()->url() == route('category.show', $navCat->slug);
+
+                        // B. Cek Halaman Berita: Apakah variabel $news ada DAN ID Kategori Pertama Berita == ID Kategori ini?
+                        // (Logika: $news->categories->first() mengambil kategori UTAMA saja)
+                        $isNewsPage = isset($news) && 
+                                      $news->categories->count() > 0 && 
+                                      $news->categories->first()->id == $navCat->id;
+
+                        // Gabungkan: Nyala jika salah satu benar
+                        $isActive = $isCategoryPage || $isNewsPage;
                     @endphp
 
                     <a href="{{ route('category.show', $navCat->slug) }}" 
