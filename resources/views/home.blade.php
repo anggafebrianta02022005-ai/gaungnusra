@@ -65,15 +65,19 @@
     <header id="main-header" class="bg-white border-b border-gray-100 py-4 relative z-50 transition-all duration-300">
         <div class="container mx-auto px-4 lg:px-8 flex justify-between items-center gap-4">
             <a href="/" class="flex items-center gap-3 group select-none shrink-0 animate-fade-in-up">
-                @if($company && $company->logo)
-                    <img src="{{ Storage::url($company->logo) }}" alt="{{ $company->name }}" class="block h-10 md:h-12 w-auto object-contain">
-                @else
-                    <div class="flex flex-col leading-none">
-                        <span class="font-serif text-2xl font-bold text-brand-red tracking-tight">Gaung</span>
-                        <span class="font-display text-sm font-extrabold text-brand-dark tracking-widest uppercase -mt-1">NUSRA</span>
-                    </div>
-                @endif
-            </a>
+    @if($company && $company->logo)
+        {{-- UPDATE: Tambahkan class 'bg-transparent' --}}
+        {{-- Jika gambar aslinya punya kotak putih dan sulit diedit, tambahkan class 'mix-blend-multiply' --}}
+        <img src="{{ Storage::url($company->logo) }}" 
+             alt="{{ $company->name }}" 
+             class="block h-10 md:h-12 w-auto object-contain bg-transparent">
+    @else
+        <div class="flex flex-col leading-none">
+            <span class="font-serif text-2xl font-bold text-brand-red tracking-tight">Gaung</span>
+            <span class="font-display text-sm font-extrabold text-brand-dark tracking-widest uppercase -mt-1">NUSRA</span>
+        </div>
+    @endif
+</a>
             <div class="hidden md:block w-full max-w-md relative group animate-fade-in-up" style="animation-delay: 0.1s;">
                 <div class="relative transition-all duration-300">
                     <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400 group-focus-within:text-brand-red transition-colors"><i class="ph ph-magnifying-glass text-lg"></i></span>
