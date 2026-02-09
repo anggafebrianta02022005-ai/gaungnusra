@@ -205,11 +205,27 @@
                         <div class="flex items-center gap-2">
                             <span class="font-display font-bold text-slate-700">Bagikan:</span>
                         </div>
-                        <div class="flex items-center gap-3">
-                            <a href="https://api.whatsapp.com/send?text={{ urlencode($news->title . ' ' . request()->url()) }}" target="_blank" class="w-10 h-10 rounded-full bg-[#25D366]/10 text-[#25D366] flex items-center justify-center hover:bg-[#25D366] hover:text-white transition-all"><i class="ph-fill ph-whatsapp-logo text-xl"></i></a>
-                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(request()->url()) }}" target="_blank" class="w-10 h-10 rounded-full bg-[#1877F2]/10 text-[#1877F2] flex items-center justify-center hover:bg-[#1877F2] hover:text-white transition-all"><i class="ph-fill ph-facebook-logo text-xl"></i></a>
-                            <button onclick="copyToClipboard('Link')" class="w-10 h-10 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center hover:bg-slate-800 hover:text-white transition-all"><i class="ph-bold ph-link text-xl"></i></button>
-                        </div>
+                       <div class="flex items-center gap-3">
+    {{-- WhatsApp --}}
+    <a href="https://api.whatsapp.com/send?text={{ urlencode($news->title . ' ' . request()->url()) }}" target="_blank" class="w-10 h-10 rounded-full bg-[#25D366]/10 text-[#25D366] flex items-center justify-center hover:bg-[#25D366] hover:text-white transition-all">
+        <i class="ph-fill ph-whatsapp-logo text-xl"></i>
+    </a>
+
+    {{-- Facebook --}}
+    <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(request()->url()) }}" target="_blank" class="w-10 h-10 rounded-full bg-[#1877F2]/10 text-[#1877F2] flex items-center justify-center hover:bg-[#1877F2] hover:text-white transition-all">
+        <i class="ph-fill ph-facebook-logo text-xl"></i>
+    </a>
+
+    {{-- Instagram (Gaung Nusra) --}}
+    <a href="https://www.instagram.com/gaungnusra?igsh=cDJqMmJ3Zm9pMmpt" target="_blank" class="w-10 h-10 rounded-full bg-[#E1306C]/10 text-[#E1306C] flex items-center justify-center hover:bg-[#E1306C] hover:text-white transition-all" title="Instagram Gaung Nusra">
+        <i class="ph-fill ph-instagram-logo text-xl"></i>
+    </a>
+
+    {{-- Copy Link --}}
+    <button onclick="copyToClipboard('Link')" class="w-10 h-10 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center hover:bg-slate-800 hover:text-white transition-all" title="Salin Link">
+        <i class="ph-bold ph-link text-xl"></i>
+    </button>
+</div>
                     </div>
                 </div>
 
