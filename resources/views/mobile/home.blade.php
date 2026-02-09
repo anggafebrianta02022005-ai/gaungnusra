@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#F1F5F9">
     <title>Gaung Nusra - Media Online</title>
+    
+    {{-- CSS & FONTS --}}
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
@@ -29,7 +31,7 @@
         }
     </script>
     <style>
-        body { background-color: #ffffff; }
+        body { background-color: #ffffff; -webkit-font-smoothing: antialiased; }
         .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
         
         /* Hide Scrollbar */
@@ -38,42 +40,30 @@
 
         /* Search Styles */
         .search-results-container { display: none; }
+        .search-results-container.active { display: block; }
     </style>
 </head>
 <body class="bg-white text-slate-800 flex flex-col min-h-screen" x-data="{ mobileMenu: false, searchOpen: false }">
 
-    {{-- HEADER --}}
-    <header class="bg-white border-b border-gray-100 py-3 md:py-4 relative z-50">
-        <div class="container mx-auto px-4 lg:px-8 flex justify-between items-center relative min-h-[40px]">
+    {{-- 1. HEADER (LOGO & ACTIONS) --}}
+    <header class="bg-white border-b border-gray-100 py-3 relative z-50">
+        <div class="container mx-auto px-4 flex justify-between items-center relative min-h-[40px]">
             
-            {{-- 1. LOGO --}}
-            <a href="/" class="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 flex items-center gap-3 group select-none shrink-0 z-10">
+            {{-- LOGO --}}
+            <a href="/" class="flex items-center gap-3 select-none shrink-0 z-10">
                 @if($company && $company->logo)
-                    <img src="{{ Storage::url($company->logo) }}" alt="{{ $company->name }}" class="block h-8 md:h-12 w-auto object-contain">
+                    <img src="{{ Storage::url($company->logo) }}" alt="{{ $company->name }}" class="block h-8 w-auto object-contain">
                 @else
-                    <div class="flex flex-col leading-none text-center md:text-left">
-                        <span class="font-serif text-xl md:text-2xl font-bold text-brand-red tracking-tight">Gaung</span>
-                        <span class="font-display text-[10px] md:text-sm font-extrabold text-brand-dark tracking-widest uppercase -mt-0.5 md:-mt-1">NUSRA</span>
+                    <div class="flex flex-col leading-none">
+                        <span class="font-serif text-xl font-bold text-brand-red tracking-tight">Gaung</span>
+                        <span class="font-display text-[10px] font-extrabold text-brand-dark tracking-widest uppercase -mt-0.5">NUSRA</span>
                     </div>
                 @endif
             </a>
             
-            {{-- 2. SEARCH BAR (DESKTOP) --}}
-            <div class="hidden md:block w-full max-w-md relative group ml-auto mr-4">
-                <div class="relative transition-all duration-300 transform origin-left">
-                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400 group-focus-within:text-brand-red transition-colors"><i class="ph ph-magnifying-glass text-lg"></i></span>
-                    
-                    {{-- Input Desktop --}}
-                    <input type="text" id="desktop-search-input" autocomplete="off" placeholder="Cari berita..." class="w-full bg-brand-misty text-slate-800 border border-transparent rounded-full py-2.5 pl-10 pr-4 text-sm focus:bg-white focus:border-brand-red focus:ring-4 focus:ring-brand-red/10 focus:outline-none transition-all shadow-sm placeholder:text-gray-400">
-                    
-                    {{-- Hasil Search Desktop --}}
-                    <div id="desktop-search-results" class="search-results-container absolute top-full left-0 w-full mt-2 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden z-50"></div>
-                </div>
-            </div>
-
-            {{-- 3. TOMBOL AKSI MOBILE --}}
-            <div class="flex items-center gap-2 ml-auto md:hidden z-20">
-                {{-- Tombol Search Mobile --}}
+            {{-- TOMBOL AKSI MOBILE --}}
+            <div class="flex items-center gap-2 ml-auto z-20">
+                {{-- Tombol Search --}}
                 <button 
                     @click="searchOpen = !searchOpen; if(searchOpen) $nextTick(() => $refs.mobileSearchInput.focus())" 
                     class="w-9 h-9 flex items-center justify-center rounded-full text-slate-600 hover:bg-slate-100 transition-all active:scale-95"
@@ -81,7 +71,7 @@
                     <i class="ph text-xl" :class="searchOpen ? 'ph-x' : 'ph-magnifying-glass'"></i>
                 </button>
 
-                {{-- Tombol Menu --}}
+                {{-- Tombol Menu Burger --}}
                 <button @click="mobileMenu = !mobileMenu" class="w-9 h-9 flex items-center justify-center rounded-full bg-brand-misty text-brand-dark hover:bg-brand-red hover:text-white transition-all active:scale-95">
                     <i class="ph ph-list text-xl" x-show="!mobileMenu"></i>
                     <i class="ph ph-x text-xl" x-show="mobileMenu" x-cloak></i>
@@ -90,7 +80,7 @@
         </div>
     </header>
 
-    {{-- INPUT SEARCH MOBILE (Overlay Dropdown) --}}
+    {{-- 2. INPUT SEARCH MOBILE (Overlay Dropdown) --}}
     <div x-show="searchOpen" 
          x-transition:enter="transition ease-out duration-200"
          x-transition:enter-start="opacity-0 -translate-y-2"
@@ -98,32 +88,48 @@
          x-transition:leave="transition ease-in duration-150"
          x-transition:leave-start="opacity-100 translate-y-0"
          x-transition:leave-end="opacity-0 -translate-y-2"
-         class="px-4 py-3 bg-white border-b border-slate-100 shadow-sm relative z-40 md:hidden" style="display: none;">
+         class="px-4 py-3 bg-white border-b border-slate-100 shadow-sm relative z-40" style="display: none;">
         
         <div class="relative">
             <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-brand-red"><i class="ph-bold ph-magnifying-glass"></i></span>
-            
-            {{-- Input Mobile --}}
             <input x-ref="mobileSearchInput" type="text" id="mobile-search-input" placeholder="Ketik kata kunci berita..." class="w-full bg-brand-misty border-none rounded-lg py-2.5 pl-10 pr-4 text-sm focus:ring-2 focus:ring-brand-red outline-none shadow-inner">
-            
-            {{-- Hasil Search Mobile --}}
             <div id="mobile-search-results" class="search-results-container absolute top-full left-0 w-full mt-2 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden z-50"></div>
         </div>
     </div>
 
-    {{-- MENU KATEGORI --}}
-    <div class="bg-white border-b border-slate-100 overflow-x-auto no-scrollbar">
-        <div class="flex items-center px-4 h-12 gap-2 min-w-max">
-            <a href="/" class="px-3 py-1.5 text-xs font-bold text-brand-red bg-brand-red/10 rounded-full border border-brand-red/20">Berita Utama</a>
-            @foreach($categories as $category)
-                <a href="{{ route('category.show', $category->slug) }}" class="px-3 py-1.5 text-xs font-medium text-slate-600 hover:text-brand-dark hover:bg-slate-50 rounded-full border border-transparent transition-all">
-                    {{ $category->name }}
+    {{-- 3. NAVBAR KATEGORI (UNIVERSAL LOGIC) --}}
+    <nav class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-sm transition-all">
+        <div class="px-4 py-2">
+            <div class="flex items-center gap-2 h-10 overflow-x-auto no-scrollbar">
+                
+                {{-- Tombol Home --}}
+                <a href="/" 
+                   class="shrink-0 px-4 py-1.5 rounded-full text-xs font-bold border shadow-sm whitespace-nowrap transition-colors
+                   {{ request()->is('/') ? 'bg-brand-red text-white border-brand-red' : 'bg-white text-slate-600 border-slate-200 hover:border-brand-red' }}">
+                    Berita Utama
                 </a>
-            @endforeach
-        </div>
-    </div>
 
-    {{-- SIDEBAR MOBILE MENU --}}
+                {{-- Loop Kategori --}}
+                @foreach($categories as $navCategory)
+                    @php
+                        // Logika Navbar Universal (Sama dengan Desktop)
+                        $isCategoryPage = request()->url() == route('category.show', $navCategory->slug);
+                        $isNewsPage = request()->routeIs('news.show') && isset($news) && $news->categories->count() > 0 && $news->categories->first()->id == $navCategory->id;
+                        $isActive = $isCategoryPage || $isNewsPage;
+                    @endphp
+
+                    <a href="{{ route('category.show', $navCategory->slug) }}" 
+                       class="shrink-0 px-4 py-1.5 rounded-full text-xs font-medium border whitespace-nowrap active:scale-95 transition-transform
+                       {{ $isActive ? 'bg-brand-red text-white border-brand-red' : 'bg-slate-50 text-slate-600 border-slate-100 hover:bg-slate-100' }}">
+                        {{ $navCategory->name }}
+                    </a>
+                @endforeach
+
+            </div>
+        </div>
+    </nav>
+
+    {{-- 4. SIDEBAR MOBILE MENU (BURGER CONTENT) --}}
     <div x-show="mobileMenu" class="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm" @click="mobileMenu = false" x-transition.opacity style="display: none;"></div>
     <div x-show="mobileMenu" class="fixed top-0 right-0 h-full w-[80%] max-w-[300px] bg-white z-[70] shadow-2xl p-6 overflow-y-auto" 
          x-transition:enter="transition transform ease-out duration-300"
@@ -137,10 +143,20 @@
             <h3 class="font-display font-bold text-lg text-brand-dark">Menu</h3>
             <button @click="mobileMenu = false" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500"><i class="ph-bold ph-x"></i></button>
         </div>
+        
         <div class="space-y-2">
-            <a href="/" class="block px-3 py-2.5 text-sm font-bold text-brand-red bg-red-50 rounded-lg">Berita Utama</a>
-            @foreach($categories as $cat)
-                <a href="{{ route('category.show', $cat->slug) }}" class="block px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-lg">{{ $cat->name }}</a>
+            <a href="/" class="block px-3 py-2.5 text-sm font-bold rounded-lg {{ request()->is('/') ? 'text-brand-red bg-red-50' : 'text-slate-700 hover:bg-slate-50' }}">Berita Utama</a>
+            
+            @foreach($categories as $navCategory)
+                @php
+                    $isCategoryPage = request()->url() == route('category.show', $navCategory->slug);
+                    $isNewsPage = request()->routeIs('news.show') && isset($news) && $news->categories->count() > 0 && $news->categories->first()->id == $navCategory->id;
+                    $isActive = $isCategoryPage || $isNewsPage;
+                @endphp
+                <a href="{{ route('category.show', $navCategory->slug) }}" 
+                   class="block px-3 py-2.5 text-sm font-medium rounded-lg transition-colors {{ $isActive ? 'text-brand-red font-bold bg-red-50' : 'text-slate-600 hover:bg-slate-50' }}">
+                    {{ $navCategory->name }}
+                </a>
             @endforeach
         </div>
     </div>
@@ -164,32 +180,50 @@
             </div>
 
             <div class="flex flex-col gap-4" id="news-container">
-                @foreach($latestNews as $news)
-                    <article class="flex gap-4 border-b border-slate-100 pb-4 last:border-0 last:pb-0">
-                        <a href="{{ route('news.show', $news->slug) }}" class="w-28 h-20 shrink-0 rounded-lg overflow-hidden bg-slate-100 relative">
-                             @if($news->pin_order)
-                                <div class="absolute top-1 left-1 bg-brand-red text-white text-[8px] font-bold px-1.5 py-0.5 rounded shadow-sm">HEADLINE</div>
-                            @endif
-                            <img src="{{ Storage::url($news->thumbnail) }}" class="w-full h-full object-cover">
+                @foreach($latestNews as $loopNews) {{-- Ubah nama variabel agar aman --}}
+                    
+                    {{-- 1. HEADLINE MOBILE (BERITA PERTAMA) --}}
+                    @if($loop->first)
+                        <a href="{{ route('news.show', $loopNews->slug) }}" class="group block relative bg-white rounded-2xl overflow-hidden shadow-card border border-slate-100 mb-2">
+                            <div class="relative w-full aspect-video overflow-hidden bg-slate-100">
+                                <img src="{{ Storage::url($loopNews->thumbnail) }}" alt="{{ $loopNews->title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                                @if($loopNews->pin_order)
+                                    <div class="absolute top-3 left-3 bg-brand-red text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow-md z-10">HEADLINE</div>
+                                @endif
+                            </div>
+                            <div class="p-4">
+                                <span class="text-[10px] font-bold text-brand-red uppercase tracking-wide mb-1 block">{{ $loopNews->categories->first()->name ?? 'Berita' }}</span>
+                                <h2 class="text-lg font-bold text-slate-900 leading-snug mb-2 line-clamp-3 group-hover:text-brand-red transition-colors">{{ $loopNews->title }}</h2>
+                                <div class="flex items-center gap-3 text-xs text-slate-500">
+                                    <span class="flex items-center gap-1"><i class="ph-fill ph-calendar-blank text-brand-red"></i> {{ $loopNews->published_at->format('d M Y') }}</span>
+                                </div>
+                            </div>
                         </a>
-                        
-                        <div class="flex-1 flex flex-col justify-between py-0.5">
-                            <div>
-                                <span class="text-[10px] font-bold text-brand-red uppercase tracking-wide mb-0.5 block">
-                                    {{ $news->categories->first()->name ?? 'Umum' }}
-                                </span>
-                                <h3 class="text-sm font-bold text-slate-800 leading-snug line-clamp-2">
-                                    <a href="{{ route('news.show', $news->slug) }}">{{ $news->title }}</a>
-                                </h3>
+
+                    {{-- 2. BERITA LIST BIASA --}}
+                    @else
+                        <article class="flex gap-4 border-b border-slate-100 pb-4 last:border-0 last:pb-0">
+                            <a href="{{ route('news.show', $loopNews->slug) }}" class="w-24 h-24 shrink-0 rounded-lg overflow-hidden bg-slate-100 relative">
+                                <img src="{{ Storage::url($loopNews->thumbnail) }}" class="w-full h-full object-cover">
+                            </a>
+                            <div class="flex-1 flex flex-col justify-center py-0.5">
+                                <div>
+                                    <span class="text-[10px] font-bold text-brand-red uppercase tracking-wide mb-1 block">{{ $loopNews->categories->first()->name ?? 'Umum' }}</span>
+                                    <h3 class="text-sm font-bold text-slate-800 leading-snug line-clamp-2 mb-1.5">
+                                        <a href="{{ route('news.show', $loopNews->slug) }}">{{ $loopNews->title }}</a>
+                                    </h3>
+                                </div>
+                                <div class="flex items-center gap-2 mt-1">
+                                    <span class="text-[10px] text-slate-400">{{ $loopNews->published_at->diffForHumans() }}</span>
+                                </div>
                             </div>
-                            <div class="flex items-center gap-2 mt-1">
-                                <span class="text-[10px] text-slate-400">{{ $news->published_at->diffForHumans() }}</span>
-                            </div>
-                        </div>
-                    </article>
+                        </article>
+                    @endif
+
                 @endforeach
             </div>
 
+            {{-- TOMBOL LOAD MORE --}}
             @if($latestNews->hasMorePages())
                 <div class="mt-6 text-center" id="load-more-wrapper">
                     <button id="btn-load-more" data-page="2" class="px-6 py-2.5 bg-white text-brand-red border border-brand-red/30 rounded-full text-xs font-bold shadow-sm w-full active:bg-brand-red active:text-white transition-colors flex items-center justify-center gap-2">
@@ -213,11 +247,12 @@
                 @foreach($sidebarNews as $index => $sNews)
                     <a href="{{ route('news.show', $sNews->slug) }}" class="flex gap-4 items-center group">
                         <span class="text-2xl font-black text-slate-200 w-6 text-center group-hover:text-brand-red/50 transition-colors">{{ $index + 1 }}</span>
-                        
                         <div class="flex-1">
                             <h4 class="text-sm font-bold text-slate-800 leading-snug line-clamp-2 mb-1 group-hover:text-brand-red transition-colors">{{ $sNews->title }}</h4>
+                            <div class="flex items-center gap-2">
+                                <span class="text-[10px] text-slate-400">{{ $sNews->published_at->diffForHumans() }}</span>
+                            </div>
                         </div>
-                        
                         <div class="w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-slate-100">
                             <img src="{{ Storage::url($sNews->thumbnail) }}" class="w-full h-full object-cover">
                         </div>
@@ -226,7 +261,7 @@
             </div>
         </div>
 
-        {{-- IKLAN SIDEBAR --}}
+        {{-- IKLAN BAWAH --}}
         <div class="px-4 pb-8 pt-2">
             @if($sidebarAd)
                 <div class="text-[10px] text-slate-400 text-center mb-1">SPONSORED</div>
@@ -292,9 +327,9 @@
         </div>
     </footer>
 
-    {{-- SCRIPTS (PERBAIKAN LOGIKA SEARCH) --}}
+    {{-- SCRIPTS (SEARCH & LOAD MORE) --}}
     <script>
-        // Fungsi Pencarian Cerdas untuk Menangani 2 Input Berbeda (Desktop & Mobile)
+        // Fungsi Pencarian
         function initSearch(inputId, resultsId) {
             var input = $(inputId);
             var results = $(resultsId);
@@ -304,9 +339,8 @@
                 var query = $(this).val();
                 clearTimeout(timeout);
                 
-                // Jika input kosong atau kurang dari 2 huruf, sembunyikan hasil
                 if (query.length < 2) { 
-                    results.html('').hide(); 
+                    results.html('').removeClass('active').hide(); 
                     return; 
                 }
                 
@@ -326,31 +360,21 @@
                                             </a>`;
                                 });
                                 html += '</div>';
-                                results.html(html).show();
+                                results.html(html).addClass('active').show();
                             } else {
-                                results.html('<div class="p-4 text-center text-xs text-slate-400">Tidak ditemukan.</div>').show();
+                                results.html('<div class="p-4 text-center text-xs text-slate-400">Tidak ditemukan.</div>').addClass('active').show();
                             }
                         }
                     });
-                }, 300); // Delay sedikit biar server ga berat
-            });
-
-            // Sembunyikan hasil kalau klik di luar area
-            $(document).on('click', function(e) {
-                if (!$(e.target).closest(inputId).length && !$(e.target).closest(resultsId).length) {
-                    results.hide();
-                }
+                }, 300);
             });
         }
 
         $(document).ready(function() {
-            // Aktifkan Search untuk Desktop
-            initSearch('#desktop-search-input', '#desktop-search-results');
-
-            // Aktifkan Search untuk Mobile
+            // Init Search
             initSearch('#mobile-search-input', '#mobile-search-results');
 
-            // === LOAD MORE LOGIC ===
+            // Load More Logic
             $('#btn-load-more').click(function() {
                 var page = $(this).data('page');
                 var btn = $(this);
