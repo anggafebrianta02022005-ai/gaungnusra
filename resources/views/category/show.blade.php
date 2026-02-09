@@ -119,15 +119,30 @@
             
             <div class="flex items-center gap-1 h-full overflow-x-auto no-scrollbar w-full md:w-auto">
                 
-                <a href="/" class="relative h-full flex items-center px-3 text-[13px] font-bold text-brand-red border-b-[3px] border-brand-red bg-white/50 whitespace-nowrap shrink-0">
+                {{-- 1. BERITA UTAMA (Cek URL: Jika root '/' maka Aktif) --}}
+                <a href="/" 
+                   class="relative h-full flex items-center px-3 text-[13px] whitespace-nowrap shrink-0 transition-all duration-300
+                   {{ request()->is('/') ? 'font-bold text-brand-red border-b-[3px] border-brand-red bg-white/50' : 'font-medium text-slate-600 hover:text-brand-dark' }}">
                     <i class="ph-fill ph-house mr-1.5 text-base"></i>Berita Utama
                 </a>
 
-                @foreach($categories as $category)
-                    <a href="{{ route('category.show', $category->slug) }}" 
-                       class="relative h-full flex items-center px-3 text-[13px] font-medium text-slate-600 hover:text-brand-dark transition-all duration-300 group whitespace-nowrap shrink-0">
-                        {{ $category->name }}
-                        <span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[3px] bg-brand-red/20 rounded-t-full transition-all duration-300 group-hover:w-1/2 opacity-0 group-hover:opacity-100"></span>
+                {{-- 2. KATEGORI (Gunakan $navCategory agar aman) --}}
+                @foreach($categories as $navCategory)
+                    {{-- Logic: Cek apakah URL sekarang sama dengan link kategori ini --}}
+                    @php
+                        $isActive = request()->url() == route('category.show', $navCategory->slug);
+                    @endphp
+
+                    <a href="{{ route('category.show', $navCategory->slug) }}" 
+                       class="relative h-full flex items-center px-3 text-[13px] whitespace-nowrap shrink-0 transition-all duration-300 group
+                       {{ $isActive ? 'font-bold text-brand-red border-b-[3px] border-brand-red bg-white/50' : 'font-medium text-slate-600 hover:text-brand-dark' }}">
+                        
+                        {{ $navCategory->name }}
+
+                        {{-- Garis Hover (Hanya muncul jika TIDAK aktif) --}}
+                        @if(!$isActive)
+                            <span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[3px] bg-brand-red/20 rounded-t-full transition-all duration-300 group-hover:w-1/2 opacity-0 group-hover:opacity-100"></span>
+                        @endif
                     </a>
                 @endforeach
             </div>
@@ -150,7 +165,6 @@
         </div>
     </div> 
 </nav>
-
     {{-- IKLAN HEADER --}}
     <div class="bg-white border-b border-slate-100 animate-fade-in-up" style="animation-delay: 0.2s;">
         <div class="container mx-auto px-4 lg:px-8 py-6 flex flex-col items-center">
