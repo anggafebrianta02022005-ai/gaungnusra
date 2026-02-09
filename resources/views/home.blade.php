@@ -95,14 +95,20 @@
 </header>
 
 <style>
-    /* Sembunyikan scrollbar untuk Chrome, Safari dan Opera */
-    .no-scrollbar::-webkit-scrollbar {
-        display: none;
+    /* Scrollbar Tipis Modern */
+    .thin-scrollbar::-webkit-scrollbar {
+        height: 3px; /* Sangat tipis (cuma 3px) */
     }
-    /* Sembunyikan scrollbar untuk IE, Edge dan Firefox */
-    .no-scrollbar {
-        -ms-overflow-style: none;  /* IE and Edge */
-        scrollbar-width: none;  /* Firefox */
+    .thin-scrollbar::-webkit-scrollbar-track {
+        background: transparent; /* Track bening */
+    }
+    .thin-scrollbar::-webkit-scrollbar-thumb {
+        background-color: #cbd5e1; /* Warna abu muda halus */
+        border-radius: 10px;
+    }
+    .thin-scrollbar::-webkit-scrollbar-thumb:hover {
+        background-color: #D32F2F; /* Berubah Merah saat disentuh mouse */
+        height: 5px; /* Sedikit membesar biar gampang ditarik */
     }
 </style>
 
@@ -110,7 +116,7 @@
     <div class="container mx-auto px-4 lg:px-8">
         <div class="flex items-center justify-between h-14">
             
-            <div class="flex items-center gap-1 h-full overflow-x-auto no-scrollbar w-full md:w-auto">
+            <div id="menu-container" class="flex items-center gap-1 h-full overflow-x-auto thin-scrollbar w-full md:w-auto pb-[2px]">
                 
                 <a href="/" class="relative h-full flex items-center px-3 text-[13px] font-bold text-brand-red border-b-[3px] border-brand-red bg-white/50 whitespace-nowrap shrink-0">
                     <i class="ph-fill ph-house mr-1.5 text-base"></i>Berita Utama
@@ -118,7 +124,7 @@
 
                 @foreach($categories as $category)
                     <a href="{{ route('category.show', $category->slug) }}" 
-                       class="relative h-full flex items-center px-3 text-[13px] font-medium text-slate-600 hover:text-brand-dark transition-all duration-300 group whitespace-nowrap shrink-0">
+                       class="relative h-full flex items-center px-3 text-[13px] font-medium text-slate-600 hover:text-brand-dark hover:bg-white/40 transition-all duration-300 group whitespace-nowrap shrink-0">
                         {{ $category->name }}
                         <span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[3px] bg-brand-red/20 rounded-t-full transition-all duration-300 group-hover:w-1/2 opacity-0 group-hover:opacity-100"></span>
                     </a>
@@ -126,16 +132,16 @@
             </div>
 
             <div class="hidden md:flex items-center gap-3 pl-4 border-l border-gray-300 h-6 shrink-0">
-                <a href="https://www.instagram.com/gaungnusra?igsh=cDJqMmJ3Zm9pMmpt" target="_blank" class="text-slate-400 hover:text-brand-red transition-colors">
+                <a href="https://www.instagram.com/gaungnusra?igsh=cDJqMmJ3Zm9pMmpt" target="_blank" class="text-slate-400 hover:text-brand-red transition-colors hover:scale-110 transform duration-200">
                     <i class="ph-fill ph-instagram-logo text-lg"></i>
                 </a>
-                <a href="https://www.facebook.com/share/1DvqTnVEtY/?mibextid=wwXIfr" target="_blank" class="text-slate-400 hover:text-blue-600 transition-colors">
+                <a href="https://www.facebook.com/share/1DvqTnVEtY/?mibextid=wwXIfr" target="_blank" class="text-slate-400 hover:text-blue-600 transition-colors hover:scale-110 transform duration-200">
                     <i class="ph-fill ph-facebook-logo text-lg"></i>
                 </a>
-                <a href="https://www.threads.com/@gaungnusra?igshid=NTc4MTIwNjQ2YQ==" target="_blank" class="text-slate-400 hover:text-black transition-colors">
+                <a href="https://www.threads.com/@gaungnusra?igshid=NTc4MTIwNjQ2YQ==" target="_blank" class="text-slate-400 hover:text-black transition-colors hover:scale-110 transform duration-200">
                     <i class="ph-fill ph-threads-logo text-lg"></i>
                 </a>
-                <a href="#" class="text-slate-400 hover:text-black transition-colors">
+                <a href="#" class="text-slate-400 hover:text-black transition-colors hover:scale-110 transform duration-200">
                     <i class="ph-fill ph-x-logo text-lg"></i>
                 </a>
             </div>
@@ -143,6 +149,16 @@
         </div>
     </div> 
 </nav>
+
+<script>
+    const menuContainer = document.getElementById('menu-container');
+    
+    menuContainer.addEventListener('wheel', (evt) => {
+        evt.preventDefault();
+        // Mengubah putaran mouse vertikal menjadi geseran horizontal
+        menuContainer.scrollLeft += evt.deltaY; 
+    });
+</script>
 
     <div class="bg-white border-b border-slate-100 animate-fade-in-up" style="animation-delay: 0.2s;">
     <div class="container mx-auto px-4 lg:px-8 py-6 flex flex-col items-center">
