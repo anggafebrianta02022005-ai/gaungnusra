@@ -78,7 +78,7 @@
 <body class="bg-white text-slate-800 flex flex-col min-h-screen" x-data="{ searchOpen: false }">
 
     {{-- HEADER UTAMA --}}
-    <header id="main-header" class="bg-white border-b border-gray-100 py-4 relative z-50 transition-all duration-300">
+    <header id="main-header" class="bg-red-500 border-b border-gray-100 py-4 relative z-50 transition-all duration-300">
         <div class="container mx-auto px-4 lg:px-8 flex justify-between items-center gap-4">
             <a href="/" class="flex items-center gap-3 group select-none shrink-0 animate-fade-in-up">
                 @if($company && $company->logo)
