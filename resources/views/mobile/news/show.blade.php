@@ -122,45 +122,71 @@
     </div>
 
     {{-- 3. NAVBAR KATEGORI (UNIVERSAL LOGIC) --}}
-    <nav class="sticky top-0 z-40 bg-brand-misty/90 backdrop-blur-xl border-b border-gray-200/50 shadow-sm transition-all animate-fade-in-up" style="animation-delay: 0.15s;">
-        <div class="container mx-auto px-4 lg:px-8">
-            <div class="flex items-center justify-between h-14">
+{{-- NAVBAR DESKTOP (GAYA PILLS SEPERTI MOBILE) --}}
+<nav class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-sm transition-all hidden md:block">
+    <div class="container mx-auto px-4 lg:px-8">
+        <div class="flex items-center justify-between h-16"> {{-- Tinggi sedikit diperbesar agar lega --}}
+            
+            {{-- MENU SCROLLABLE (GAYA PILLS) --}}
+            <div id="menu-container" class="flex items-center gap-2 h-full overflow-x-auto no-scrollbar w-full md:w-auto pb-[2px]">
                 
-                <div id="menu-container" class="flex items-center gap-1 h-full overflow-x-auto no-scrollbar w-full md:w-auto pb-[2px]">
-                    <a href="/" class="relative h-full flex items-center px-3 text-[13px] whitespace-nowrap shrink-0 transition-all duration-300 font-medium text-slate-600 hover:text-brand-dark">
-                        <i class="ph-fill ph-house mr-1.5 text-base"></i>Berita Utama
+                {{-- 1. TOMBOL HOME --}}
+                <a href="/" 
+                   class="shrink-0 px-4 py-2 rounded-full text-sm font-bold border transition-all duration-300
+                   {{ request()->is('/') 
+                       ? 'bg-brand-red text-white border-brand-red shadow-md' 
+                       : 'bg-transparent text-slate-600 border-transparent hover:bg-slate-50 hover:text-brand-dark' }}">
+                    <i class="ph-fill ph-house mr-1.5 text-base"></i>Berita Utama
+                </a>
+
+                {{-- 2. LOOPING KATEGORI --}}
+                @foreach($categories as $navCat)
+                    @php
+                        // Logika Universal (Aman untuk Home, Kategori, & Detail Berita)
+                        $isCategoryPage = request()->url() == route('category.show', $navCat->slug);
+                        
+                        // Cek Detail Berita (Hanya nyala 1 kategori utama)
+                        $isNewsPage = request()->routeIs('news.show') && 
+                                      isset($news) && 
+                                      $news->categories->count() > 0 && 
+                                      $news->categories->first()->id == $navCat->id;
+                        
+                        $isActive = $isCategoryPage || $isNewsPage;
+                    @endphp
+
+                    <a href="{{ route('category.show', $navCat->slug) }}" 
+                       class="shrink-0 px-4 py-2 rounded-full text-sm font-medium border transition-all duration-300 whitespace-nowrap
+                       {{ $isActive 
+                           ? 'bg-brand-red text-white border-brand-red shadow-md font-bold' 
+                           : 'bg-transparent text-slate-600 border-transparent hover:bg-slate-50 hover:text-brand-dark' }}">
+                        {{ $navCat->name }}
                     </a>
-
-                    @foreach($categories as $navCat)
-                        @php
-                            // Logika Seiras:
-                            // 1. Cek jika di halaman kategori
-                            $isCategoryPage = request()->url() == route('category.show', $navCat->slug);
-                            // 2. Cek jika baca berita dalam kategori ini (Pakai first() agar cuma 1 yg nyala)
-                            $isNewsPage = isset($news) && $news->categories->count() > 0 && $news->categories->first()->id == $navCat->id;
-                            $isActive = $isCategoryPage || $isNewsPage;
-                        @endphp
-
-                        <a href="{{ route('category.show', $navCat->slug) }}" 
-                           class="relative h-full flex items-center px-3 text-[13px] whitespace-nowrap shrink-0 transition-all duration-300 group
-                           {{ $isActive ? 'font-bold text-brand-red border-b-[3px] border-brand-red bg-white/50' : 'font-medium text-slate-600 hover:text-brand-dark' }}">
-                            {{ $navCat->name }}
-                            @if(!$isActive)
-                                <span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[3px] bg-brand-red/20 rounded-t-full transition-all duration-300 group-hover:w-1/2 opacity-0 group-hover:opacity-100"></span>
-                            @endif
-                        </a>
-                    @endforeach
-                </div>
-
-                {{-- Sosmed Kanan --}}
-                <div class="hidden md:flex items-center gap-3 pl-4 border-l border-gray-300 h-6 shrink-0">
-                    <a href="https://www.instagram.com/gaungnusra" target="_blank" class="text-slate-400 hover:text-brand-red transition-colors"><i class="ph-fill ph-instagram-logo text-lg"></i></a>
-                    <a href="https://www.facebook.com/gaungnusra" target="_blank" class="text-slate-400 hover:text-blue-600 transition-colors"><i class="ph-fill ph-facebook-logo text-lg"></i></a>
-                    <a href="#" class="text-slate-400 hover:text-black transition-colors"><i class="ph-fill ph-x-logo text-lg"></i></a>
-                </div>
+                @endforeach
             </div>
-        </div> 
-    </nav>
+
+            {{-- SOSMED KANAN (Tetap Ada) --}}
+            <div class="hidden md:flex items-center gap-3 pl-4 border-l border-gray-300 h-8 shrink-0 ml-4">
+                <a href="https://www.instagram.com/gaungnusra" target="_blank" class="text-slate-400 hover:text-brand-red transition-colors"><i class="ph-fill ph-instagram-logo text-xl"></i></a>
+                <a href="https://www.facebook.com/gaungnusra" target="_blank" class="text-slate-400 hover:text-blue-600 transition-colors"><i class="ph-fill ph-facebook-logo text-xl"></i></a>
+                <a href="#" class="text-slate-400 hover:text-black transition-colors"><i class="ph-fill ph-x-logo text-xl"></i></a>
+            </div>
+
+        </div>
+    </div> 
+</nav>
+
+{{-- SCRIPT SCROLL MOUSE UNTUK DESKTOP --}}
+<script>
+    const menuContainer = document.getElementById('menu-container');
+    if(menuContainer){
+        menuContainer.addEventListener('wheel', (evt) => {
+            if (menuContainer.scrollWidth > menuContainer.clientWidth) {
+                evt.preventDefault();
+                menuContainer.scrollLeft += evt.deltaY * 2; 
+            }
+        });
+    }
+</script>
 
     {{-- 4. SIDEBAR MOBILE MENU (SLIDE FROM RIGHT - SEIRAS) --}}
     <div x-show="mobileMenu" class="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm" @click="mobileMenu = false" x-transition.opacity style="display: none;"></div>
