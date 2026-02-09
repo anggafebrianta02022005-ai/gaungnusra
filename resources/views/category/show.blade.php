@@ -78,7 +78,7 @@
 <body class="bg-white text-slate-800 flex flex-col min-h-screen" x-data="{ searchOpen: false }">
 
     {{-- HEADER UTAMA --}}
-    <header id="main-header" class="bg-red-500 border-b border-gray-100 py-4 relative z-50 transition-all duration-300">
+    <header id="main-header" class="bg-white border-b border-gray-100 py-4 relative z-50 transition-all duration-300">
         <div class="container mx-auto px-4 lg:px-8 flex justify-between items-center gap-4">
             <a href="/" class="flex items-center gap-3 group select-none shrink-0 animate-fade-in-up">
                 @if($company && $company->logo)
@@ -101,53 +101,55 @@
     </header>
 
     {{-- NAVBAR (SUDAH DIPERBAIKI LOGIKANYA) --}}
-    <nav class="sticky top-0 z-40 bg-brand-misty/90 backdrop-blur-xl border-b border-gray-200/50 shadow-sm transition-all animate-fade-in-up" style="animation-delay: 0.15s;">
-        <div class="container mx-auto px-4 lg:px-8">
-            <div class="flex items-center justify-between h-14">
+   <style>
+    /* Sembunyikan scrollbar untuk Chrome, Safari dan Opera */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    /* Sembunyikan scrollbar untuk IE, Edge dan Firefox */
+    .no-scrollbar {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+    }
+</style>
+
+<nav class="sticky top-0 z-40 bg-brand-misty/90 backdrop-blur-xl border-b border-gray-200/50 shadow-sm transition-all animate-fade-in-up" style="animation-delay: 0.15s;">
+    <div class="container mx-auto px-4 lg:px-8">
+        <div class="flex items-center justify-between h-14">
+            
+            <div class="flex items-center gap-1 h-full overflow-x-auto no-scrollbar w-full md:w-auto">
                 
-                {{-- Menu Kategori Scrollable --}}
-                <div class="flex items-center gap-1 h-full overflow-x-auto no-scrollbar">
-                    
-                    {{-- HOME (Logic Aktif) --}}
-                    <a href="/" class="relative h-full flex items-center px-4 text-sm font-medium transition-all duration-300 
-                        {{ request()->is('/') ? 'text-brand-red font-bold border-b-[3px] border-brand-red bg-white/50' : 'text-slate-600 hover:text-brand-dark' }}">
-                        <i class="ph-fill ph-house mr-2"></i> Berita Utama
-                    </a>
+                <a href="/" class="relative h-full flex items-center px-3 text-[13px] font-bold text-brand-red border-b-[3px] border-brand-red bg-white/50 whitespace-nowrap shrink-0">
+                    <i class="ph-fill ph-house mr-1.5 text-base"></i>Berita Utama
+                </a>
 
-                    {{-- LOOP KATEGORI (Logic Aktif) --}}
-                    @foreach($categories as $cat)
-                        <a href="{{ route('category.show', $cat->slug) }}" 
-                           class="relative h-full flex items-center px-4 text-sm font-medium transition-all duration-300 group
-                           {{ request()->is('category/'.$cat->slug) ? 'text-brand-red font-bold border-b-[3px] border-brand-red bg-white/50' : 'text-slate-600 hover:text-brand-dark' }}">
-                            
-                            {{ $cat->name }}
-                            
-                            {{-- Garis Bawah Hover (Hanya muncul jika tidak aktif) --}}
-                            @if(!request()->is('category/'.$cat->slug))
-                                <span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[3px] bg-brand-red/20 rounded-t-full transition-all duration-300 group-hover:w-1/2 opacity-0 group-hover:opacity-100"></span>
-                            @endif
-                        </a>
-                    @endforeach
-                </div>
-
-                {{-- Sosmed Kanan --}}
-                <div class="hidden md:flex items-center gap-2 pl-6 border-l border-gray-300 h-6">
-                    <a href="https://www.instagram.com/gaungnusra?igsh=cDJqMmJ3Zm9pMmpt" target="_blank" class="text-slate-400 hover:text-brand-red transition-colors">
-                        <i class="ph-fill ph-instagram-logo text-lg"></i>
+                @foreach($categories as $category)
+                    <a href="{{ route('category.show', $category->slug) }}" 
+                       class="relative h-full flex items-center px-3 text-[13px] font-medium text-slate-600 hover:text-brand-dark transition-all duration-300 group whitespace-nowrap shrink-0">
+                        {{ $category->name }}
+                        <span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[3px] bg-brand-red/20 rounded-t-full transition-all duration-300 group-hover:w-1/2 opacity-0 group-hover:opacity-100"></span>
                     </a>
-                    <a href="https://www.facebook.com/share/1DvqTnVEtY/?mibextid=wwXIfr" target="_blank" class="text-slate-400 hover:text-blue-600 transition-colors">
-                        <i class="ph-fill ph-facebook-logo text-lg"></i>
-                    </a>
-                    <a href="https://www.threads.com/@gaungnusra?igshid=NTc4MTIwNjQ2YQ==" target="_blank" class="text-slate-400 hover:text-black transition-colors">
-                        <i class="ph-fill ph-threads-logo text-lg"></i>
-                    </a>
-                    <a href="#" class="text-slate-400 hover:text-black transition-colors">
-                        <i class="ph-fill ph-x-logo text-lg"></i>
-                    </a>
-                </div>
+                @endforeach
             </div>
+
+            <div class="hidden md:flex items-center gap-3 pl-4 border-l border-gray-300 h-6 shrink-0">
+                <a href="https://www.instagram.com/gaungnusra?igsh=cDJqMmJ3Zm9pMmpt" target="_blank" class="text-slate-400 hover:text-brand-red transition-colors">
+                    <i class="ph-fill ph-instagram-logo text-lg"></i>
+                </a>
+                <a href="https://www.facebook.com/share/1DvqTnVEtY/?mibextid=wwXIfr" target="_blank" class="text-slate-400 hover:text-blue-600 transition-colors">
+                    <i class="ph-fill ph-facebook-logo text-lg"></i>
+                </a>
+                <a href="https://www.threads.com/@gaungnusra?igshid=NTc4MTIwNjQ2YQ==" target="_blank" class="text-slate-400 hover:text-black transition-colors">
+                    <i class="ph-fill ph-threads-logo text-lg"></i>
+                </a>
+                <a href="#" class="text-slate-400 hover:text-black transition-colors">
+                    <i class="ph-fill ph-x-logo text-lg"></i>
+                </a>
+            </div>
+
         </div>
-    </nav>
+    </div> 
+</nav>
 
     {{-- IKLAN HEADER --}}
     <div class="bg-white border-b border-slate-100 animate-fade-in-up" style="animation-delay: 0.2s;">
