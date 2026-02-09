@@ -205,9 +205,6 @@
                 <a href="https://www.threads.com/@gaungnusra?igshid=NTc4MTIwNjQ2YQ==" target="_blank" class="text-slate-400 hover:text-black transition-colors">
                     <i class="ph-fill ph-threads-logo text-lg"></i>
                 </a>
-                <a href="#" class="text-slate-400 hover:text-black transition-colors">
-                    <i class="ph-fill ph-x-logo text-lg"></i>
-                </a>
             </div>
 
         </div>
