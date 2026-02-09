@@ -61,7 +61,7 @@
     </style>
 </head>
 <body class="bg-white text-slate-800 flex flex-col min-h-screen" x-data="{ searchOpen: false }">
-<header id="main-header" class="bg-red-500 border-b border-gray-100 py-4 relative z-50 transition-all duration-300">
+<header id="main-header" class="bg-white border-b border-gray-100 py-4 relative z-50 transition-all duration-300">
     
     <div class="container mx-auto px-4 lg:px-8 flex justify-between items-center gap-4">
         
