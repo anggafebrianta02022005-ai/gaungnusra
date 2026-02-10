@@ -157,7 +157,6 @@
             @foreach($categories as $cat)
                 <a href="{{ route('category.show', $cat->slug) }}" class="block px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-lg">{{ $cat->name }}</a>
             @endforeach
-            <a href="{{ route('pages.advertise') }}" class="block px-3 py-2.5 text-sm font-bold text-brand-red bg-red-50 rounded-lg">Pasang Iklan</a>
         </div>
     </div>
 
