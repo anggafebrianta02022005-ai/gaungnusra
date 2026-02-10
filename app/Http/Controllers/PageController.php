@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\News;
 use App\Models\Ad;
 use App\Models\Category;
-use App\Models\CompanyProfile; 
+use App\Models\CompanyProfile;
 use Illuminate\Http\Request;
 use Jenssegers\Agent\Agent;
 
@@ -14,7 +14,14 @@ class PageController extends Controller
     public function about()
     {
         $agent = new Agent();
-        $view = $agent->isMobile() ? 'mobile.pages.about' : 'pages.about';
+        
+        // Cek apakah file view mobile ada? Kalau belum ada, fallback ke desktop
+        // Ini untuk mencegah error "View Not Found" kalau Mas belum sempat bikin file mobile-nya
+        if ($agent->isMobile() && view()->exists('mobile.pages.about')) {
+            $view = 'mobile.pages.about';
+        } else {
+            $view = 'pages.about';
+        }
 
         return view($view, $this->getSharedData());
     }
@@ -22,37 +29,47 @@ class PageController extends Controller
     public function advertise()
     {
         $agent = new Agent();
-        $view = $agent->isMobile() ? 'mobile.pages.advertise' : 'pages.advertise';
+        
+        if ($agent->isMobile() && view()->exists('mobile.pages.advertise')) {
+            $view = 'mobile.pages.advertise';
+        } else {
+            $view = 'pages.advertise';
+        }
 
         return view($view, $this->getSharedData());
     }
 
+    /**
+     * Fungsi Privasi untuk mengambil data yang sama (Menu, Iklan, Sidebar)
+     * Agar kodingan lebih rapi dan tidak diulang-ulang.
+     */
     private function getSharedData()
     {
         return [
+            // 1. DATA PERUSAHAAN
             'company' => CompanyProfile::first(),
-            'categories' => Category::all(),
-            
-            // Berita Trending (Sidebar)
+
+            // 2. NAVIGASI (PENTING: Harus sama logic-nya dengan HomeController)
+            // Ambil kategori aktif, limit 7 biar navbar rapi
+            'categories' => Category::where('is_active', true)->take(7)->get(),
+
+            // 3. BERITA TRENDING (SIDEBAR)
+            // Urutkan berdasarkan views_count terbanyak
             'sidebarNews' => News::where('status', 'published')
-                                ->latest()
-                                ->take(5)
-                                ->get(),
-            
-            // --- PERBAIKAN DI SINI (SESUAI DATABASE) ---
-            
-            // 1. Ganti 'sidebar' jadi 'sidebar_right'
-            // 2. Tambahkan pengecekan 'is_active' = 1
-            'sidebarAd' => Ad::where('position', 'sidebar_right')
-                             ->where('is_active', 1)
-                             ->latest()
-                             ->first(),
-            
-            // 1. Ganti 'header' jadi 'header_top'
-            // 2. Tambahkan pengecekan 'is_active' = 1
+                            ->orderBy('views_count', 'desc') 
+                            ->take(6)
+                            ->get(),
+
+            // 4. IKLAN HEADER (Atas)
             'headerAd' => Ad::where('position', 'header_top')
                             ->where('is_active', 1)
                             ->latest()
+                            ->first(),
+
+            // 5. IKLAN SIDEBAR (Samping)
+            'sidebarAd' => Ad::where('position', 'sidebar_right')
+                            ->where('is_active', 1)
+                            ->inRandomOrder() // Acak biar iklannya ganti-ganti dikit
                             ->first(),
         ];
     }
