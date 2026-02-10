@@ -7,11 +7,22 @@
     <meta name="description" content="{{ $company->description ?? 'Portal Berita Terkini' }}">
     <title>Gaung Nusra - Media Online</title>
     <link rel="icon" type="image/png" href="{{ asset('gaungnusra.png') }}?v=3">
+
+    {{-- SEO Canonical --}}
+    @php
+        $canonicalUrl = url()->current();
+        if (request()->has('page') && request()->get('page') > 1) {
+            $canonicalUrl = request()->fullUrl();
+        }
+    @endphp
+    <link rel="canonical" href="{{ $canonicalUrl }}">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    
     <script>
         tailwind.config = {
             theme: {

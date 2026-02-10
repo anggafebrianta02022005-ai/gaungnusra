@@ -10,6 +10,17 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    {{-- SEO CANONICAL (UNIVERSAL) --}}
+    @php
+        // Default: Ambil URL bersih
+        $canonicalUrl = url()->current();
+        
+        // Khusus Halaman 2, 3, dst (Pagination): Pakai URL lengkap (?page=2)
+        if (request()->has('page') && request()->get('page') > 1) {
+            $canonicalUrl = request()->fullUrl();
+        }
+    @endphp
+    <link rel="canonical" href="{{ $canonicalUrl }}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     
     <script>
