@@ -114,15 +114,32 @@
         </div>
     </div>
 
-    {{-- NAVBAR KATEGORI --}}
-    <div class="bg-white border-b border-slate-100 overflow-x-auto no-scrollbar">
-        <div class="flex items-center px-4 h-12 gap-2 min-w-max">
-            <a href="/" class="px-3 py-1.5 text-xs font-medium text-slate-600 hover:text-brand-dark hover:bg-slate-50 rounded-full border border-transparent transition-all">Berita Utama</a>
+{{-- NAVBAR KATEGORI (MODEL CAPSULE MOBILE) --}}
+    <div class="sticky top-[60px] z-30 bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-sm">
+        <div class="flex items-center gap-2 overflow-x-auto no-scrollbar px-4 py-3">
+            
+            {{-- 1. TOMBOL HOME (Berita Utama) --}}
+            <a href="/" 
+               class="shrink-0 px-4 py-2 rounded-full text-xs font-bold transition-all border
+               {{ request()->is('/') 
+                  ? 'bg-brand-red text-white border-brand-red shadow-md shadow-brand-red/30' 
+                  : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100 hover:border-slate-300' 
+               }}">
+               Berita Utama
+            </a>
+
+            {{-- 2. LOOPING KATEGORI --}}
             @foreach($categories as $cat)
-                <a href="{{ route('category.show', $cat->slug) }}" class="px-3 py-1.5 text-xs font-bold rounded-full border transition-all text-slate-600 border-transparent hover:bg-slate-50">
+                <a href="{{ route('category.show', $cat->slug) }}" 
+                   class="shrink-0 px-4 py-2 rounded-full text-xs font-bold transition-all border
+                   {{ request()->url() == route('category.show', $cat->slug) 
+                      ? 'bg-brand-red text-white border-brand-red shadow-md shadow-brand-red/30' 
+                      : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100 hover:border-slate-300' 
+                   }}">
                     {{ $cat->name }}
                 </a>
             @endforeach
+
         </div>
     </div>
 
