@@ -1,9 +1,44 @@
 User-agent: *
 Allow: /
-Disallow: /admin
+
+ ADMIN & OTENTIKASI (WAJIB BLOKIR) 
+# Jangan sampai halaman login muncul di Google
+Disallow: /admin/
 Disallow: /login
 Disallow: /register
-Disallow: /storage/*.zip
-Disallow: /storage/*.pdf
+Disallow: /password/
+Disallow: /email/
+Disallow: /logout
+Disallow: /dashboard
 
+ HASIL PENCARIAN INTERNAL (CRITICAL SEO)
+# Google melarang indeks halaman hasil search internal (duplikat konten)
+Disallow: /search
+Disallow: /pencarian
+Disallow: /?q=
+Disallow: /?s=
+Disallow: /?search=
+
+ SYSTEM & API LARAVEL 
+# Jalur data (JSON) tidak perlu dibaca Googlebot
+Disallow: /api/
+Disallow: /sanctum/
+Disallow: /telescope/
+Disallow: /horizon/
+Disallow: /nova/
+
+ FILE SAMPAH / SYSTEM 
+Disallow: /storage/*.log
+Disallow: /storage/*.key
+Disallow: /storage/*.zip
+Disallow: /storage/*.sql
+
+ KHUSUS GOOGLE NEWS BOT (PRIORITAS) 
+# Kita kasih karpet merah untuk bot berita
+User-agent: Googlebot-News
+Allow: /
+Allow: /news/
+Allow: /category/
+
+ SITEMAP DINAMIS KITA 
 Sitemap: https://gaungnusra.co.id/sitemap.xml
