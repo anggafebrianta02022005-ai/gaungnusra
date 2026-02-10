@@ -3,7 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\EpaperController; // Tambahkan ini
+use App\Http\Controllers\EpaperController; 
+use App\Http\Controllers\SitemapController;
 
 // Route Search Berita
 Route::get('/search/news', [HomeController::class, 'searchNews'])->name('search.news');
@@ -30,3 +31,4 @@ Route::get('epaper/download/{epaper}', [EpaperController::class, 'download'])->n
 // Catatan: Nanti sebaiknya ini dimasukkan ke dalam Middleware Auth (Login) biar aman
 Route::resource('epapers', EpaperController::class);
 Route::get('/epaper/terbaru', [App\Http\Controllers\EpaperController::class, 'downloadLatest'])->name('epaper.latest');
+Route::get('/sitemap.xml', [SitemapController::class, 'index']);
