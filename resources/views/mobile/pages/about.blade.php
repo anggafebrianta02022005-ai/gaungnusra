@@ -153,7 +153,7 @@
             <button @click="mobileMenu = false" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500"><i class="ph-bold ph-x"></i></button>
         </div>
         <div class="space-y-2">
-            <a href="/" class="block px-3 py-2.5 text-sm font-bold text-brand-red bg-red-50 rounded-lg">Home</a>
+            <a href="/" class="block px-3 py-2.5 text-sm font-bold text-brand-red bg-red-50 rounded-lg">Berita Utama</a>
             @foreach($categories as $cat)
                 <a href="{{ route('category.show', $cat->slug) }}" class="block px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-lg">{{ $cat->name }}</a>
             @endforeach
