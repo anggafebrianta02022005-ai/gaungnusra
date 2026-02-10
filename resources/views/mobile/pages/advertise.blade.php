@@ -115,7 +115,7 @@
     </div>
 
    {{-- NAVBAR KATEGORI (MODEL CAPSULE / PILL) --}}
-    <div class="bg-white border-b border-slate-100 sticky top-[60px] z-30 shadow-sm">
+    <div class="bg-white border-b border-slate-100 shadow-sm">
         <div class="flex items-center gap-2 overflow-x-auto no-scrollbar px-4 py-3">
             
             {{-- 1. TOMBOL BERITA UTAMA --}}
