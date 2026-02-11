@@ -240,20 +240,59 @@
                     </div>
                 </div>
 
-                {{-- BERITA TERKAIT --}}
-                <div class="mt-12">
-                    <h3 class="font-display font-bold text-lg text-brand-dark mb-4 flex items-center gap-2 border-l-4 border-brand-red pl-3">Berita Terkait</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        @foreach($relatedNews as $rNews)
-                        <a href="{{ route('news.show', $rNews->slug) }}" class="group block h-full">
-                            <div class="rounded-lg overflow-hidden mb-3 aspect-video bg-slate-100 relative shadow-sm">
-                                <img src="{{ Storage::url($rNews->thumbnail) }}" class="w-full h-full object-cover">
-                            </div>
-                            <h4 class="font-bold text-sm text-slate-800 leading-snug group-hover:text-brand-red transition-colors line-clamp-3">{{ $rNews->title }}</h4>
-                        </a>
-                        @endforeach
-                    </div>
+                {{-- BERITA TERKAIT (SWIPE MODE) --}}
+<div class="mt-10 md:mt-14 border-t border-slate-100 pt-8">
+    
+    {{-- Judul Section --}}
+    <div class="flex items-center justify-between mb-5 px-0">
+        <h3 class="font-display font-bold text-lg text-brand-dark flex items-center gap-2 border-l-4 border-brand-red pl-3">
+            Berita Terkait
+        </h3>
+        <span class="text-xs text-slate-400 font-medium md:hidden">Geser &rarr;</span>
+    </div>
+
+    {{-- Container Scrollable --}}
+    {{-- 
+        Trik UX Mobile: 
+        1. flex & overflow-x-auto: Biar bisa discroll samping.
+        2. snap-x & snap-mandatory: Biar berhentinya pas di tengah kartu (magnet effect).
+        3. -mx-4 & px-4: Biar konten mentok sampai ujung layar HP (full bleed) tapi start-nya tetap rapi sejajar margin.
+    --}}
+    <div class="flex md:grid md:grid-cols-3 gap-5 overflow-x-auto md:overflow-visible pb-6 -mx-4 px-4 md:mx-0 md:px-0 snap-x snap-mandatory no-scrollbar">
+        
+        @foreach($relatedNews as $rNews)
+        <a href="{{ route('news.show', $rNews->slug) }}" class="group block relative flex-shrink-0 w-[260px] md:w-auto snap-center md:snap-align-none transition-transform active:scale-95 md:active:scale-100">
+            
+            {{-- Wrapper Gambar --}}
+            <div class="rounded-xl overflow-hidden mb-3 aspect-video bg-slate-100 relative shadow-card border border-slate-100 group-hover:shadow-md transition-all">
+                {{-- Label Kategori Kecil di atas gambar --}}
+                @if($rNews->categories->count() > 0)
+                    <span class="absolute top-2 left-2 bg-brand-red/90 backdrop-blur-sm text-white text-[9px] font-bold px-2 py-0.5 rounded shadow-sm z-10">
+                        {{ $rNews->categories->first()->name }}
+                    </span>
+                @endif
+
+                <img src="{{ Storage::url($rNews->thumbnail) }}" alt="{{ $rNews->title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                
+                {{-- Efek Gelap Dikit saat Hover --}}
+                <div class="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-20 transition-opacity"></div>
+            </div>
+
+            {{-- Judul & Meta --}}
+            <div class="px-1">
+                <div class="flex items-center gap-2 text-[10px] text-slate-400 mb-1.5 font-medium">
+                    <i class="ph-fill ph-calendar-blank"></i>
+                    <span>{{ $rNews->created_at->format('d M Y') }}</span>
                 </div>
+                <h4 class="font-display font-bold text-sm text-slate-800 leading-snug group-hover:text-brand-red transition-colors line-clamp-2">
+                    {{ $rNews->title }}
+                </h4>
+            </div>
+        </a>
+        @endforeach
+
+    </div>
+</div>
             </article>
 
             {{-- SIDEBAR KANAN --}}
