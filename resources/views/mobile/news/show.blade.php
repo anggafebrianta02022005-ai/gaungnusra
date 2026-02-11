@@ -295,83 +295,25 @@
             </article>
 
             {{-- SIDEBAR KANAN --}}
-            <aside class="lg:col-span-4 space-y-10 pl-0 lg:pl-6 border-l border-transparent lg:border-slate-100 animate-fade-in-up" style="animation-delay: 0.2s;">
-    
-    {{-- WRAPPER STICKY: Agar sidebar ikut turun saat discroll --}}
-    <div class="sticky top-24 space-y-8">
-        
-        {{-- 1. WIDGET TRENDING --}}
-        <div class="bg-white rounded-2xl p-6 shadow-card border border-slate-100 relative overflow-hidden">
-            
-            {{-- Header Widget --}}
-            <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-50">
-                <h3 class="font-display font-bold text-lg text-brand-dark flex items-center gap-2">
-                    <i class="ph-fill ph-trend-up text-brand-red text-xl"></i> 
-                    Sedang Trending
-                </h3>
-            </div> 
-
-            {{-- List Berita --}}
-            <div class="space-y-6">
+            <div class="px-4 py-6 bg-white">
+            <div class="flex items-center gap-2 mb-5">
+                <i class="ph-fill ph-trend-up text-brand-red text-xl"></i>
+                <h2 class="font-display font-bold text-lg text-brand-dark">Sedang Trending</h2>
+            </div>
+            <div class="flex flex-col gap-4">
                 @foreach($sidebarNews as $index => $sNews)
-                    <a href="{{ route('news.show', $sNews->slug) }}" class="group flex gap-4 items-start relative">
-                        
-                        {{-- Nomor Urut (Styling Beda untuk Top 3) --}}
-                        <div class="absolute -left-2 -top-2 w-7 h-7 flex items-center justify-center bg-white border border-slate-100 shadow-sm rounded-full z-10 
-                            {{ $index < 3 ? 'text-brand-red font-extrabold ring-2 ring-brand-red/10' : 'text-slate-400 font-bold' }}">
-                            <span class="text-xs font-display">#{{ $index + 1 }}</span>
+                    <a href="{{ route('news.show', $sNews->slug) }}" class="flex gap-4 items-center group">
+                        <span class="text-2xl font-black text-slate-200 w-6 text-center group-hover:text-brand-red/50 transition-colors">{{ $index + 1 }}</span>
+                        <div class="flex-1">
+                            <h4 class="text-sm font-bold text-slate-800 leading-snug line-clamp-2 mb-1 group-hover:text-brand-red transition-colors">{{ $sNews->title }}</h4>
                         </div>
-
-                        {{-- Gambar dengan Efek Zoom --}}
-                        <div class="w-24 h-24 img-wrapper rounded-xl flex-shrink-0 shadow-sm border border-slate-100 overflow-hidden group-hover:shadow-md transition-all duration-500">
-                            <img src="{{ Storage::url($sNews->thumbnail) }}" 
-                                 alt="{{ $sNews->title }}"
-                                 loading="lazy" 
-                                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        </div>
-
-                        {{-- Konten Teks --}}
-                        <div class="flex-1 py-1 flex flex-col justify-between h-24">
-                            
-                            {{-- Judul --}}
-                            <h4 class="font-display text-sm font-bold text-brand-dark leading-snug line-clamp-3 group-hover:text-brand-red transition-colors duration-300">
-                                {{ $sNews->title }}
-                            </h4>
-
-                            {{-- Tanggal / Meta --}}
-                            <div class="flex items-center gap-2 text-[10px] text-slate-400 font-medium mt-auto">
-                                <span class="flex items-center gap-1">
-                                    <i class="ph-fill ph-calendar-blank"></i> {{ $sNews->created_at->format('d M Y') }}
-                                </span>
-                            </div>
+                        <div class="w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-slate-100">
+                            <img src="{{ Storage::url($sNews->thumbnail) }}" class="w-full h-full object-cover">
                         </div>
                     </a>
                 @endforeach
             </div>
         </div>
-        
-        {{-- 2. WIDGET IKLAN --}}
-        @if($sidebarAd && $sidebarAd->image)
-        <div class="relative group">
-            <a href="{{ $sidebarAd->link ?? '#' }}" target="_blank" class="block rounded-2xl overflow-hidden shadow-card border border-slate-100 transform transition-all duration-500 hover:-translate-y-1 hover:shadow-xl">
-                
-                {{-- Label Sponsored --}}
-                <div class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm border border-white/50 text-[10px] font-bold px-2 py-0.5 rounded text-slate-500 z-10 tracking-widest shadow-sm">
-                    ADS
-                </div>
-
-                <img src="{{ Storage::url($sidebarAd->image) }}" 
-                     alt="Iklan Sidebar" 
-                     class="w-full h-auto object-cover">
-                
-                {{-- Efek Kilau saat Hover --}}
-                <div class="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
-            </a>
-        </div>
-        @endif
-
-    </div>
-</aside>
         </div>
     </main>
 
