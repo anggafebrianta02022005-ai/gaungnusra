@@ -248,7 +248,6 @@
         <h3 class="font-display font-bold text-lg text-brand-dark flex items-center gap-2 border-l-4 border-brand-red pl-3">
             Berita Terkait
         </h3>
-        <span class="text-xs text-slate-400 font-medium md:hidden">Geser &rarr;</span>
     </div>
 
     {{-- Container Scrollable --}}
