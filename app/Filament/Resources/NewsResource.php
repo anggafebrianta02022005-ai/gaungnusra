@@ -88,9 +88,9 @@ class NewsResource extends Resource
                             ])
                             ->columns(2),
 
-                        // === BAGIAN VISUAL UTAMA (FIXED VIEWPORT EDITOR) ===
+                        // === BAGIAN VISUAL UTAMA (FIXED: NO EDITOR HERE TO PREVENT BUG) ===
                         Section::make('Visual Utama')
-                            ->description('Klik ikon Pensil untuk mengedit gambar. Gunakan mode layar luas untuk menghindari bug canvas.')
+                            ->description('Upload gambar di sini. Untuk memotong (Crop), gunakan tombol [Potong Gambar] di halaman Daftar Berita agar tidak bug.')
                             ->collapsible()
                             ->schema([
                                 Group::make()->schema([
@@ -101,19 +101,6 @@ class NewsResource extends Resource
                                         ->image()
                                         ->directory('news-main')
                                         ->required()
-                                        ->imageEditor()
-                                        // Mode 2 (Modal) lebih stabil untuk layout yang menabrak
-                                        ->imageEditorMode(2) 
-                                        ->imageEditorEmptyFillColor('#000000')
-                                        // Paksa Viewport luas agar canvas tidak terjepit sidebar
-                                        ->imageEditorViewportWidth('1200')
-                                        ->imageEditorViewportHeight('675')
-                                        ->imageEditorAspectRatios([
-                                            '16:9',
-                                            '4:3',
-                                            '1:1',
-                                        ])
-                                        ->imageResizeTargetWidth('1200')
                                         ->panelLayout('integrated') 
                                         ->columnSpanFull(),
 
@@ -131,13 +118,6 @@ class NewsResource extends Resource
                                         ->image()
                                         ->directory('news-thumbnails')
                                         ->required()
-                                        ->imageEditor()
-                                        ->imageEditorMode(2)
-                                        ->imageEditorViewportWidth('800')
-                                        ->imageEditorViewportHeight('450')
-                                        ->imageCropAspectRatio('16:9')
-                                        ->imageResizeTargetWidth('600')
-                                        ->panelLayout('integrated')
                                         ->extraAttributes(['class' => 'w-full']), 
                                 ])
                                 ->columnSpanFull()
@@ -151,6 +131,7 @@ class NewsResource extends Resource
                     ->schema([
                         Section::make('Publikasi')
                             ->schema([
+                                // 1. STATUS
                                 Select::make('status')
                                     ->options([
                                         'draft' => 'Draft (Konsep)',
@@ -162,6 +143,7 @@ class NewsResource extends Resource
                                     ->live() 
                                     ->native(false),
 
+                                // 2. PIN ORDER
                                 Select::make('pin_order')
                                     ->label('Sematkan Berita (Pinned)')
                                     ->placeholder('Tidak disematkan')
@@ -221,10 +203,7 @@ class NewsResource extends Resource
     {
         return $table
             ->modifyQueryUsing(function (Builder $query) {
-                return $query
-                    ->orderByRaw('pin_order IS NULL asc')
-                    ->orderBy('pin_order', 'asc')
-                    ->orderBy('id', 'desc');
+                return $query->orderByRaw('pin_order IS NULL asc')->orderBy('pin_order', 'asc')->orderBy('id', 'desc');
             })
             ->columns([
                 ImageColumn::make('thumbnail')
@@ -318,14 +297,12 @@ class NewsResource extends Resource
                     }),
             ])
             ->actions([
-                Action::make('preview')
-                    ->label('Simulasi')
-                    ->icon('heroicon-o-eye')
-                    ->color('info')
-                    ->modalContent(fn (News $record) => view('filament.resources.news-resource.pages.news-preview', ['record' => $record]))
-                    ->modalSubmitAction(false)
-                    ->modalCancelActionLabel('Tutup')
-                    ->modalWidth('4xl'),
+                // TOMBOL BARU: Mengarah ke halaman Editor khusus (Bebas Bug Sidebar)
+                Tables\Actions\Action::make('cropImage')
+                    ->label('Potong Gambar')
+                    ->icon('heroicon-o-scissors')
+                    ->color('warning')
+                    ->url(fn (News $record): string => static::getUrl('edit-image', ['record' => $record])),
 
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
@@ -348,6 +325,8 @@ class NewsResource extends Resource
             'index' => Pages\ListNews::route('/'),
             'create' => Pages\CreateNews::route('/create'),
             'edit' => Pages\EditNews::route('/{record}/edit'),
+            // HALAMAN EDITOR KHUSUS
+            'edit-image' => Pages\EditNewsImage::route('/{record}/image-editor'),
         ];
     }
 }
