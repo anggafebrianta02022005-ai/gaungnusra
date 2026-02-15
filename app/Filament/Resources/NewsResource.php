@@ -88,9 +88,9 @@ class NewsResource extends Resource
                             ])
                             ->columns(2),
 
-                        // === BAGIAN VISUAL UTAMA (UPDATE: IMAGE EDITOR) ===
+                        // === BAGIAN VISUAL UTAMA (INTEGRATED EDITOR) ===
                         Section::make('Visual Utama')
-                            ->description('Klik ikon Pensil pada gambar untuk mengedit (Crop/Rotate).')
+                            ->description('Gunakan editor terintegrasi untuk menyesuaikan gambar agar rapi.')
                             ->collapsible()
                             ->schema([
                                 Group::make()->schema([
@@ -98,48 +98,44 @@ class NewsResource extends Resource
                                     // 1. Gambar Utama (Header)
                                     FileUpload::make('image')
                                         ->label('Gambar Utama (Header)')
-                                        ->helperText('Klik tombol pensil setelah upload untuk memotong gambar (Crop).')
                                         ->image()
                                         ->directory('news-main')
                                         ->required()
-                                        // === AKTIFKAN EDITOR ===
-                                        ->imageEditor() 
+                                        ->imageEditor()
+                                        ->imageEditorMode(1)
                                         ->imageEditorAspectRatios([
                                             '16:9',
                                             '4:3',
                                             '1:1',
                                         ])
-                                        // Resize target width agar file tidak terlalu berat
-                                        ->imageResizeTargetWidth('1200') 
-                                        ->panelLayout('integrated'),
+                                        ->imageResizeTargetWidth('1200')
+                                        // Layout integrated agar tidak muncul sebagai pop-up/modal
+                                        ->panelLayout('integrated') 
+                                        ->columnSpanFull(),
 
                                     // 2. Caption
                                     TextInput::make('image_caption')
                                         ->label('Keterangan Gambar (Caption)')
                                         ->placeholder('Contoh: Suasana pelantikan pejabat...')
-                                        ->prefixIcon('heroicon-m-chat-bubble-bottom-center-text')
                                         ->maxLength(255)
                                         ->columnSpanFull(),
                                     
                                     // 3. Thumbnail
                                     FileUpload::make('thumbnail')
                                         ->label('Thumbnail Berita')
-                                        ->helperText('Wajib 16:9. Gunakan editor (pensil) untuk menyesuaikan area potong.')
                                         ->image()
                                         ->directory('news-thumbnails')
                                         ->required()
-                                        // === AKTIFKAN EDITOR ===
                                         ->imageEditor()
-                                        ->imageEditorAspectRatios([
-                                            '16:9',
-                                        ])
-                                        // Memaksa crop awal 16:9 saat editor dibuka
-                                        ->imageCropAspectRatio('16:9') 
+                                        ->imageEditorMode(1)
+                                        ->imageCropAspectRatio('16:9')
                                         ->imageResizeTargetWidth('600')
-                                        ->extraAttributes(['class' => 'w-1/2 mx-auto']), 
+                                        // Mencegah bug tabrakan dengan merender editor di dalam form
+                                        ->panelLayout('integrated')
+                                        ->extraAttributes(['class' => 'w-full']), 
                                 ])
                                 ->columnSpanFull()
-                                ->extraAttributes(['class' => 'flex flex-col items-center justify-center text-center gap-4']),
+                                ->extraAttributes(['class' => 'space-y-6']),
                             ]),
                     ])
                     ->columnSpan(['lg' => 2]),
@@ -205,10 +201,10 @@ class NewsResource extends Resource
                             ->schema([
                                 Placeholder::make('created_at')
                                     ->label('Dibuat pada')
-                                    ->content(fn (News $record): string => $record->created_at?->diffForHumans() ?? '-'),
+                                    ->content(fn (News $record): string => $record->created_at?->diffFor_humans() ?? '-'),
                                 Placeholder::make('updated_at')
                                     ->label('Terakhir diupdate')
-                                    ->content(fn (News $record): string => $record->updated_at?->diffForHumans() ?? '-'),
+                                    ->content(fn (News $record): string => $record->updated_at?->diffFor_humans() ?? '-'),
                             ])
                             ->hidden(fn (?News $record) => $record === null),
                     ])
