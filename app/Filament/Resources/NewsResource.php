@@ -88,52 +88,53 @@ class NewsResource extends Resource
                             ])
                             ->columns(2),
 
+                        // === BAGIAN YANG DIPERBARUI: VISUAL UTAMA ===
                         Section::make('Visual Utama')
-                            ->description('Gambar akan otomatis dipotong (Auto-Crop) sesuai rasio.')
+                            ->description('Gambar akan diupload sesuai ukuran aslinya (Tanpa Crop).')
                             ->collapsible()
                             ->schema([
                                 Group::make()->schema([
+                                    
+                                    // 1. Gambar Utama (Header)
                                     FileUpload::make('image')
                                         ->label('Gambar Utama (Header)')
-                                        ->helperText('Format Landscape 16:9')
+                                        ->helperText('Format bebas (Landscape/Portrait). Gambar tidak akan dipotong.')
                                         ->image()
                                         ->directory('news-main')
                                         ->required()
-                                        ->imageResizeMode('cover') 
-                                        ->imageCropAspectRatio('16:9') 
-                                        ->imageResizeTargetWidth('1200')
-                                        ->imageResizeTargetHeight('675')
+                                        // HAPUS: imageCropAspectRatio & imageResizeTargetHeight
+                                        // HAPUS: imageResizeMode('cover')
+                                        // HANYA: Batasi lebar agar file tidak terlalu berat, rasio tetap asli.
+                                        ->imageResizeTargetWidth('1200') 
                                         ->panelLayout('integrated'),
 
-                                   
-                                   // === KODE PERBAIKAN (HAPUS characterLimit) ===
+                                    // 2. Caption
                                     TextInput::make('image_caption')
                                         ->label('Keterangan Gambar (Caption)')
                                         ->placeholder('Contoh: Suasana pelantikan pejabat di Kantor Gubernur...')
                                         ->prefixIcon('heroicon-m-chat-bubble-bottom-center-text')
-                                        ->helperText('Teks ini akan muncul tepat di bawah gambar utama berita sebagai referensi pembaca.')
-                                        ->maxLength(255) // <--- Cukup pakai ini saja
-                                        ->columnSpanFull(), 
-                                    // ===============================================
+                                        ->helperText('Teks ini akan muncul tepat di bawah gambar utama berita.')
+                                        ->maxLength(255)
+                                        ->columnSpanFull(),
                                     
+                                    // 3. Thumbnail
                                     FileUpload::make('thumbnail')
-                                        ->label('Thumbnail Berita (Wajib 16:9)')
+                                        ->label('Thumbnail Berita')
+                                        ->helperText('Format bebas. Gambar akan ditampilkan utuh.')
                                         ->image()
                                         ->directory('news-thumbnails')
-                                        ->imageEditor()
-                                        ->imageCropAspectRatio('16:9')
-                                        ->imageResizeTargetWidth('1280')
-                                        ->imageResizeTargetHeight('720')
+                                        ->imageEditor() // Editor manual tetap ada jika user ingin potong sendiri
                                         ->required()
-                                        ->imageResizeMode('cover')
-                                        ->imageCropAspectRatio('1:1')
-                                        ->imageResizeTargetWidth('400')
-                                        ->imageResizeTargetHeight('400')
+                                        // HAPUS: Semua aturan paksa rasio (16:9 atau 1:1)
+                                        // HAPUS: imageResizeMode('cover')
+                                        // HANYA: Batasi lebar thumbnail.
+                                        ->imageResizeTargetWidth('600') 
                                         ->extraAttributes(['class' => 'w-1/2 mx-auto']), 
                                 ])
                                 ->columnSpanFull()
                                 ->extraAttributes(['class' => 'flex flex-col items-center justify-center text-center gap-4']),
                             ]),
+                        // === SELESAI BAGIAN YANG DIPERBARUI ===
                     ])
                     ->columnSpan(['lg' => 2]),
 
