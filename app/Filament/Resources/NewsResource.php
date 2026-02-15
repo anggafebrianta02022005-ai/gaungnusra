@@ -88,9 +88,9 @@ class NewsResource extends Resource
                             ])
                             ->columns(2),
 
-                        // === BAGIAN VISUAL UTAMA (INTEGRATED EDITOR) ===
+                        // === BAGIAN VISUAL UTAMA (FULLSCREEN EDITOR MODE) ===
                         Section::make('Visual Utama')
-                            ->description('Gunakan editor terintegrasi untuk menyesuaikan gambar agar rapi.')
+                            ->description('Klik ikon Pensil untuk mengedit gambar dalam mode layar penuh (Fullscreen).')
                             ->collapsible()
                             ->schema([
                                 Group::make()->schema([
@@ -102,36 +102,40 @@ class NewsResource extends Resource
                                         ->directory('news-main')
                                         ->required()
                                         ->imageEditor()
-                                        ->imageEditorMode(1)
+                                        // PAKSA AREA KERJA LUAS UNTUK MENCEGAH TABRAKAN CANVAS
+                                        ->imageEditorEmptyFillColor('#000000')
+                                        ->imageEditorViewportWidth('1920')
+                                        ->imageEditorViewportHeight('1080')
                                         ->imageEditorAspectRatios([
                                             '16:9',
                                             '4:3',
                                             '1:1',
                                         ])
                                         ->imageResizeTargetWidth('1200')
-                                        // Layout integrated agar tidak muncul sebagai pop-up/modal
-                                        ->panelLayout('integrated') 
                                         ->columnSpanFull(),
 
                                     // 2. Caption
                                     TextInput::make('image_caption')
                                         ->label('Keterangan Gambar (Caption)')
                                         ->placeholder('Contoh: Suasana pelantikan pejabat...')
+                                        ->prefixIcon('heroicon-m-chat-bubble-bottom-center-text')
                                         ->maxLength(255)
                                         ->columnSpanFull(),
                                     
                                     // 3. Thumbnail
                                     FileUpload::make('thumbnail')
                                         ->label('Thumbnail Berita')
+                                        ->helperText('Wajib 16:9. Gunakan editor untuk menyesuaikan area potong.')
                                         ->image()
                                         ->directory('news-thumbnails')
                                         ->required()
                                         ->imageEditor()
-                                        ->imageEditorMode(1)
-                                        ->imageCropAspectRatio('16:9')
+                                        ->imageEditorEmptyFillColor('#000000')
+                                        ->imageEditorAspectRatios([
+                                            '16:9',
+                                        ])
+                                        ->imageCropAspectRatio('16:9') 
                                         ->imageResizeTargetWidth('600')
-                                        // Mencegah bug tabrakan dengan merender editor di dalam form
-                                        ->panelLayout('integrated')
                                         ->extraAttributes(['class' => 'w-full']), 
                                 ])
                                 ->columnSpanFull()
@@ -201,10 +205,10 @@ class NewsResource extends Resource
                             ->schema([
                                 Placeholder::make('created_at')
                                     ->label('Dibuat pada')
-                                    ->content(fn (News $record): string => $record->created_at?->diffFor_humans() ?? '-'),
+                                    ->content(fn (News $record): string => $record->created_at?->diffForHumans() ?? '-'),
                                 Placeholder::make('updated_at')
                                     ->label('Terakhir diupdate')
-                                    ->content(fn (News $record): string => $record->updated_at?->diffFor_humans() ?? '-'),
+                                    ->content(fn (News $record): string => $record->updated_at?->diffForHumans() ?? '-'),
                             ])
                             ->hidden(fn (?News $record) => $record === null),
                     ])
