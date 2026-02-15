@@ -41,6 +41,7 @@ class NewsResource extends Resource
     {
         return $form
             ->schema([
+                // === KOLOM KIRI (KONTEN & MEDIA) ===
                 Group::make()
                     ->schema([
                         Section::make('Detail Berita')
@@ -87,24 +88,26 @@ class NewsResource extends Resource
                             ])
                             ->columns(2),
 
+                        // === BAGIAN VISUAL UTAMA (FIXED VIEWPORT EDITOR) ===
                         Section::make('Visual Utama')
-                            ->description('Klik ikon Pensil untuk memotong gambar. Gunakan mode layar lebar untuk menghindari bug.')
+                            ->description('Klik ikon Pensil untuk mengedit gambar. Gunakan mode layar luas untuk menghindari bug canvas.')
                             ->collapsible()
                             ->schema([
                                 Group::make()->schema([
                                     
-                                    // 1. Gambar Utama
+                                    // 1. Gambar Utama (Header)
                                     FileUpload::make('image')
                                         ->label('Gambar Utama (Header)')
                                         ->image()
                                         ->directory('news-main')
                                         ->required()
                                         ->imageEditor()
-                                        // REVISI: Menggunakan Mode 2 (Modal Box) dengan Viewport Luas
+                                        // Mode 2 (Modal) lebih stabil untuk layout yang menabrak
                                         ->imageEditorMode(2) 
                                         ->imageEditorEmptyFillColor('#000000')
+                                        // Paksa Viewport luas agar canvas tidak terjepit sidebar
                                         ->imageEditorViewportWidth('1200')
-                                        ->imageEditorViewportHeight('675') // Ratio 16:9
+                                        ->imageEditorViewportHeight('675')
                                         ->imageEditorAspectRatios([
                                             '16:9',
                                             '4:3',
@@ -116,7 +119,9 @@ class NewsResource extends Resource
 
                                     // 2. Caption
                                     TextInput::make('image_caption')
-                                        ->label('Keterangan Gambar')
+                                        ->label('Keterangan Gambar (Caption)')
+                                        ->placeholder('Contoh: Suasana pelantikan pejabat...')
+                                        ->prefixIcon('heroicon-m-chat-bubble-bottom-center-text')
                                         ->maxLength(255)
                                         ->columnSpanFull(),
                                     
@@ -128,9 +133,9 @@ class NewsResource extends Resource
                                         ->required()
                                         ->imageEditor()
                                         ->imageEditorMode(2)
-                                        ->imageCropAspectRatio('16:9')
                                         ->imageEditorViewportWidth('800')
                                         ->imageEditorViewportHeight('450')
+                                        ->imageCropAspectRatio('16:9')
                                         ->imageResizeTargetWidth('600')
                                         ->panelLayout('integrated')
                                         ->extraAttributes(['class' => 'w-full']), 
@@ -141,6 +146,7 @@ class NewsResource extends Resource
                     ])
                     ->columnSpan(['lg' => 2]),
 
+                // === KOLOM KANAN (SIDEBAR SETTING) ===
                 Group::make()
                     ->schema([
                         Section::make('Publikasi')
@@ -221,28 +227,119 @@ class NewsResource extends Resource
                     ->orderBy('id', 'desc');
             })
             ->columns([
-                ImageColumn::make('thumbnail')->label('Cover')->square()->size(50),
-                TextColumn::make('news_code')->label('Kode')->searchable()->sortable()->color('gray')->copyable(),
-                TextColumn::make('title')->label('Judul')->searchable()->weight('bold')->limit(40)
-                    ->description(fn (News $record): string => Str::limit($record->subtitle ?? '-', 30)),
-                TextColumn::make('pin_order')->label('Pin')->badge()
-                    ->color(fn ($state) => match ($state) { 1 => 'danger', 2 => 'warning', 3 => 'info', default => 'gray' })
-                    ->formatStateUsing(fn ($state) => $state ? "#$state" : '-')->alignCenter()->sortable(),
-                TextColumn::make('categories.name')->label('Kategori')->badge()->color('info')->separator(','),
-                TextColumn::make('status')->badge()->color(fn (string $state): string => match ($state) { 'draft' => 'gray', 'published' => 'success', 'review' => 'warning', default => 'gray' }),
-                TextColumn::make('published_at')->label('Tanggal')->dateTime('d M Y, H:i')->sortable(),
+                ImageColumn::make('thumbnail')
+                    ->label('Cover')
+                    ->square()
+                    ->size(50),
+
+                TextColumn::make('news_code')
+                    ->label('Kode')
+                    ->searchable()
+                    ->sortable()
+                    ->color('gray')
+                    ->copyable(),
+
+                TextColumn::make('title')
+                    ->label('Judul')
+                    ->searchable()
+                    ->weight('bold')
+                    ->limit(40)
+                    ->description(fn (News $record): string => 
+                        Str::limit($record->subtitle ?? '-', 30)
+                    ),
+
+                TextColumn::make('pin_order')
+                    ->label('Pin')
+                    ->badge()
+                    ->color(fn ($state) => match ($state) {
+                        1 => 'danger',
+                        2 => 'warning',
+                        3 => 'info',
+                        default => 'gray',
+                    })
+                    ->formatStateUsing(fn ($state) => $state ? "#$state" : '-')
+                    ->alignCenter()
+                    ->sortable(),
+
+                TextColumn::make('categories.name')
+                    ->label('Kategori')
+                    ->badge()
+                    ->color('info')
+                    ->separator(','),
+
+                TextColumn::make('status')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'draft' => 'gray',
+                        'published' => 'success',
+                        'review' => 'warning',
+                        default => 'gray',
+                    }),
+
+                TextColumn::make('views_count')
+                    ->label('Views')
+                    ->icon('heroicon-m-eye')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                TextColumn::make('published_at')
+                    ->label('Tanggal')
+                    ->dateTime('d M Y, H:i')
+                    ->sortable(),
             ])
             ->filters([
-                SelectFilter::make('categories')->relationship('categories', 'name')->multiple(),
-                SelectFilter::make('status')->options(['draft' => 'Draft', 'review' => 'Review', 'published' => 'Published']),
+                SelectFilter::make('categories')
+                    ->relationship('categories', 'name')
+                    ->multiple(),
+
+                SelectFilter::make('status')
+                    ->label('Status')
+                    ->options([
+                        'draft' => 'Draft',
+                        'review' => 'Review',
+                        'published' => 'Published',
+                    ]),
+
+                Filter::make('published_at')
+                    ->form([
+                        Forms\Components\DatePicker::make('published_from')->label('Dari Tanggal'),
+                        Forms\Components\DatePicker::make('published_until')->label('Sampai Tanggal'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['published_from'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('published_at', '>=', $date),
+                            )
+                            ->when(
+                                $data['published_until'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('published_at', '<=', $date),
+                            );
+                    }),
             ])
             ->actions([
+                Action::make('preview')
+                    ->label('Simulasi')
+                    ->icon('heroicon-o-eye')
+                    ->color('info')
+                    ->modalContent(fn (News $record) => view('filament.resources.news-resource.pages.news-preview', ['record' => $record]))
+                    ->modalSubmitAction(false)
+                    ->modalCancelActionLabel('Tutup')
+                    ->modalWidth('4xl'),
+
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([Tables\Actions\DeleteBulkAction::make()]),
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
             ]);
+    }
+
+    public static function getRelations(): array
+    {
+        return [];
     }
 
     public static function getPages(): array
