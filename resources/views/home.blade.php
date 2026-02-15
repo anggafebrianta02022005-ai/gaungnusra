@@ -247,45 +247,47 @@
                 @endif
             </div>
 
-            <aside class="lg:col-span-4 space-y-10 pl-0 lg:pl-6 border-l border-transparent lg:border-slate-100 animate-fade-in-up" style="animation-delay: 0.4s;">
-                <div class="sticky top-24 space-y-8">
-                    <div class="bg-white rounded-2xl p-6 shadow-card border border-slate-100">
-                        <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-50">
-                            <h3 class="font-display font-bold text-lg text-brand-dark flex items-center gap-2">
-                                <i class="ph-fill ph-trend-up text-brand-red"></i> Sedang Trending
-                            </h3>
-                        </div> 
-                        <div class="space-y-6">
-                            @foreach($sidebarNews as $index => $sNews)
-                                <a href="{{ route('news.show', $sNews->slug) }}" class="group flex gap-4 items-start relative">
-                                    <span class="absolute -left-3 -top-3 w-7 h-7 flex items-center justify-center bg-white border border-slate-100 shadow-sm rounded-full text-xs font-bold {{ $index < 3 ? 'text-brand-red' : 'text-slate-400' }} z-10 font-display">#{{ $index + 1 }}</span>
-                                    <div class="w-24 h-24 img-wrapper rounded-xl flex-shrink-0 shadow-sm group-hover:shadow-md transition-all overflow-hidden">
-                                        <img src="{{ Storage::url($sNews->thumbnail) }}" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                                    </div>
-                                    <div class="flex-1 py-1">
-                                        <h4 class="font-display text-sm font-bold text-brand-dark leading-snug line-clamp-3 group-hover:text-brand-red transition-colors duration-200 mb-2">{{ $sNews->title }}</h4>
-                                    </div>
-                                </a>
-                            @endforeach
+           <aside class="lg:col-span-4 space-y-10 pl-0 lg:pl-6 border-l border-transparent lg:border-slate-100 animate-fade-in-up" style="animation-delay: 0.4s;">
+    <div class="sticky top-24 space-y-8">
+        <div class="bg-white p-6 shadow-sm border border-slate-100">
+            <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-50">
+                <h3 class="font-display font-bold text-lg text-brand-dark flex items-center gap-2">
+                    <i class="ph-fill ph-trend-up text-brand-red"></i> Sedang Trending
+                </h3>
+            </div> 
+            <div class="space-y-6">
+                @foreach($sidebarNews as $index => $sNews)
+                    <a href="{{ route('news.show', $sNews->slug) }}" class="group flex gap-4 items-start relative">
+                        <span class="absolute top-0 left-0 bg-brand-red text-white text-[10px] font-bold px-2 py-1 z-10 shadow-sm">#{{ $index + 1 }}</span>
+                        
+                        <div class="w-24 h-24 img-wrapper flex-shrink-0 overflow-hidden bg-slate-100">
+                            <img src="{{ Storage::url($sNews->thumbnail) }}" loading="lazy" class="w-full h-full object-cover">
                         </div>
-                    </div>
+                        
+                        <div class="flex-1 py-0">
+                            <h4 class="font-display text-sm font-bold text-brand-dark leading-snug line-clamp-3 group-hover:text-brand-red transition-colors duration-200 mb-2">{{ $sNews->title }}</h4>
+                            <span class="text-[10px] text-slate-400 uppercase tracking-wider">{{ $sNews->published_at->diffForHumans() }}</span>
+                        </div>
+                    </a>
+                @endforeach
+            </div>
+        </div>
 
-                    <div>
-                        @if($sidebarAd && $sidebarAd->image)
-                            <a href="{{ $sidebarAd->link ?? '#' }}" class="block relative rounded-2xl overflow-hidden shadow-card group hover:shadow-lg transition-all duration-500 hover:-translate-y-1">
-                                <span class="absolute top-3 right-3 bg-brand-misty text-[10px] font-bold px-2 py-0.5 rounded text-slate-500 z-10 tracking-widest border border-white">ADS</span>
-                                <img src="{{ Storage::url($sidebarAd->image) }}" alt="Iklan Sidebar" loading="lazy" class="w-full h-auto">
-                            </a>
-                        @else
-                            <div class="bg-brand-misty h-[300px] w-full flex flex-col items-center justify-center text-slate-300 rounded-2xl text-center p-6 border border-slate-200 shadow-sm relative overflow-hidden group">
-                                <i class="ph-duotone ph-image text-4xl mb-2 opacity-50"></i>
-                                <span class="font-bold text-lg text-slate-400">Space Iklan</span>
-                                <span class="text-xs font-mono mt-1">Hubungi Redaksi</span>
-                            </div>
-                        @endif
-                    </div>
+        <div>
+            @if($sidebarAd && $sidebarAd->image)
+                <a href="{{ $sidebarAd->link ?? '#' }}" class="block relative overflow-hidden shadow-sm border border-slate-100 group transition-opacity hover:opacity-90">
+                    <span class="absolute top-2 right-2 bg-white/90 text-[10px] font-bold px-2 py-0.5 text-slate-500 z-10 tracking-widest uppercase">ADS</span>
+                    <img src="{{ Storage::url($sidebarAd->image) }}" alt="Iklan Sidebar" loading="lazy" class="w-full h-auto block">
+                </a>
+            @else
+                <div class="bg-brand-misty h-[300px] w-full flex flex-col items-center justify-center text-slate-300 text-center p-6 border border-slate-200 shadow-sm relative overflow-hidden group"> <i class="ph-duotone ph-image text-4xl mb-2 opacity-50"></i>
+                    <span class="font-bold text-lg text-slate-400">Space Iklan</span>
+                    <span class="text-xs font-mono mt-1">Hubungi Redaksi</span>
                 </div>
-            </aside>
+            @endif
+        </div>
+    </div>
+</aside>
 
         </div>
     </main>
