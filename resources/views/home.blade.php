@@ -77,19 +77,20 @@
         #search-results { display: none; }
         #search-results.active { display: block; }
 
-        /* Hide Scrollbar */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        [x-cloak] { display: none !important; }
     </style>
 </head>
 
-<body class="bg-white text-slate-800 flex flex-col min-h-screen" x-data="{ searchOpen: false }">
+<body class="bg-white text-slate-800 flex flex-col min-h-screen" 
+      x-data="{ searchOpen: false, lightboxOpen: false, lightboxImage: '' }">
 
     {{-- HEADER UTAMA --}}
     <header id="main-header" class="bg-white border-b border-gray-100 py-4 relative z-50 transition-all duration-300">
         <div class="container mx-auto px-4 lg:px-8 flex justify-between items-center gap-4">
             
-            {{-- Logo --}}
             <a href="/" class="flex items-center gap-3 group select-none shrink-0 animate-fade-in-up bg-transparent" style="background-color: transparent !important;">
                 @if($company && $company->logo)
                     <img src="{{ Storage::url($company->logo) }}" 
@@ -104,7 +105,6 @@
                 @endif
             </a>
 
-            {{-- Search Bar Desktop --}}
             <div class="hidden md:block w-full max-w-md relative group animate-fade-in-up" style="animation-delay: 0.1s;">
                 <div class="relative transition-all duration-300">
                     <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400 group-focus-within:text-brand-red transition-colors">
@@ -125,15 +125,12 @@
             <div class="flex items-center justify-between h-14">
                 
                 <div id="menu-container" class="flex items-center gap-1 h-full overflow-x-auto no-scrollbar w-full md:w-auto pb-[2px]">
-                    
-                    {{-- Tombol Berita Utama --}}
                     <a href="/" 
                        class="relative h-full flex items-center px-3 text-[13px] whitespace-nowrap shrink-0 transition-all duration-300
                        {{ request()->is('/') ? 'font-bold text-brand-red border-b-[3px] border-brand-red bg-white/50' : 'font-medium text-slate-600 hover:text-brand-dark' }}">
                         <i class="ph-fill ph-house mr-1.5 text-base"></i>Berita Utama
                     </a>
 
-                    {{-- Looping Kategori --}}
                     @foreach($categories as $navCat)
                         @php
                             $isCategoryPage = request()->url() == route('category.show', $navCat->slug);
@@ -152,7 +149,6 @@
                     @endforeach
                 </div>
 
-                {{-- Ikon Sosmed Desktop --}}
                 <div class="hidden md:flex items-center gap-3 pl-4 border-l border-gray-300 h-6 shrink-0">
                     <a href="https://www.instagram.com/gaungnusra?igsh=cDJqMmJ3Zm9pMmpt" target="_blank" class="text-slate-400 hover:text-brand-red transition-colors"><i class="ph-fill ph-instagram-logo text-lg"></i></a>
                     <a href="https://www.facebook.com/share/1DvqTnVEtY/?mibextid=wwXIfr" target="_blank" class="text-slate-400 hover:text-blue-600 transition-colors"><i class="ph-fill ph-facebook-logo text-lg"></i></a>
@@ -163,12 +159,24 @@
         </div> 
     </nav>
 
-    {{-- IKLAN HEADER --}}
+    {{-- IKLAN HEADER DENGAN LOGIKA LIGHTBOX --}}
     <div class="bg-white border-b border-slate-100 animate-fade-in-up" style="animation-delay: 0.2s;">
         <div class="container mx-auto px-4 lg:px-8 py-6 flex flex-col items-center">
             @if($headerAd && $headerAd->image)
-                <a href="{{ $headerAd->link ?? '#' }}" target="_blank" class="relative group block w-fit mx-auto rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-500 hover:-translate-y-1">
+                @php 
+                    $isPopupHeader = empty($headerAd->link) || $headerAd->link === '#'; 
+                @endphp
+
+                <a href="{{ $isPopupHeader ? 'javascript:void(0)' : $headerAd->link }}" 
+                   @if($isPopupHeader) 
+                        @click.prevent="lightboxOpen = true; lightboxImage = '{{ Storage::url($headerAd->image) }}'" 
+                   @else 
+                        target="_blank" 
+                   @endif
+                   class="relative group block w-fit mx-auto rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-500 hover:-translate-y-1">
+                    
                     <div class="absolute top-0 right-0 bg-brand-misty text-slate-600 text-[10px] font-bold px-3 py-1 rounded-bl-xl backdrop-blur-sm z-20 border-l border-b border-white">SPONSORED</div>
+                    
                     <img src="{{ Storage::url($headerAd->image) }}" 
                          alt="Iklan Header" 
                          class="block w-auto h-auto max-w-full max-h-[250px] md:max-h-[350px] object-contain rounded-xl shadow-card border border-slate-100">
@@ -181,7 +189,6 @@
     <main class="container mx-auto px-4 lg:px-8 py-10 flex-grow bg-white">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
             
-            {{-- KOLOM KIRI: LIST BERITA --}}
             <div class="lg:col-span-8 animate-fade-in-up" style="animation-delay: 0.3s;">
                 <div class="flex items-center justify-between mb-8">
                     <div class="flex items-center gap-3">
@@ -193,7 +200,6 @@
                 <div class="flex flex-col gap-8" id="news-container">
                     @foreach($latestNews as $news)
                         <article class="group flex flex-col md:flex-row gap-6 border-b border-slate-100 pb-8 last:border-0">
-                            {{-- Thumbnail --}}
                             <a href="{{ route('news.show', $news->slug) }}" class="w-full md:w-1/3 aspect-video md:aspect-[4/3] rounded-2xl overflow-hidden bg-slate-100 relative shrink-0 shadow-sm group-hover:shadow-md transition-all">
                                 @if($news->pin_order)
                                     <div class="absolute top-2 left-2 bg-brand-red text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm z-10">HEADLINE</div>
@@ -201,7 +207,6 @@
                                 <img src="{{ Storage::url($news->thumbnail) }}" alt="{{ $news->title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                             </a>
                             
-                            {{-- Konten Teks --}}
                             <div class="flex-1 flex flex-col justify-center">
                                 <div class="flex items-center gap-2 mb-2">
                                     <span class="text-xs font-bold text-brand-red uppercase tracking-wide bg-red-50 px-2 py-0.5 rounded-full">{{ $news->categories->first()->name ?? 'Umum' }}</span>
@@ -221,7 +226,6 @@
                     @endforeach
                 </div>
 
-                {{-- Load More --}}
                 @if($latestNews->hasMorePages())
                     <div class="mt-14 pb-8 flex flex-col items-center justify-center" id="load-more-wrapper">
                         <button id="btn-load-more" data-page="2" class="group relative px-8 py-3 bg-white text-slate-600 font-display font-bold text-sm rounded-full border border-slate-200 shadow-sm hover:border-brand-red hover:text-brand-red hover:shadow-lg transition-all duration-300 active:scale-95 flex items-center gap-2">
@@ -236,7 +240,6 @@
             <aside class="lg:col-span-4 space-y-10 pl-0 lg:pl-6 border-l border-transparent lg:border-slate-100 animate-fade-in-up" style="animation-delay: 0.4s;">
                 <div class="sticky top-24 space-y-8">
                     
-                    {{-- Trending --}}
                     <div class="bg-white rounded-2xl p-6 shadow-card border border-slate-100">
                         <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-50">
                             <h3 class="font-display font-bold text-lg text-brand-dark flex items-center gap-2">
@@ -258,11 +261,23 @@
                         </div>
                     </div>
 
-                    {{-- Iklan Sidebar --}}
+                    {{-- IKLAN SIDEBAR DENGAN LOGIKA LIGHTBOX --}}
                     <div>
                         @if($sidebarAd && $sidebarAd->image)
-                            <a href="{{ $sidebarAd->link ?? '#' }}" class="block relative rounded-2xl overflow-hidden shadow-card group hover:shadow-lg transition-all duration-500 hover:-translate-y-1">
+                            @php 
+                                $isPopupSidebar = empty($sidebarAd->link) || $sidebarAd->link === '#'; 
+                            @endphp
+
+                            <a href="{{ $isPopupSidebar ? 'javascript:void(0)' : $sidebarAd->link }}" 
+                               @if($isPopupSidebar) 
+                                    @click.prevent="lightboxOpen = true; lightboxImage = '{{ Storage::url($sidebarAd->image) }}'" 
+                               @else 
+                                    target="_blank" 
+                               @endif
+                               class="block relative rounded-2xl overflow-hidden shadow-card group hover:shadow-lg transition-all duration-500 hover:-translate-y-1">
+                                
                                 <span class="absolute top-3 right-3 bg-brand-misty text-[10px] font-bold px-2 py-0.5 rounded text-slate-500 z-10 tracking-widest border border-white">ADS</span>
+                                
                                 <img src="{{ Storage::url($sidebarAd->image) }}" alt="Iklan Sidebar" loading="lazy" class="w-full h-auto">
                             </a>
                         @else
@@ -285,7 +300,6 @@
         <div class="container mx-auto px-4 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
                 
-                {{-- Brand & Sosmed --}}
                 <div class="md:col-span-1">
                     <div class="flex items-center gap-2 mb-6">
                         @if($company && $company->logo)
@@ -302,7 +316,6 @@
                     </div>
                 </div>
 
-                {{-- Link Kategori --}}
                 <div>
                     <h3 class="font-display font-bold text-brand-dark mb-6 text-sm tracking-widest uppercase border-b-2 border-brand-red inline-block pb-1">Kategori</h3>
                     <ul class="space-y-4 text-slate-500 text-sm font-medium">
@@ -312,7 +325,6 @@
                     </ul>
                 </div>
 
-                {{-- Link Perusahaan --}}
                 <div>
                     <h3 class="font-display font-bold text-brand-dark mb-6 text-sm tracking-widest uppercase border-b-2 border-brand-red inline-block pb-1">Tentang Kami</h3>
                     <ul class="space-y-4 text-slate-500 text-sm font-medium">
@@ -320,7 +332,6 @@
                     </ul>
                 </div>
 
-                {{-- Layanan --}}
                 <div>
                     <h3 class="font-display font-bold text-brand-dark mb-6 text-sm tracking-widest uppercase border-b-2 border-brand-red inline-block pb-1">Layanan</h3>
                     <ul class="space-y-4 text-slate-500 text-sm font-medium">
@@ -335,31 +346,45 @@
                         </li>
                     </ul>
                 </div>
-
             </div>
 
-            {{-- Copyright --}}
             <div class="border-t border-slate-200 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
                 <p class="text-sm text-slate-500 font-medium">&copy; {{ date('Y') }} {{ $company->name ?? 'Gaung Nusra' }}. All rights reserved.</p>
                 <div class="flex items-center gap-1 text-xs text-slate-400">
                     <span>Dibuat Oleh Udayana Digital Data</span>
                 </div>
             </div>
-
         </div>
     </footer>
+
+    {{-- MODAL LIGHTBOX GLOBAL UNTUK IKLAN --}}
+    <div x-show="lightboxOpen" 
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         class="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4" 
+         x-cloak>
+        
+        <button @click="lightboxOpen = false" class="absolute top-6 right-6 text-white hover:text-brand-red transition-colors p-2 bg-black/50 rounded-full">
+            <i class="ph-bold ph-x text-3xl"></i>
+        </button>
+
+        <div class="relative max-w-5xl w-full flex justify-center" @click.away="lightboxOpen = false">
+            <img :src="lightboxImage" class="max-w-full max-h-[90vh] object-contain shadow-2xl rounded-lg">
+        </div>
+    </div>
 
     {{-- SCRIPTS LOGIC --}}
     <script>
         $(document).ready(function() {
-            
-            // 1. Sticky Header Effect
             $(window).scroll(function() {
                 var scroll = $(window).scrollTop();
                 if (scroll >= 50) { $('#main-header').addClass('scrolled'); } else { $('#main-header').removeClass('scrolled'); }
             });
 
-            // 2. Horizontal Menu Wheel Scroll (Desktop)
             const menuContainer = document.getElementById('menu-container');
             if(menuContainer){
                 menuContainer.addEventListener('wheel', (evt) => {
@@ -370,7 +395,6 @@
                 });
             }
 
-            // 3. Load More Berita
             $('#btn-load-more').click(function() {
                 var page = $(this).data('page');
                 var btn = $(this);
@@ -391,7 +415,6 @@
                 });
             });
 
-            // 4. Search Bar Logic
             var searchInput = $('#search-input');
             var searchResults = $('#search-results');
             var timeout = null;
@@ -425,7 +448,6 @@
                     });
                 }, 300);
             });
-
         });
     </script>
 </body>
