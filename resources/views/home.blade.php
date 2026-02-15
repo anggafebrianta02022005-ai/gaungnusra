@@ -210,17 +210,17 @@
                 <div class="flex flex-col gap-8" id="news-container">
     @foreach($latestNews as $news)
         <article class="group flex flex-col md:flex-row gap-6 border-b border-slate-100 pb-8 last:border-0">
-            <a href="{{ route('news.show', $news->slug) }}" class="w-full md:w-1/3 h-auto relative shrink-0 shadow-sm group-hover:shadow-md transition-all overflow-hidden">
+            <a href="{{ route('news.show', $news->slug) }}" class="w-full md:w-1/3 aspect-video relative shrink-0 shadow-sm group-hover:shadow-md transition-all overflow-hidden bg-slate-200">
                 @if($news->pin_order)
-                    <div class="absolute top-2 left-2 bg-brand-red text-white text-[10px] font-bold px-2 py-1 rounded-sm shadow-sm z-10">HEADLINE</div>
+                    <div class="absolute top-2 left-2 bg-brand-red text-white text-[10px] font-bold px-2 py-1 shadow-sm z-10">HEADLINE</div>
                 @endif
                 
-                <img src="{{ Storage::url($news->thumbnail) }}" alt="{{ $news->title }}" class="w-full h-auto block transition-transform duration-700 group-hover:scale-105">
+                <img src="{{ Storage::url($news->thumbnail) }}" alt="{{ $news->title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
             </a>
             
             <div class="flex-1 flex flex-col justify-center">
                 <div class="flex items-center gap-2 mb-2">
-                    <span class="text-xs font-bold text-brand-red uppercase tracking-wide bg-red-50 px-2 py-0.5 rounded-full">{{ $news->categories->first()->name ?? 'Umum' }}</span>
+                    <span class="text-xs font-bold text-brand-red uppercase tracking-wide bg-red-50 px-2 py-0.5">{{ $news->categories->first()->name ?? 'Umum' }}</span>
                     <span class="text-xs text-slate-400 flex items-center gap-1"><i class="ph-bold ph-calendar-blank"></i> {{ $news->published_at->format('d M Y') }}</span>
                 </div>
                 <h3 class="font-display font-bold text-xl md:text-2xl text-slate-800 leading-snug mb-3 group-hover:text-brand-red transition-colors">
