@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#F1F5F9">
-    <title>Kategori {{ $category->name }} - Gaung Nusra - Media Online</title>
+     <title>Gaung Nusra - Media Online</title>
     <link rel="icon" type="image/png" href="{{ asset('gaungnusra.png') }}?v=3">
     
     {{-- SEO CANONICAL --}}
