@@ -154,7 +154,7 @@
             <div class="lg:col-span-8 animate-fade-in-up" style="animation-delay: 0.3s;">
                 <div class="mb-10 pb-6 border-b border-slate-100">
                     <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Kategori</span>
-                    <h1 class="font-display font-extrabold text-3xl text-brand-dark mt-1">{{ $category->name }}</h1>
+                    <h1 class="font-display font-extrabold text-3xl md:text-4xl text-brand-dark mt-1">{{ $category->name }}</h1>
                 </div>
 
                 <div class="flex flex-col gap-8" id="news-container">
@@ -172,9 +172,12 @@
                                     <div class="flex items-center gap-2 mb-2">
                                         <span class="text-xs text-slate-400 flex items-center gap-1"><i class="ph-bold ph-calendar-blank"></i> {{ $item->published_at->format('d M Y') }}</span>
                                     </div>
-                                    <h3 class="font-display font-bold text-xl text-slate-800 leading-snug mb-3 group-hover:text-brand-red transition-colors">
+                                    
+                                    {{-- JUDUL: Diupdate jadi text-2xl agar SEIRAS dengan Homepage --}}
+                                    <h3 class="font-display font-bold text-xl md:text-2xl text-slate-800 leading-snug mb-3 group-hover:text-brand-red transition-colors">
                                         <a href="{{ route('news.show', $item->slug) }}">{{ $item->title }}</a>
                                     </h3>
+                                    
                                     <p class="text-sm text-slate-500 line-clamp-2 mb-4 leading-relaxed">
                                         {{ $item->subtitle ?? Str::limit(strip_tags($item->content), 120) }}
                                     </p>
@@ -194,7 +197,7 @@
 
                 @if($news->hasMorePages())
                     <div class="mt-14 pb-8 flex flex-col items-center justify-center" id="load-more-wrapper">
-                        {{-- TOMBOL: Ganti rounded-full jadi rounded-none --}}
+                        {{-- TOMBOL: Rounded-none agar kotak --}}
                         <button id="btn-load-more" data-page="2" class="px-8 py-3 bg-white text-slate-600 font-display font-bold text-sm uppercase tracking-wider rounded-none border border-slate-200 shadow-sm hover:border-brand-red hover:text-brand-red transition-all flex items-center gap-2">
                             <span>Muat Lebih Banyak</span><i class="ph-bold ph-arrow-down"></i>
                         </button>
