@@ -88,9 +88,9 @@ class NewsResource extends Resource
                             ])
                             ->columns(2),
 
-                        // === BAGIAN YANG DIPERBARUI: VISUAL UTAMA ===
+                        // === BAGIAN VISUAL UTAMA (UPDATE: IMAGE EDITOR) ===
                         Section::make('Visual Utama')
-                            ->description('Gambar akan diupload sesuai ukuran aslinya (Tanpa Crop).')
+                            ->description('Klik ikon Pensil pada gambar untuk mengedit (Crop/Rotate).')
                             ->collapsible()
                             ->schema([
                                 Group::make()->schema([
@@ -98,43 +98,49 @@ class NewsResource extends Resource
                                     // 1. Gambar Utama (Header)
                                     FileUpload::make('image')
                                         ->label('Gambar Utama (Header)')
-                                        ->helperText('Format bebas (Landscape/Portrait). Gambar tidak akan dipotong.')
+                                        ->helperText('Klik tombol pensil setelah upload untuk memotong gambar (Crop).')
                                         ->image()
                                         ->directory('news-main')
                                         ->required()
-                                        // HAPUS: imageCropAspectRatio & imageResizeTargetHeight
-                                        // HAPUS: imageResizeMode('cover')
-                                        // HANYA: Batasi lebar agar file tidak terlalu berat, rasio tetap asli.
+                                        // === AKTIFKAN EDITOR ===
+                                        ->imageEditor() 
+                                        ->imageEditorAspectRatios([
+                                            '16:9',
+                                            '4:3',
+                                            '1:1',
+                                        ])
+                                        // Resize target width agar file tidak terlalu berat
                                         ->imageResizeTargetWidth('1200') 
                                         ->panelLayout('integrated'),
 
                                     // 2. Caption
                                     TextInput::make('image_caption')
                                         ->label('Keterangan Gambar (Caption)')
-                                        ->placeholder('Contoh: Suasana pelantikan pejabat di Kantor Gubernur...')
+                                        ->placeholder('Contoh: Suasana pelantikan pejabat...')
                                         ->prefixIcon('heroicon-m-chat-bubble-bottom-center-text')
-                                        ->helperText('Teks ini akan muncul tepat di bawah gambar utama berita.')
                                         ->maxLength(255)
                                         ->columnSpanFull(),
                                     
                                     // 3. Thumbnail
                                     FileUpload::make('thumbnail')
                                         ->label('Thumbnail Berita')
-                                        ->helperText('Format bebas. Gambar akan ditampilkan utuh.')
+                                        ->helperText('Wajib 16:9. Gunakan editor (pensil) untuk menyesuaikan area potong.')
                                         ->image()
                                         ->directory('news-thumbnails')
-                                        ->imageEditor() // Editor manual tetap ada jika user ingin potong sendiri
                                         ->required()
-                                        // HAPUS: Semua aturan paksa rasio (16:9 atau 1:1)
-                                        // HAPUS: imageResizeMode('cover')
-                                        // HANYA: Batasi lebar thumbnail.
-                                        ->imageResizeTargetWidth('600') 
+                                        // === AKTIFKAN EDITOR ===
+                                        ->imageEditor()
+                                        ->imageEditorAspectRatios([
+                                            '16:9',
+                                        ])
+                                        // Memaksa crop awal 16:9 saat editor dibuka
+                                        ->imageCropAspectRatio('16:9') 
+                                        ->imageResizeTargetWidth('600')
                                         ->extraAttributes(['class' => 'w-1/2 mx-auto']), 
                                 ])
                                 ->columnSpanFull()
                                 ->extraAttributes(['class' => 'flex flex-col items-center justify-center text-center gap-4']),
                             ]),
-                        // === SELESAI BAGIAN YANG DIPERBARUI ===
                     ])
                     ->columnSpan(['lg' => 2]),
 
@@ -155,7 +161,7 @@ class NewsResource extends Resource
                                     ->live() 
                                     ->native(false),
 
-                                // 2. LOGIKA PIN BARU (Posisi 1, 2, 3)
+                                // 2. PIN ORDER
                                 Select::make('pin_order')
                                     ->label('Sematkan Berita (Pinned)')
                                     ->placeholder('Tidak disematkan')
