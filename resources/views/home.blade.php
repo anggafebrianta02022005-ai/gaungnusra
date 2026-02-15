@@ -239,7 +239,7 @@
 
                 @if($latestNews->hasMorePages())
                    <div class="mt-14 pb-8 flex flex-col items-center justify-center" id="load-more-wrapper">
-    <button id="btn-load-more" data-page="2" class="group relative px-10 py-4 bg-white text-slate-600 font-display font-bold text-xs uppercase tracking-wider border border-slate-200 shadow-sm hover:border-brand-red hover:text-brand-red hover:bg-slate-50 hover:shadow-md transition-all duration-300 active:scale-95 flex items-center gap-3">
+    <button id="btn-load-more" data-page="2" class="rounded-none group relative px-10 py-4 bg-white text-slate-600 font-display font-bold text-xs uppercase tracking-wider border border-slate-200 shadow-sm hover:border-brand-red hover:text-brand-red hover:bg-slate-50 hover:shadow-md transition-all duration-300 active:scale-95 flex items-center gap-3">
         <span>Muat Lebih Banyak</span>
         <i class="ph-bold ph-arrow-down group-hover:translate-y-0.5 transition-transform duration-300"></i>
     </button>
