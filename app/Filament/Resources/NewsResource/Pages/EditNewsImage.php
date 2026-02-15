@@ -5,15 +5,14 @@ namespace App\Filament\Resources\NewsResource\Pages;
 use App\Filament\Resources\NewsResource;
 use App\Models\News;
 use Filament\Resources\Pages\Page;
-use Filament\Actions\Action;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
+use Filament\Actions\Action;
 
 class EditNewsImage extends Page
 {
     protected static string $resource = NewsResource::class;
-
     protected static string $view = 'filament.resources.news-resource.pages.edit-news-image';
 
     public ?array $data = [];
@@ -22,10 +21,7 @@ class EditNewsImage extends Page
     public function mount(News $record): void
     {
         $this->record = $record;
-        $this->form->fill([
-            'image' => $record->image,
-            'thumbnail' => $record->thumbnail,
-        ]);
+        $this->form->fill($record->toArray());
     }
 
     public function form(Form $form): Form
@@ -33,34 +29,30 @@ class EditNewsImage extends Page
         return $form
             ->schema([
                 FileUpload::make('image')
-                    ->label('Potong Gambar Header (16:9)')
+                    ->label('Potong Gambar Header')
                     ->image()
                     ->imageEditor()
                     ->imageEditorMode(1)
-                    ->imageEditorEmptyFillColor('#000000')
+                    ->imageEditorAspectRatios(['16:9', '4:3', '1:1'])
+                    ->panelLayout('integrated')
+                    ->columnSpanFull(),
+                
+                FileUpload::make('thumbnail')
+                    ->label('Potong Thumbnail')
+                    ->image()
+                    ->imageEditor()
+                    ->imageEditorMode(1)
                     ->imageEditorAspectRatios(['16:9'])
-                    ->panelLayout('integrated') // Canvas lega memakan satu halaman penuh
+                    ->panelLayout('integrated')
                     ->columnSpanFull(),
             ])
             ->statePath('data');
     }
 
-    protected function getHeaderActions(): array
+    public function save()
     {
-        return [
-            Action::make('save')
-                ->label('Simpan & Kembali')
-                ->color('success')
-                ->action(function () {
-                    $this->record->update($this->data);
-                    
-                    Notification::make()
-                        ->title('Gambar berhasil disimpan')
-                        ->success()
-                        ->send();
-
-                    return redirect($this->getResource()::getUrl('index'));
-                }),
-        ];
+        $this->record->update($this->data);
+        Notification::make()->title('Gambar Berhasil Disimpan')->success()->send();
+        return redirect($this->getResource()::getUrl('index'));
     }
 }

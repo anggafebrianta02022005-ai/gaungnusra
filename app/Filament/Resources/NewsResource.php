@@ -320,13 +320,13 @@ class NewsResource extends Resource
     }
 
     public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListNews::route('/'),
-            'create' => Pages\CreateNews::route('/create'),
-            'edit' => Pages\EditNews::route('/{record}/edit'),
-            // HALAMAN EDITOR KHUSUS
-            'edit-image' => Pages\EditNewsImage::route('/{record}/image-editor'),
-        ];
-    }
+{
+    return [
+        'index' => Pages\ListNews::route('/'),
+        'create' => Pages\CreateNews::route('/create'),
+        'edit' => Pages\EditNews::route('/{record}/edit'),
+        // WAJIB ADA INI:
+        'edit-image' => Pages\EditNewsImage::route('/{record}/image-editor'),
+    ];
+}
 }
