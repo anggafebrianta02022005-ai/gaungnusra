@@ -4,11 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#F1F5F9">
+    
+    {{-- Meta Standard --}}
     <meta name="description" content="{{ $news->subtitle ?? Str::limit(strip_tags($news->content), 150) }}">
     <meta name="author" content="{{ $news->author->name ?? 'Redaksi' }}">
     <title>{{ $news->title }} - Gaung Nusra - Media Online</title>
     <link rel="icon" type="image/png" href="{{ asset('gaungnusra.png') }}?v=3">
-    
+
+    {{-- START: META SHARE (Open Graph & Twitter) --}}
+    {{-- Kode ini memastikan foto berita muncul saat di-share ke WA/FB/FB --}}
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Gaung Nusra">
+    <meta property="og:title" content="{{ $news->title }}">
+    <meta property="og:description" content="{{ $news->subtitle ?? Str::limit(strip_tags($news->content), 150) }}">
+    <meta property="og:url" content="{{ request()->url() }}">
+    <meta property="og:image" content="{{ asset(Storage::url($news->image ?? $news->thumbnail)) }}">
+    <meta property="og:image:secure_url" content="{{ asset(Storage::url($news->image ?? $news->thumbnail)) }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:type" content="image/jpeg">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $news->title }}">
+    <meta name="twitter:description" content="{{ $news->subtitle ?? Str::limit(strip_tags($news->content), 150) }}">
+    <meta name="twitter:image" content="{{ asset(Storage::url($news->image ?? $news->thumbnail)) }}">
+    {{-- END: META SHARE --}}
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
