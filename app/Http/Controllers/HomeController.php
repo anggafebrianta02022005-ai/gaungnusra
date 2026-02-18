@@ -205,7 +205,8 @@ class HomeController extends Controller
     }
 
     /**
-     * [BARU] Menampilkan Halaman Tentang Kami (About)
+     * Menampilkan Halaman Tentang Kami (About)
+     * UPDATE: Menambahkan logika 5 slot sidebarAds
      */
     public function about()
     {
@@ -215,7 +216,7 @@ class HomeController extends Controller
         $categories = Category::where('is_active', true)->take(7)->get();
         $headerAd = Ad::where('position', 'header_top')->where('is_active', true)->latest()->first();
         
-        // IKLAN SIDEBAR 5 SLOT
+        // IKLAN SIDEBAR 5 SLOT (FIXED)
         $sidebarAds = Ad::where('position', 'sidebar_right')
             ->where('is_active', true)
             ->whereNotNull('slot_number')
@@ -229,6 +230,7 @@ class HomeController extends Controller
             ->get();
 
         if ($agent->isMobile()) {
+            // Pastikan mengirim 'sidebarAds' (Array 5 Slot)
             return view('mobile.pages.about', compact(
                 'company', 'categories', 'headerAd', 'sidebarAds', 'sidebarNews'
             ));
@@ -241,6 +243,7 @@ class HomeController extends Controller
 
     /**
      * Menampilkan Halaman Pasang Iklan (Advertise)
+     * UPDATE: Menambahkan logika 5 slot sidebarAds
      */
     public function advertise()
     {
@@ -250,7 +253,7 @@ class HomeController extends Controller
         $categories = Category::where('is_active', true)->take(7)->get();
         $headerAd = Ad::where('position', 'header_top')->where('is_active', true)->latest()->first();
         
-        // IKLAN SIDEBAR 5 SLOT
+        // IKLAN SIDEBAR 5 SLOT (FIXED)
         $sidebarAds = Ad::where('position', 'sidebar_right')
             ->where('is_active', true)
             ->whereNotNull('slot_number')
@@ -264,6 +267,7 @@ class HomeController extends Controller
             ->get();
 
         if ($agent->isMobile()) {
+            // Pastikan mengirim 'sidebarAds' (Array 5 Slot)
             return view('mobile.pages.advertise', compact(
                 'company', 'categories', 'headerAd', 'sidebarAds', 'sidebarNews'
             ));
