@@ -41,7 +41,6 @@ class HomeController extends Controller
         $headerAd = Ad::where('position', 'header_top')->where('is_active', true)->latest()->first();
         
         // 4. IKLAN SIDEBAR (LOGIKA 5 SLOT)
-        // Mengambil semua iklan aktif, diurutkan slot 1-5, dan dijadikan Key Array
         $sidebarAds = Ad::where('position', 'sidebar_right')
             ->where('is_active', true)
             ->whereNotNull('slot_number')
@@ -206,7 +205,42 @@ class HomeController extends Controller
     }
 
     /**
-     * Menampilkan Halaman Pasang Iklan
+     * [BARU] Menampilkan Halaman Tentang Kami (About)
+     */
+    public function about()
+    {
+        $agent = new Agent();
+        
+        $company = CompanyProfile::first();
+        $categories = Category::where('is_active', true)->take(7)->get();
+        $headerAd = Ad::where('position', 'header_top')->where('is_active', true)->latest()->first();
+        
+        // IKLAN SIDEBAR 5 SLOT
+        $sidebarAds = Ad::where('position', 'sidebar_right')
+            ->where('is_active', true)
+            ->whereNotNull('slot_number')
+            ->orderBy('slot_number')
+            ->get()
+            ->keyBy('slot_number');
+
+        $sidebarNews = News::where('status', 'published')
+            ->orderBy('views_count', 'desc')
+            ->take(6)
+            ->get();
+
+        if ($agent->isMobile()) {
+            return view('mobile.pages.about', compact(
+                'company', 'categories', 'headerAd', 'sidebarAds', 'sidebarNews'
+            ));
+        }
+
+        return view('pages.about', compact(
+            'company', 'categories', 'headerAd', 'sidebarAds', 'sidebarNews'
+        ));
+    }
+
+    /**
+     * Menampilkan Halaman Pasang Iklan (Advertise)
      */
     public function advertise()
     {
