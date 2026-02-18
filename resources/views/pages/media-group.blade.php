@@ -319,13 +319,29 @@
                             <a href="https://www.instagram.com/gaungnusra?igsh=cDJqMmJ3Zm9pMmpt" target="_blank" class="text-slate-400 hover:text-brand-red transition-colors"><i class="ph-fill ph-instagram-logo text-lg"></i></a>
                             <a href="https://www.facebook.com/share/1DvqTnVEtY/?mibextid=wwXIfr" target="_blank" class="text-slate-400 hover:text-blue-600 transition-colors"><i class="ph-fill ph-facebook-logo text-lg"></i></a>
                             <a href="https://www.threads.com/@gaungnusra?igshid=NTc4MTIwNjQ2YQ==" target="_blank" class="text-slate-400 hover:text-black transition-colors"><i class="ph-fill ph-threads-logo text-lg"></i></a>
-                            <a href="#" class="text-slate-400 hover:text-black transition-colors"><i class="ph-fill ph-x-logo text-lg"></i></a>
                         </div>
                     </div>
                 </div>
-                <div><h3 class="font-display font-bold text-brand-dark mb-6 text-sm tracking-widest uppercase border-b-2 border-brand-red inline-block pb-1">Kategori</h3><ul class="space-y-4 text-slate-500 text-sm font-medium">@foreach($categories->take(5) as $cat)<li><a href="{{ route('category.show', $cat->slug) }}" class="hover:text-brand-red hover:pl-2 transition-all block">{{ $cat->name }}</a></li>@endforeach</ul></div>
-                <div><h3 class="font-display font-bold text-brand-dark mb-6 text-sm tracking-widest uppercase border-b-2 border-brand-red inline-block pb-1">Tentang Kami</h3><ul class="space-y-4 text-slate-500 text-sm font-medium"><li><a href="{{ route('pages.about') }}" class="hover:text-brand-red transition-colors">Profil Redaksi</a></li></ul></div>
-                <div><h3 class="font-display font-bold text-brand-dark mb-6 text-sm tracking-widest uppercase border-b-2 border-brand-red inline-block pb-1">Layanan</h3><ul class="space-y-4 text-slate-500 text-sm font-medium"><li><a href="{{ route('pages.advertise') }}" class="hover:text-brand-red transition-colors">Pasang Iklan</a></li><li><a href="{{ route('epaper.latest') }}" target="_blank" class="hover:text-brand-red transition-colors flex items-center gap-2"><span>Koran Cetak (E-Paper)</span><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg></a></li></ul></div>
+                <ul class="space-y-4 text-slate-500 text-sm font-medium">
+    <li>
+        <a href="{{ route('pages.advertise') }}" class="hover:text-brand-red transition-colors">
+            Pasang Iklan
+        </a>
+    </li>
+    <li>
+        <a href="{{ route('epaper.latest') }}" target="_blank" class="hover:text-brand-red transition-colors flex items-center gap-2">
+            <span>Koran Cetak (E-Paper)</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a href="{{ route('pages.media-group') }}" class="hover:text-brand-red transition-colors">
+            Media Group
+        </a>
+    </li>
+</ul>
             </div>
             <div class="border-t border-slate-200 pt-8 flex flex-col md:flex-row items-center justify-between gap-4"><p class="text-sm text-slate-500 font-medium">&copy; {{ date('Y') }} {{ $company->name ?? 'Gaung Nusra' }}. All rights reserved.</p><div class="flex items-center gap-1 text-xs text-slate-400"><span>Dibuat Oleh Udayana Digital Data</span></div></div>
         </div>
