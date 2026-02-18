@@ -235,23 +235,17 @@
                 </div>
                 
                 <div class="flex flex-col gap-4">
-                    {{-- Pastikan controller mengirim variable $sidebarNews --}}
-                    @if(isset($sidebarNews) && count($sidebarNews) > 0)
-                        @foreach($sidebarNews as $index => $sNews)
-                            <a href="{{ route('news.show', $sNews->slug) }}" class="flex gap-4 items-center group">
-                                <span class="text-2xl font-black text-slate-200 w-6 text-center group-hover:text-brand-red/50 transition-colors">{{ $index + 1 }}</span>
-                                <div class="flex-1">
-                                    <h4 class="text-sm font-bold text-slate-800 leading-snug line-clamp-2 mb-1 group-hover:text-brand-red transition-colors">{{ $sNews->title }}</h4>
-                                </div>
-                                <div class="w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-slate-100">
-                                    <img src="{{ Storage::url($sNews->thumbnail) }}" class="w-full h-full object-cover">
-                                </div>
-                            </a>
-                        @endforeach
-                    @else
-                        <p class="text-xs text-slate-400 italic">Belum ada berita trending.</p>
-                    @endif
-                </div>
+                @foreach($sidebarNews as $index => $sNews)
+                    <a href="{{ route('news.show', $sNews->slug) }}" class="flex gap-4 items-center group">
+                        <span class="text-2xl font-black text-slate-200 w-6 text-center group-hover:text-brand-red/50 transition-colors">{{ $index + 1 }}</span>
+                        <div class="flex-1">
+                            <h4 class="text-sm font-bold text-slate-800 leading-snug line-clamp-2 mb-1 group-hover:text-brand-red transition-colors">{{ $sNews->title }}</h4>
+                        </div>
+                        <div class="w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-slate-100">
+                            <img src="{{ Storage::url($sNews->thumbnail) }}" class="w-full h-full object-cover">
+                        </div>
+                    </a>
+                @endforeach
             </div>
 
             {{-- UPDATE 4: IKLAN SIDEBAR (LOGIKA POPUP) --}}
