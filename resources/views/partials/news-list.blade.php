@@ -1,15 +1,19 @@
 @foreach($latestNews as $news)
     <article class="group flex flex-col md:flex-row gap-6 border-b border-slate-100 pb-8 last:border-0 animate-fade-in-up">
         
-        <a href="{{ route('news.show', $news->slug) }}" class="w-full md:w-1/3 aspect-video overflow-hidden bg-slate-100 relative shrink-0 shadow-sm group-hover:shadow-md transition-shadow">
+        {{-- CONTAINER GAMBAR: Ditambahkan rounded-xl untuk garis tepi lengkung --}}
+        <a href="{{ route('news.show', $news->slug) }}" 
+           class="w-full md:w-1/3 aspect-video shrink-0 rounded-xl overflow-hidden bg-slate-100 relative shadow-sm group-hover:shadow-md transition-all">
+            
             @if($news->pin_order)
-                <div class="absolute top-2 left-2 bg-brand-red text-white text-[10px] font-bold px-2 py-1 shadow-sm z-10">HEADLINE</div>
+                <div class="absolute top-2 left-2 bg-brand-red text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm z-10">HEADLINE</div>
             @endif
             
+            {{-- GAMBAR: Ditambahkan animasi zoom (scale-105) saat hover --}}
             <img src="{{ Storage::url($news->thumbnail) }}" 
                  alt="{{ $news->title }}" 
                  loading="lazy" 
-                 class="w-full h-full object-cover">
+                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
         </a>
         
         <div class="flex-1 flex flex-col justify-center">

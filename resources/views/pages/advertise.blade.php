@@ -241,22 +241,19 @@
                         </div>
                     </div>
 
-                    <div>
-                        @if($sidebarAd && $sidebarAd->image)
-                            @php $isPopupSide = empty($sidebarAd->link) || $sidebarAd->link === '#'; @endphp
-                            <a href="{{ $isPopupSide ? 'javascript:void(0)' : $sidebarAd->link }}" 
-                               @if($isPopupSide) @click.prevent="lightboxOpen = true; lightboxImage = '{{ Storage::url($sidebarAd->image) }}'" @else target="_blank" @endif
-                               class="block relative rounded-2xl overflow-hidden shadow-card group hover:shadow-lg transition-all duration-500 hover:-translate-y-1">
-                                <span class="absolute top-3 right-3 bg-brand-misty text-[10px] font-bold px-2 py-0.5 rounded text-slate-500 z-10 tracking-widest border border-white">ADS</span>
-                                <img src="{{ Storage::url($sidebarAd->image) }}" alt="Iklan Sidebar" loading="lazy" class="w-full h-auto">
-                            </a>
-                        @else
-                            <div class="bg-brand-misty h-[300px] w-full flex flex-col items-center justify-center text-slate-300 rounded-2xl text-center p-6 border border-slate-200 shadow-sm relative overflow-hidden group">
-                                <i class="ph-duotone ph-image text-4xl mb-2 opacity-50"></i>
-                                <span class="font-bold text-lg text-slate-400">Space Iklan</span>
-                            </div>
-                        @endif
-                    </div>
+                    {{-- 5 SLOT IKLAN SIDEBAR --}}
+                <div class="space-y-6">
+                    @if(isset($sidebarAds))
+                        @for ($i = 1; $i <= 5; $i++)
+                            @if(isset($sidebarAds[$i]))
+                                @php $ad = $sidebarAds[$i]; $isPopup = empty($ad->link) || $ad->link === '#'; @endphp
+                                <a href="{{ $isPopup ? 'javascript:void(0)' : $ad->link }}" @if($isPopup) @click.prevent="lightboxOpen = true; lightboxImage = '{{ Storage::url($ad->image) }}'" @else target="_blank" @endif class="block rounded-xl overflow-hidden shadow-sm hover:shadow-md transition border border-slate-100">
+                                    <img src="{{ Storage::url($ad->image) }}" class="w-full h-auto object-cover">
+                                </a>
+                            @endif
+                        @endfor
+                    @endif
+                </div>
                 </div>
             </aside>
         </div>
