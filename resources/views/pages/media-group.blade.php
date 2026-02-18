@@ -30,7 +30,7 @@
 
 <body class="bg-white text-slate-800 flex flex-col min-h-screen" x-data="{ searchOpen: false, lightboxOpen: false, lightboxImage: '' }">
 
-    {{-- HEADER DESKTOP (Konsisten dengan Home) --}}
+    {{-- HEADER DESKTOP --}}
     <header class="bg-white border-b border-gray-100 py-4 sticky top-0 z-50">
         <div class="container mx-auto px-4 lg:px-8 flex justify-between items-center">
             <a href="/" class="flex items-center gap-3">
