@@ -228,13 +228,12 @@
         <div class="bg-white rounded-t-[2rem] pt-8 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.05)] relative z-20">
             
             {{-- BERITA TRENDING --}}
-            <div class="px-4 pb-6">
-                <div class="flex items-center gap-2 mb-5">
-                    <i class="ph-fill ph-trend-up text-brand-red text-xl"></i>
-                    <h2 class="font-display font-bold text-lg text-brand-dark">Sedang Trending</h2>
-                </div>
-                
-                <div class="flex flex-col gap-4">
+             <div class="px-4 py-6 bg-white">
+            <div class="flex items-center gap-2 mb-5">
+                <i class="ph-fill ph-trend-up text-brand-red text-xl"></i>
+                <h2 class="font-display font-bold text-lg text-brand-dark">Sedang Trending</h2>
+            </div>
+            <div class="flex flex-col gap-4">
                 @foreach($sidebarNews as $index => $sNews)
                     <a href="{{ route('news.show', $sNews->slug) }}" class="flex gap-4 items-center group">
                         <span class="text-2xl font-black text-slate-200 w-6 text-center group-hover:text-brand-red/50 transition-colors">{{ $index + 1 }}</span>
@@ -247,6 +246,7 @@
                     </a>
                 @endforeach
             </div>
+        </div>
 
             {{-- UPDATE 4: IKLAN SIDEBAR (LOGIKA POPUP) --}}
             <div class="px-4 pb-8 pt-2">
