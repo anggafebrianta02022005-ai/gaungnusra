@@ -8,50 +8,48 @@ use App\Models\CompanyProfile;
 use App\Models\News;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Jenssegers\Agent\Agent; // Pastikan library ini ada
+use Jenssegers\Agent\Agent;
 
 class HomeController extends Controller
 {
+    /**
+     * Menampilkan Halaman Utama (Home)
+     */
     public function index(Request $request)
     {
-        // 1. DATA UTAMA
-        $company = CompanyProfile::first(); 
-        $categories = Category::where('is_active', true)->take(7)->get(); 
+        $agent = new Agent();
 
-        // 2. IKLAN
-        $headerAd = Ad::where('position', 'header_top')->where('is_active', true)->latest()->first();
-        $sidebarAd = Ad::where('position', 'sidebar_right')->where('is_active', true)->inRandomOrder()->first();
-
-        // 3. BERITA TERBARU (LOAD MORE)
+        // 1. QUERY BERITA (LOAD MORE)
         $latestNews = News::with(['categories', 'author'])
             ->where('status', 'published')
             ->orderByRaw('pin_order IS NULL asc')
             ->orderBy('pin_order', 'asc')
             ->orderBy('id', 'desc')
-            ->paginate(5); 
+            ->paginate(5);
 
-        // ===> LOGIKA AJAX (LOAD MORE) YANG DIPERBAIKI <===
+        // 2. LOGIKA AJAX (LOAD MORE)
         if ($request->ajax()) {
-            $agent = new Agent();
-            
-            // Jika HP, panggil partial khusus Mobile (yang layoutnya rapi/kecil)
+            // Jika request dari HP -> Panggil partial mobile
             if ($agent->isMobile()) {
                 return view('partials.mobile-news-list', compact('latestNews'))->render();
             }
-            
-            // Jika Desktop, panggil partial Desktop (yang layoutnya besar)
+            // Jika request dari Desktop -> Panggil partial desktop
             return view('partials.news-list', compact('latestNews'))->render();
         }
 
-        // 4. SIDEBAR (TRENDING)
+        // 3. DATA UMUM (Header, Footer, Sidebar)
+        $company = CompanyProfile::first();
+        $categories = Category::where('is_active', true)->take(7)->get();
+        $headerAd = Ad::where('position', 'header_top')->where('is_active', true)->latest()->first();
+        $sidebarAd = Ad::where('position', 'sidebar_right')->where('is_active', true)->inRandomOrder()->first();
+
+        // 4. TRENDING (SIDEBAR)
         $sidebarNews = News::where('status', 'published')
             ->orderBy('views_count', 'desc')
-            ->take(6) 
+            ->take(6)
             ->get();
 
-        // ===> LOGIKA DETEKSI HALAMAN UTAMA <===
-        $agent = new Agent();
-
+        // 5. RENDER VIEW (MOBILE / DESKTOP)
         if ($agent->isMobile()) {
             return view('mobile.home', compact(
                 'company', 'categories', 'headerAd', 'sidebarAd', 'latestNews', 'sidebarNews'
@@ -63,31 +61,35 @@ class HomeController extends Controller
         ));
     }
 
+    /**
+     * Menampilkan Halaman Kategori
+     */
     public function category(Request $request, $slug)
     {
+        $agent = new Agent();
         $category = Category::where('slug', $slug)->where('is_active', true)->firstOrFail();
 
+        // 1. QUERY BERITA PER KATEGORI
         $news = $category->news()
             ->with(['author', 'categories'])
             ->where('status', 'published')
             ->orderByRaw('pin_order IS NULL asc')
             ->orderBy('pin_order', 'asc')
             ->orderBy('news.id', 'desc')
-            ->paginate(10); 
+            ->paginate(10);
 
-        // ===> LOGIKA AJAX (LOAD MORE) KATEGORI YANG DIPERBAIKI <===
+        // 2. LOGIKA AJAX (LOAD MORE)
         if ($request->ajax()) {
-            $agent = new Agent();
-            
+            // Gunakan variable 'latestNews' agar kompatibel dengan partials yang sama
             if ($agent->isMobile()) {
                 return view('partials.mobile-news-list', ['latestNews' => $news])->render();
             }
-            
             return view('partials.news-list', ['latestNews' => $news])->render();
         }
 
+        // 3. DATA PENDUKUNG
         $company = CompanyProfile::first();
-        $categories = Category::where('is_active', true)->take(7)->get(); 
+        $categories = Category::where('is_active', true)->take(7)->get();
         $headerAd = Ad::where('position', 'header_top')->where('is_active', true)->latest()->first();
         $sidebarAd = Ad::where('position', 'sidebar_right')->where('is_active', true)->inRandomOrder()->first();
 
@@ -96,9 +98,7 @@ class HomeController extends Controller
             ->take(6)
             ->get();
 
-        // ===> LOGIKA DETEKSI HALAMAN KATEGORI <===
-        $agent = new Agent();
-
+        // 4. RENDER VIEW
         if ($agent->isMobile()) {
             return view('mobile.category.show', compact(
                 'category', 'news', 'company', 'categories', 'headerAd', 'sidebarAd', 'sidebarNews'
@@ -110,41 +110,46 @@ class HomeController extends Controller
         ));
     }
 
+    /**
+     * Menampilkan Halaman Detail Berita
+     */
     public function show($slug)
     {
+        $agent = new Agent();
+
+        // 1. AMBIL BERITA
         $news = News::where('slug', $slug)
             ->where('status', 'published')
             ->firstOrFail();
 
+        // 2. COUNTER VIEWS
         $news->increment('views_count');
 
+        // 3. DATA PENDUKUNG
         $company = CompanyProfile::first();
         $categories = Category::where('is_active', true)->take(7)->get();
-        
         $headerAd = Ad::where('position', 'header_top')->where('is_active', true)->latest()->first();
         $sidebarAd = Ad::where('position', 'sidebar_right')->where('is_active', true)->inRandomOrder()->first();
 
+        // 4. TRENDING
         $sidebarNews = News::where('status', 'published')
             ->orderBy('views_count', 'desc')
             ->take(6)
             ->get();
 
+        // 5. BERITA TERKAIT (Relasi Kategori)
         $relatedNews = News::whereHas('categories', function($q) use ($news) {
                 $q->whereIn('categories.id', $news->categories->pluck('id'));
             })
             ->where('id', '!=', $news->id)
             ->where('status', 'published')
+            ->orderBy('id', 'desc')
             ->take(3)
             ->get();
 
-        // ===> LOGIKA DETEKSI HALAMAN DETAIL BERITA <===
-        $agent = new Agent();
-
+        // 6. RENDER VIEW
         if ($agent->isMobile()) {
-            // Pastikan file 'resources/views/mobile/news/show.blade.php' sudah dibuat ya!
-            // Jika belum, buat dulu (copy dari news/show.blade.php lalu sesuaikan layoutnya)
-            // Untuk sementara saya arahkan ke file desktop jika file mobile belum ada, 
-            // TAPI idealnya Mas Angga buat file mobile-nya.
+            // Pastikan file view mobile ada, jika tidak fallback ke desktop
             if (view()->exists('mobile.news.show')) {
                 return view('mobile.news.show', compact(
                     'news', 'company', 'categories', 'headerAd', 'sidebarAd', 'sidebarNews', 'relatedNews'
@@ -157,24 +162,51 @@ class HomeController extends Controller
         ));
     }
 
+    /**
+     * Menampilkan Halaman Media Group (Halaman Baru)
+     */
+    public function mediaGroup()
+    {
+        $agent = new Agent();
+        
+        $company = CompanyProfile::first();
+        $categories = Category::where('is_active', true)->take(7)->get();
+        
+        // Iklan tetap dimuat agar header/footer tidak error
+        $headerAd = Ad::where('position', 'header_top')->where('is_active', true)->latest()->first();
+        $sidebarAd = Ad::where('position', 'sidebar_right')->where('is_active', true)->inRandomOrder()->first();
+
+        // Render khusus mobile jika user pakai HP
+        if ($agent->isMobile()) {
+            return view('mobile.pages.media-group', compact('company', 'categories', 'headerAd', 'sidebarAd'));
+        }
+
+        // Tampilan Desktop (Jika belum ada, bisa diarahkan ke view yang sama atau dibuatkan view khusus)
+        return view('pages.media-group', compact('company', 'categories', 'headerAd', 'sidebarAd'));
+    }
+
+    /**
+     * API Pencarian Berita (AJAX)
+     */
     public function searchNews(Request $request)
     {
         $query = $request->get('q');
         
-        if (!$query) {
+        if (!$query || strlen($query) < 2) {
             return response()->json([]);
         }
 
         $news = News::where('status', 'published')
-            ->where('title', 'like', "%{$query}%") 
+            ->where('title', 'like', "%{$query}%")
+            ->orderBy('id', 'desc')
             ->take(5)
-            ->get(['title', 'slug', 'thumbnail']); 
+            ->get(['title', 'slug', 'thumbnail']); // Optimasi: Ambil kolom yg perlu saja
 
         $results = $news->map(function($item) {
             return [
                 'title' => $item->title,
                 'url' => route('news.show', $item->slug),
-                'image' => Storage::url($item->thumbnail)
+                'image' => $item->thumbnail ? Storage::url($item->thumbnail) : asset('default-news.jpg') // Fallback image jika null
             ];
         });
 
