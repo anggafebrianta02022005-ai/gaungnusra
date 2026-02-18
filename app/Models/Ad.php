@@ -15,6 +15,7 @@ class Ad extends Model
         'type',      // Jenis: image_only / with_link
         'link',      // URL jika ada link
         'position',  // Posisi iklan
+        'slot_number', // Slot Iklan 
         'is_active', // Status aktif
     ];
 

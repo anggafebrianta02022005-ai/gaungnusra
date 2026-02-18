@@ -5,11 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#F1F5F9">
     
-    {{-- UPDATE 1: META TAGS (Agar Share WA Muncul Gambar) --}}
+    {{-- META TAGS --}}
     <title>{{ $company->name ?? 'Gaung Nusra' }} - Media Online Terkini</title>
     <meta name="description" content="{{ $company->description ?? 'Portal berita terkini dan terpercaya.' }}">
-    
-    {{-- Open Graph / Facebook / WhatsApp --}}
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:title" content="{{ $company->name ?? 'Gaung Nusra' }}">
@@ -18,7 +16,7 @@
     
     <link rel="icon" type="image/png" href="{{ asset('gaungnusra.png') }}?v=3">
     
-    {{-- SEO CANONICAL (UNIVERSAL) --}}
+    {{-- SEO CANONICAL --}}
     @php
         $canonicalUrl = url()->current();
         if (request()->has('page') && request()->get('page') > 1) {
@@ -26,6 +24,7 @@
         }
     @endphp
     <link rel="canonical" href="{{ $canonicalUrl }}">
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -59,7 +58,6 @@
     </style>
 </head>
 
-{{-- UPDATE 2: Menambahkan State 'lightboxOpen' & 'lightboxImage' di body --}}
 <body class="bg-white text-slate-800 flex flex-col min-h-screen" 
       x-data="{ mobileMenu: false, searchOpen: false, lightboxOpen: false, lightboxImage: '' }">
 
@@ -67,7 +65,7 @@
     <header class="bg-white border-b border-gray-100 py-3 md:py-4 relative z-50">
         <div class="container mx-auto px-4 lg:px-8 flex justify-between items-center relative min-h-[40px]">
             
-            {{-- 1. LOGO --}}
+            {{-- LOGO --}}
             <a href="/" class="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 flex items-center gap-3 group select-none shrink-0 z-10">
                 @if($company && $company->logo)
                     <img src="{{ Storage::url($company->logo) }}" alt="{{ $company->name }}" class="block h-8 md:h-12 w-auto object-contain">
@@ -79,7 +77,7 @@
                 @endif
             </a>
             
-            {{-- 2. SEARCH BAR (DESKTOP) --}}
+            {{-- SEARCH DESKTOP --}}
             <div class="hidden md:block w-full max-w-md relative group ml-auto mr-4">
                 <div class="relative transition-all duration-300 transform origin-left">
                     <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400 group-focus-within:text-brand-red transition-colors"><i class="ph ph-magnifying-glass text-lg"></i></span>
@@ -88,12 +86,11 @@
                 </div>
             </div>
 
-            {{-- 3. TOMBOL AKSI MOBILE --}}
+            {{-- TOMBOL AKSI MOBILE --}}
             <div class="flex items-center gap-2 ml-auto md:hidden z-20">
-                <button 
-                    @click="searchOpen = !searchOpen; if(searchOpen) $nextTick(() => $refs.mobileSearchInput.focus())" 
-                    class="w-9 h-9 flex items-center justify-center rounded-full text-slate-600 hover:bg-slate-100 transition-all active:scale-95"
-                    :class="{ 'bg-brand-red/10 text-brand-red': searchOpen }">
+                <button @click="searchOpen = !searchOpen; if(searchOpen) $nextTick(() => $refs.mobileSearchInput.focus())" 
+                        class="w-9 h-9 flex items-center justify-center rounded-full text-slate-600 hover:bg-slate-100 transition-all active:scale-95"
+                        :class="{ 'bg-brand-red/10 text-brand-red': searchOpen }">
                     <i class="ph text-xl" :class="searchOpen ? 'ph-x' : 'ph-magnifying-glass'"></i>
                 </button>
 
@@ -154,7 +151,7 @@
         </div>
     </div>
 
-    {{-- UPDATE 3: IKLAN HEADER DENGAN LOGIKA POPUP --}}
+    {{-- IKLAN HEADER --}}
     <div class="px-4 pt-4 pb-2">
         @if($headerAd && $headerAd->image)
             @php 
@@ -169,9 +166,7 @@
                @endif
                class="block relative rounded-xl overflow-hidden shadow-sm border border-slate-100 group">
                
-               {{-- Badge Sponsored --}}
                <div class="absolute top-0 right-0 bg-brand-misty text-slate-600 text-[8px] font-bold px-2 py-0.5 rounded-bl-lg z-10 border-l border-b border-white">SPONSORED</div>
-               
                <img src="{{ Storage::url($headerAd->image) }}" class="w-full h-auto object-cover max-h-[250px]">
             </a>
         @endif
@@ -246,26 +241,53 @@
             </div>
         </div>
 
-        {{-- UPDATE 4: IKLAN SIDEBAR (BOTTOM) DENGAN LOGIKA POPUP --}}
-        <div class="px-4 pb-8 pt-2">
-            @if($sidebarAd && $sidebarAd->image)
-                @php 
-                    $isPopupSidebar = empty($sidebarAd->link) || $sidebarAd->link === '#'; 
-                @endphp
+        {{-- UPDATE 4: IKLAN SIDEBAR / BAWAH (LOOPING 5 SLOT) --}}
+        {{-- Menggunakan Loop 1-5 untuk menampilkan iklan berdasarkan slot_number --}}
+        <div class="px-4 pb-8 pt-2 space-y-4"> 
+            
+            @if(isset($sidebarAds))
+                @for ($i = 1; $i <= 5; $i++)
+                    @if(isset($sidebarAds[$i]))
+                        @php 
+                            $ad = $sidebarAds[$i];
+                            $isPopup = empty($ad->link) || $ad->link === '#'; 
+                        @endphp
 
-                <a href="{{ $isPopupSidebar ? 'javascript:void(0)' : $sidebarAd->link }}" 
-                   @if($isPopupSidebar) 
+                        <div class="relative group">
+                            <a href="{{ $isPopup ? 'javascript:void(0)' : $ad->link }}" 
+                               @if($isPopup) 
+                                    @click.prevent="lightboxOpen = true; lightboxImage = '{{ Storage::url($ad->image) }}'" 
+                               @else 
+                                    target="_blank" 
+                               @endif
+                               class="block relative rounded-xl overflow-hidden shadow-sm border border-slate-100 transition-transform active:scale-95">
+                               
+                               <span class="absolute top-0 right-0 bg-brand-misty text-slate-600 text-[8px] font-bold px-2 py-0.5 rounded-bl-lg z-10 border-l border-b border-white">
+                                   ADS #{{ $i }}
+                               </span>
+                               
+                               <img src="{{ Storage::url($ad->image) }}" class="w-full h-auto object-cover">
+                            </a>
+                        </div>
+                    @endif
+                @endfor
+            @elseif(isset($sidebarAd) && $sidebarAd->image)
+                {{-- FALLBACK: Jika Controller belum diupdate, pakai logic lama --}}
+                @php 
+                    $isPopup = empty($sidebarAd->link) || $sidebarAd->link === '#'; 
+                @endphp
+                <a href="{{ $isPopup ? 'javascript:void(0)' : $sidebarAd->link }}" 
+                   @if($isPopup) 
                         @click.prevent="lightboxOpen = true; lightboxImage = '{{ Storage::url($sidebarAd->image) }}'" 
                    @else 
                         target="_blank" 
                    @endif
-                   class="block relative rounded-xl overflow-hidden shadow-sm border border-slate-100 group">
-                   
+                   class="block relative rounded-xl overflow-hidden shadow-sm border border-slate-100">
                    <span class="absolute top-0 right-0 bg-brand-misty text-slate-600 text-[8px] font-bold px-2 py-0.5 rounded-bl-lg z-10 border-l border-b border-white">ADS</span>
-                   
                    <img src="{{ Storage::url($sidebarAd->image) }}" class="w-full h-auto object-cover">
                 </a>
             @endif
+
         </div>
 
     </main>
@@ -308,23 +330,11 @@
                     </div>
                     <div>
                         <h3 class="font-display font-bold text-brand-dark mb-3 text-xs tracking-wide uppercase">Layanan</h3>
-                       <ul class="space-y-2 text-slate-500 text-xs font-medium">
-                        <li>
-                            <a href="{{ route('pages.advertise') }}" class="hover:text-brand-red transition-colors">
-                                Pasang Iklan
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('epaper.latest') }}" target="_blank" class="hover:text-brand-red transition-colors">
-                                Koran Cetak
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('pages.media-group') }}" class="hover:text-brand-red transition-colors">
-                                Media Group
-                            </a>
-                        </li>
-                    </ul>
+                        <ul class="space-y-2 text-slate-500 text-xs font-medium">
+                            <li><a href="{{ route('pages.advertise') }}" class="hover:text-brand-red transition-colors">Pasang Iklan</a></li>
+                            <li><a href="{{ route('epaper.latest') }}" target="_blank" class="hover:text-brand-red transition-colors">Koran Cetak</a></li>
+                            <li><a href="{{ route('pages.media-group') }}" class="hover:text-brand-red transition-colors">Media Group</a></li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -336,7 +346,7 @@
         </div>
     </footer>
 
-    {{-- UPDATE 5: MODAL LIGHTBOX --}}
+    {{-- MODAL LIGHTBOX --}}
     <div x-show="lightboxOpen" 
          x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
          x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"

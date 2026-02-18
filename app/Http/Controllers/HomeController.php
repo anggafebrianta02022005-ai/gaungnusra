@@ -29,27 +29,29 @@ class HomeController extends Controller
 
         // 2. LOGIKA AJAX (LOAD MORE)
         if ($request->ajax()) {
-            // Jika request dari HP -> Panggil partial mobile
             if ($agent->isMobile()) {
                 return view('partials.mobile-news-list', compact('latestNews'))->render();
             }
-            // Jika request dari Desktop -> Panggil partial desktop
             return view('partials.news-list', compact('latestNews'))->render();
         }
 
-        // 3. DATA UMUM (Header, Footer, Sidebar)
+        // 3. DATA UMUM
         $company = CompanyProfile::first();
         $categories = Category::where('is_active', true)->take(7)->get();
         $headerAd = Ad::where('position', 'header_top')->where('is_active', true)->latest()->first();
+        
+        // Mengambil Iklan Sidebar (Logic 5 Slot untuk Mobile, atau Random untuk Desktop)
+        // Jika Anda sudah migrasi 5 slot, pakai logika keyBy('slot_number') di sini.
+        // Untuk saat ini saya pakai random dulu sesuai kode awal agar tidak error.
         $sidebarAd = Ad::where('position', 'sidebar_right')->where('is_active', true)->inRandomOrder()->first();
 
-        // 4. TRENDING (SIDEBAR)
+        // 4. TRENDING
         $sidebarNews = News::where('status', 'published')
             ->orderBy('views_count', 'desc')
             ->take(6)
             ->get();
 
-        // 5. RENDER VIEW (MOBILE / DESKTOP)
+        // 5. RENDER VIEW
         if ($agent->isMobile()) {
             return view('mobile.home', compact(
                 'company', 'categories', 'headerAd', 'sidebarAd', 'latestNews', 'sidebarNews'
@@ -69,7 +71,6 @@ class HomeController extends Controller
         $agent = new Agent();
         $category = Category::where('slug', $slug)->where('is_active', true)->firstOrFail();
 
-        // 1. QUERY BERITA PER KATEGORI
         $news = $category->news()
             ->with(['author', 'categories'])
             ->where('status', 'published')
@@ -78,16 +79,13 @@ class HomeController extends Controller
             ->orderBy('news.id', 'desc')
             ->paginate(10);
 
-        // 2. LOGIKA AJAX (LOAD MORE)
         if ($request->ajax()) {
-            // Gunakan variable 'latestNews' agar kompatibel dengan partials yang sama
             if ($agent->isMobile()) {
                 return view('partials.mobile-news-list', ['latestNews' => $news])->render();
             }
             return view('partials.news-list', ['latestNews' => $news])->render();
         }
 
-        // 3. DATA PENDUKUNG
         $company = CompanyProfile::first();
         $categories = Category::where('is_active', true)->take(7)->get();
         $headerAd = Ad::where('position', 'header_top')->where('is_active', true)->latest()->first();
@@ -98,7 +96,6 @@ class HomeController extends Controller
             ->take(6)
             ->get();
 
-        // 4. RENDER VIEW
         if ($agent->isMobile()) {
             return view('mobile.category.show', compact(
                 'category', 'news', 'company', 'categories', 'headerAd', 'sidebarAd', 'sidebarNews'
@@ -117,27 +114,22 @@ class HomeController extends Controller
     {
         $agent = new Agent();
 
-        // 1. AMBIL BERITA
         $news = News::where('slug', $slug)
             ->where('status', 'published')
             ->firstOrFail();
 
-        // 2. COUNTER VIEWS
         $news->increment('views_count');
 
-        // 3. DATA PENDUKUNG
         $company = CompanyProfile::first();
         $categories = Category::where('is_active', true)->take(7)->get();
         $headerAd = Ad::where('position', 'header_top')->where('is_active', true)->latest()->first();
         $sidebarAd = Ad::where('position', 'sidebar_right')->where('is_active', true)->inRandomOrder()->first();
 
-        // 4. TRENDING
         $sidebarNews = News::where('status', 'published')
             ->orderBy('views_count', 'desc')
             ->take(6)
             ->get();
 
-        // 5. BERITA TERKAIT (Relasi Kategori)
         $relatedNews = News::whereHas('categories', function($q) use ($news) {
                 $q->whereIn('categories.id', $news->categories->pluck('id'));
             })
@@ -147,9 +139,7 @@ class HomeController extends Controller
             ->take(3)
             ->get();
 
-        // 6. RENDER VIEW
         if ($agent->isMobile()) {
-            // Pastikan file view mobile ada, jika tidak fallback ke desktop
             if (view()->exists('mobile.news.show')) {
                 return view('mobile.news.show', compact(
                     'news', 'company', 'categories', 'headerAd', 'sidebarAd', 'sidebarNews', 'relatedNews'
@@ -163,46 +153,66 @@ class HomeController extends Controller
     }
 
     /**
-     * Menampilkan Halaman Media Group (Halaman Baru)
+     * Menampilkan Halaman Media Group
      */
     public function mediaGroup()
     {
         $agent = new Agent();
         
-        // 1. Data Utama
         $company = CompanyProfile::first();
         $categories = Category::where('is_active', true)->take(7)->get();
         
-        // 2. Iklan
         $headerAd = Ad::where('position', 'header_top')->where('is_active', true)->latest()->first();
         $sidebarAd = Ad::where('position', 'sidebar_right')->where('is_active', true)->inRandomOrder()->first();
 
-        // 3. TRENDING (INI YANG KEMARIN KURANG/PENYEBAB ERROR)
         $sidebarNews = News::where('status', 'published')
             ->orderBy('views_count', 'desc')
             ->take(6)
             ->get();
 
-        // 4. Render View Mobile
         if ($agent->isMobile()) {
             return view('mobile.pages.media-group', compact(
-                'company', 
-                'categories', 
-                'headerAd', 
-                'sidebarAd', 
-                'sidebarNews' // <-- Wajib dikirim ke view
+                'company', 'categories', 'headerAd', 'sidebarAd', 'sidebarNews'
             ));
         }
 
-        // 5. Render View Desktop
         return view('pages.media-group', compact(
-            'company', 
-            'categories', 
-            'headerAd', 
-            'sidebarAd', 
-            'sidebarNews' // <-- Wajib dikirim ke view
+            'company', 'categories', 'headerAd', 'sidebarAd', 'sidebarNews'
         ));
     }
+
+    /**
+     * [BARU] Menampilkan Halaman Pasang Iklan
+     */
+    public function advertise()
+    {
+        $agent = new Agent();
+        
+        $company = CompanyProfile::first();
+        $categories = Category::where('is_active', true)->take(7)->get();
+        
+        $headerAd = Ad::where('position', 'header_top')->where('is_active', true)->latest()->first();
+        $sidebarAd = Ad::where('position', 'sidebar_right')->where('is_active', true)->inRandomOrder()->first();
+
+        $sidebarNews = News::where('status', 'published')
+            ->orderBy('views_count', 'desc')
+            ->take(6)
+            ->get();
+
+        // Jika Mobile, arahkan ke file view mobile yang baru kita buat
+        if ($agent->isMobile()) {
+            // Pastikan Anda menyimpan file tadi di: resources/views/mobile/pages/advertise.blade.php
+            return view('mobile.pages.advertise', compact(
+                'company', 'categories', 'headerAd', 'sidebarAd', 'sidebarNews'
+            ));
+        }
+
+        // Jika Desktop (Fallback ke halaman page biasa jika belum ada view khusus)
+        return view('pages.advertise', compact(
+            'company', 'categories', 'headerAd', 'sidebarAd', 'sidebarNews'
+        ));
+    }
+
     /**
      * API Pencarian Berita (AJAX)
      */
@@ -218,13 +228,13 @@ class HomeController extends Controller
             ->where('title', 'like', "%{$query}%")
             ->orderBy('id', 'desc')
             ->take(5)
-            ->get(['title', 'slug', 'thumbnail']); // Optimasi: Ambil kolom yg perlu saja
+            ->get(['title', 'slug', 'thumbnail']);
 
         $results = $news->map(function($item) {
             return [
                 'title' => $item->title,
                 'url' => route('news.show', $item->slug),
-                'image' => $item->thumbnail ? Storage::url($item->thumbnail) : asset('default-news.jpg') // Fallback image jika null
+                'image' => $item->thumbnail ? Storage::url($item->thumbnail) : asset('default-news.jpg')
             ];
         });
 

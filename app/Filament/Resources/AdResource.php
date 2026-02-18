@@ -6,7 +6,7 @@ use App\Filament\Resources\AdResource\Pages;
 use App\Models\Ad;
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Forms\Get; // Import penting untuk baca nilai form
+use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -42,67 +42,70 @@ class AdResource extends Resource
                             ->required()
                             ->maxLength(255),
 
-                        Select::make('type')
-                            ->label('Jenis Tampilan')
-                            ->options([
-                                'image_only' => 'Hanya Gambar (Banner Info)',
-                                'with_link' => 'Gambar Bisa Diklik (Link)',
-                            ])
-                            ->default('with_link')
-                            ->live()
-                            ->required(),
-
+                        // Input Link fleksibel: Bisa URL atau # untuk popup
                         TextInput::make('link')
-                            ->label('URL Tujuan')
-                            ->placeholder('https://google.com')
-                            ->url()
-                            ->visible(fn (Get $get) => $get('type') === 'with_link')
-                            ->required(fn (Get $get) => $get('type') === 'with_link'),
+                            ->label('Link Tujuan (URL)')
+                            ->placeholder('https://... atau # untuk Popup Gambar')
+                            ->nullable(),
 
                         Select::make('position')
                             ->label('Posisi Penempatan')
                             ->options([
                                 'header_top' => 'Header Atas',
-                                'sidebar_right' => 'Sidebar Kanan',
+                                'sidebar_right' => 'Sidebar Kanan (Mobile 5 Slot)',
                             ])
                             ->default('sidebar_right')
                             ->required()
-                            ->live(), // Live agar toggle di bawah bisa validasi real-time
+                            ->live(), // Live agar input slot di bawah bisa muncul/hilang
+
+                        // [BARU] Input Slot Number (Hanya muncul jika Sidebar dipilih)
+                        Select::make('slot_number')
+                            ->label('Pilih Slot Tayang')
+                            ->options([
+                                1 => 'Slot 1 (Paling Atas)',
+                                2 => 'Slot 2',
+                                3 => 'Slot 3',
+                                4 => 'Slot 4',
+                                5 => 'Slot 5 (Paling Bawah)',
+                            ])
+                            ->visible(fn (Get $get) => $get('position') === 'sidebar_right')
+                            ->required(fn (Get $get) => $get('position') === 'sidebar_right')
+                            ->native(false),
 
                         FileUpload::make('image')
                             ->label('Banner Iklan')
                             ->image()
                             ->directory('ads')
-                            ->imageEditor() // <--- Aktifkan fitur crop manual
-                            // Jangan kunci aspect ratio karena iklan beda-beda bentuknya
-                            ->helperText('Rekomendasi Ukuran: Header (1200 x 300 px), Sidebar (300 x 600 px)')
-                            ->columnSpanFull(),
+                            ->imageEditor()
+                            ->helperText('Rekomendasi: Header (1200x300px), Sidebar (300x300px atau 300x600px)')
+                            ->columnSpanFull()
+                            ->required(),
 
-                        // === [UPDATE REVISI 2] VALIDASI LIMIT IKLAN ===
+                        // [UPDATE] Validasi Limit yang Lebih Cerdas (Support 5 Slot)
                         Toggle::make('is_active')
                             ->label('Status Aktif')
                             ->default(true)
                             ->rules([
                                 fn (Get $get, $record) => function (string $attribute, $value, \Closure $fail) use ($get, $record) {
-                                    // Hanya cek jika user mencoba mengaktifkan (ON)
-                                    if ($value) {
+                                    if ($value) { // Cek hanya saat diaktifkan
                                         $position = $get('position');
-                                        
-                                        // Cari iklan LAIN yang aktif di posisi yang sama
-                                        $existingAds = Ad::where('position', $position)
-                                            ->where('is_active', true)
-                                            ->when($record, fn ($q) => $q->where('id', '!=', $record->id)) // Abaikan diri sendiri saat edit
-                                            ->count();
+                                        $slot = $get('slot_number');
 
-                                        // Jika sudah ada 1, tolak!
-                                        if ($existingAds >= 1) {
-                                            $namaPosisi = match($position) {
-                                                'header_top' => 'Header Atas',
-                                                'sidebar_right' => 'Sidebar Kanan',
-                                                default => $position
-                                            };
-                                            
-                                            $fail("Gagal! Posisi '$namaPosisi' sudah penuh (Max 1 Iklan). Matikan iklan lain dulu.");
+                                        $query = Ad::where('position', $position)
+                                            ->where('is_active', true)
+                                            ->when($record, fn ($q) => $q->where('id', '!=', $record->id));
+
+                                        // Jika Sidebar, cek berdasarkan Slot Number juga
+                                        if ($position === 'sidebar_right') {
+                                            $query->where('slot_number', $slot);
+                                            $msg = "Slot Sidebar #{$slot} sudah terisi. Nonaktifkan iklan lain di slot ini dulu.";
+                                        } else {
+                                            // Jika Header, cek posisi saja (Max 1)
+                                            $msg = "Posisi Header sudah terisi. Nonaktifkan iklan header yang lama dulu.";
+                                        }
+
+                                        if ($query->count() > 0) {
+                                            $fail($msg);
                                         }
                                     }
                                 },
@@ -114,53 +117,57 @@ class AdResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-        ->defaultSort('created_at', 'desc')
+            ->defaultSort('created_at', 'desc')
             ->columns([
                 ImageColumn::make('image')
-                    ->label('Preview'),
+                    ->label('Preview')
+                    ->height(50),
                 
                 TextColumn::make('title')
                     ->searchable()
-                    ->sortable(),
-
-                TextColumn::make('type')
-                    ->label('Jenis')
-                    ->badge()
-                    ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'image_only' => 'Info',
-                        'with_link' => 'Link',
-                    })
-                    ->color(fn (string $state): string => match ($state) {
-                        'image_only' => 'gray',
-                        'with_link' => 'success',
-                    }),
+                    ->sortable()
+                    ->limit(30),
 
                 TextColumn::make('position')
                     ->label('Posisi')
-                    ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'header_top' => 'Header Atas',
-                        'sidebar_right' => 'Sidebar Kanan',
-                        default => $state,
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'header_top' => 'info',
+                        'sidebar_right' => 'warning',
+                        default => 'gray',
                     })
-                    ->sortable(),
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'header_top' => 'Header',
+                        'sidebar_right' => 'Sidebar',
+                        default => $state,
+                    }),
+
+                // [BARU] Kolom Slot agar admin tau ini iklan slot ke berapa
+                TextColumn::make('slot_number')
+                    ->label('Slot')
+                    ->sortable()
+                    ->alignCenter()
+                    ->badge()
+                    ->color('success')
+                    ->formatStateUsing(fn ($state) => $state ? "#{$state}" : '-')
+                    ->visible(fn () => true), // Selalu tampil
+
+                TextColumn::make('link')
+                    ->label('Tujuan')
+                    ->limit(20)
+                    ->icon(fn ($state) => $state === '#' ? 'heroicon-o-eye' : 'heroicon-o-link')
+                    ->url(fn ($state) => $state === '#' ? null : $state, true),
 
                 IconColumn::make('is_active')
                     ->label('Aktif')
                     ->boolean(),
 
                 TextColumn::make('created_at')
-                    ->dateTime()
+                    ->dateTime('d M Y')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                SelectFilter::make('type')
-                    ->label('Filter Jenis')
-                    ->options([
-                        'image_only' => 'Hanya Gambar',
-                        'with_link' => 'Ada Link',
-                    ]),
-
                 SelectFilter::make('position')
                     ->label('Filter Posisi')
                     ->options([
@@ -168,10 +175,15 @@ class AdResource extends Resource
                         'sidebar_right' => 'Sidebar Kanan',
                     ]),
 
+                // Filter Slot Sidebar
+                SelectFilter::make('slot_number')
+                    ->label('Filter Slot')
+                    ->options([
+                        1 => 'Slot 1', 2 => 'Slot 2', 3 => 'Slot 3', 4 => 'Slot 4', 5 => 'Slot 5'
+                    ]),
+
                 TernaryFilter::make('is_active')
-                    ->label('Status Aktif')
-                    ->trueLabel('Hanya Aktif')
-                    ->falseLabel('Hanya Non-Aktif'),
+                    ->label('Status Aktif'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
