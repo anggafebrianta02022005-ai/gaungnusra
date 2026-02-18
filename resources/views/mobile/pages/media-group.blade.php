@@ -41,7 +41,7 @@
     </style>
 </head>
 
-{{-- UPDATE 1: Menambahkan State Lightbox di body --}}
+{{-- STATE LIGHTBOX --}}
 <body class="bg-white text-slate-800 flex flex-col min-h-screen" 
       x-data="{ mobileMenu: false, searchOpen: false, lightboxOpen: false, lightboxImage: '' }">
 
@@ -59,7 +59,6 @@
                 @endif
             </a>
             
-            {{-- Search Desktop --}}
             <div class="hidden md:block w-full max-w-md relative group ml-auto mr-4">
                 <div class="relative transition-all duration-300">
                     <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400"><i class="ph ph-magnifying-glass text-lg"></i></span>
@@ -68,7 +67,6 @@
                 </div>
             </div>
 
-            {{-- Tombol Mobile --}}
             <div class="flex items-center gap-2 ml-auto md:hidden z-20">
                 <button @click="searchOpen = !searchOpen; if(searchOpen) $nextTick(() => $refs.mobileSearchInput.focus())" class="w-9 h-9 flex items-center justify-center rounded-full text-slate-600 hover:bg-slate-100 transition-all active:scale-95" :class="{ 'bg-brand-red/10 text-brand-red': searchOpen }">
                     <i class="ph text-xl" :class="searchOpen ? 'ph-x' : 'ph-magnifying-glass'"></i>
@@ -119,7 +117,7 @@
         </div>
     </div>
 
-    {{-- UPDATE 2: IKLAN HEADER (DENGAN LOGIKA POPUP) --}}
+    {{-- IKLAN HEADER (DENGAN LOGIKA POPUP) --}}
     <div class="px-4 pt-4 pb-2">
         @if($headerAd && $headerAd->image)
             @php 
@@ -223,50 +221,81 @@
 
         </div>
 
-        {{-- UPDATE 3: SECTION TRENDING & IKLAN BAWAH --}}
-        {{-- Kita bungkus dengan background putih agar terpisah dari konten Media Group yg abu-abu --}}
+        {{-- UPDATE: SECTION TRENDING & IKLAN BAWAH --}}
         <div class="bg-white rounded-t-[2rem] pt-8 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.05)] relative z-20">
             
             {{-- BERITA TRENDING --}}
-             <div class="px-4 py-6 bg-white">
-            <div class="flex items-center gap-2 mb-5">
-                <i class="ph-fill ph-trend-up text-brand-red text-xl"></i>
-                <h2 class="font-display font-bold text-lg text-brand-dark">Sedang Trending</h2>
+            <div class="px-4 pb-6">
+                <div class="flex items-center gap-2 mb-5">
+                    <i class="ph-fill ph-trend-up text-brand-red text-xl"></i>
+                    <h2 class="font-display font-bold text-lg text-brand-dark">Sedang Trending</h2>
+                </div>
+                
+                <div class="flex flex-col gap-4">
+                    @if(isset($sidebarNews) && count($sidebarNews) > 0)
+                        @foreach($sidebarNews as $index => $sNews)
+                            <a href="{{ route('news.show', $sNews->slug) }}" class="flex gap-4 items-center group">
+                                <span class="text-2xl font-black text-slate-200 w-6 text-center group-hover:text-brand-red/50 transition-colors">{{ $index + 1 }}</span>
+                                <div class="flex-1">
+                                    <h4 class="text-sm font-bold text-slate-800 leading-snug line-clamp-2 mb-1 group-hover:text-brand-red transition-colors">{{ $sNews->title }}</h4>
+                                </div>
+                                <div class="w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-slate-100">
+                                    <img src="{{ Storage::url($sNews->thumbnail) }}" class="w-full h-full object-cover">
+                                </div>
+                            </a>
+                        @endforeach
+                    @else
+                        <p class="text-xs text-slate-400 italic">Belum ada berita trending.</p>
+                    @endif
+                </div>
             </div>
-            <div class="flex flex-col gap-4">
-                @foreach($sidebarNews as $index => $sNews)
-                    <a href="{{ route('news.show', $sNews->slug) }}" class="flex gap-4 items-center group">
-                        <span class="text-2xl font-black text-slate-200 w-6 text-center group-hover:text-brand-red/50 transition-colors">{{ $index + 1 }}</span>
-                        <div class="flex-1">
-                            <h4 class="text-sm font-bold text-slate-800 leading-snug line-clamp-2 mb-1 group-hover:text-brand-red transition-colors">{{ $sNews->title }}</h4>
-                        </div>
-                        <div class="w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-slate-100">
-                            <img src="{{ Storage::url($sNews->thumbnail) }}" class="w-full h-full object-cover">
-                        </div>
-                    </a>
-                @endforeach
-            </div>
-        </div>
 
-            {{-- UPDATE 4: IKLAN SIDEBAR (LOGIKA POPUP) --}}
-            <div class="px-4 pb-8 pt-2">
-                @if($sidebarAd && $sidebarAd->image)
+            {{-- UPDATE: IKLAN SIDEBAR (LOOPING 5 SLOT) --}}
+            <div class="px-4 pb-8 pt-2 space-y-4"> 
+                
+                @if(isset($sidebarAds))
+                    @for ($i = 1; $i <= 5; $i++)
+                        @if(isset($sidebarAds[$i]))
+                            @php 
+                                $ad = $sidebarAds[$i];
+                                $isPopup = empty($ad->link) || $ad->link === '#'; 
+                            @endphp
+
+                            <div class="relative group block w-full">
+                                <a href="{{ $isPopup ? 'javascript:void(0)' : $ad->link }}" 
+                                   @if($isPopup) 
+                                        @click.prevent="lightboxOpen = true; lightboxImage = '{{ Storage::url($ad->image) }}'" 
+                                   @else 
+                                        target="_blank" 
+                                   @endif
+                                   class="block relative rounded-xl overflow-hidden shadow-sm border border-slate-100 transition-transform active:scale-95">
+                                   
+                                   <span class="absolute top-0 right-0 bg-brand-misty text-slate-600 text-[8px] font-bold px-2 py-0.5 rounded-bl-lg z-10 border-l border-b border-white">
+                                       ADS #{{ $i }}
+                                   </span>
+                                   
+                                   <img src="{{ Storage::url($ad->image) }}" class="w-full h-auto object-cover">
+                                </a>
+                            </div>
+                        @endif
+                    @endfor
+                @elseif(isset($sidebarAd) && $sidebarAd->image)
+                    {{-- FALLBACK OLD SINGLE AD --}}
                     @php 
-                        $isPopupSidebar = empty($sidebarAd->link) || $sidebarAd->link === '#'; 
+                        $isPopup = empty($sidebarAd->link) || $sidebarAd->link === '#'; 
                     @endphp
-
-                    <a href="{{ $isPopupSidebar ? 'javascript:void(0)' : $sidebarAd->link }}" 
-                       @if($isPopupSidebar) 
+                    <a href="{{ $isPopup ? 'javascript:void(0)' : $sidebarAd->link }}" 
+                       @if($isPopup) 
                             @click.prevent="lightboxOpen = true; lightboxImage = '{{ Storage::url($sidebarAd->image) }}'" 
                        @else 
                             target="_blank" 
                        @endif
-                       class="block relative rounded-xl overflow-hidden shadow-sm border border-slate-100 group transition-transform active:scale-95">
-                       
+                       class="block relative rounded-xl overflow-hidden shadow-sm border border-slate-100">
                        <span class="absolute top-0 right-0 bg-brand-misty text-slate-600 text-[8px] font-bold px-2 py-0.5 rounded-bl-lg z-10 border-l border-b border-white">ADS</span>
                        <img src="{{ Storage::url($sidebarAd->image) }}" class="w-full h-auto object-cover">
                     </a>
                 @endif
+
             </div>
 
         </div>
