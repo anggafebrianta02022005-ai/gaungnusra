@@ -3,24 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Media Group - Gaung Nusra</title>
+    <meta name="theme-color" content="#F1F5F9">
+    <title>Media Group - {{ $company->name ?? 'Gaung Nusra' }}</title>
     
-    {{-- SEO --}}
+    {{-- SEO & Meta --}}
     <meta name="description" content="Jaringan Media Group Gaung Nusra. Partner informasi terpercaya di Nusa Tenggara dan Indonesia.">
     <link rel="icon" type="image/png" href="{{ asset('gaungnusra.png') }}?v=3">
+    <link rel="canonical" href="{{ url()->current() }}">
     
-    {{-- CSS & FONTS --}}
+    {{-- CSS & Fonts --}}
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: { sans: ['Inter', 'sans-serif'], display: ['"Plus Jakarta Sans"', 'sans-serif'] },
-                    colors: { brand: { red: '#D32F2F', dark: '#1E3A8A', misty: '#F1F5F9', gray: '#64748B' } }
+                    colors: { brand: { red: '#D32F2F', dark: '#1E3A8A', misty: '#F1F5F9' } }
                 }
             }
         }
@@ -30,7 +33,7 @@
 
 <body class="bg-white text-slate-800 flex flex-col min-h-screen" x-data="{ searchOpen: false, lightboxOpen: false, lightboxImage: '' }">
 
-    {{-- HEADER DESKTOP --}}
+    {{-- HEADER (SAMA PERSIS DENGAN HOME DESKTOP) --}}
     <header class="bg-white border-b border-gray-100 py-4 sticky top-0 z-50">
         <div class="container mx-auto px-4 lg:px-8 flex justify-between items-center">
             <a href="/" class="flex items-center gap-3">
@@ -52,7 +55,7 @@
     </header>
 
     {{-- SEARCH BAR --}}
-    <div x-show="searchOpen" class="border-b border-gray-100 py-4 bg-white" x-transition x-cloak>
+    <div x-show="searchOpen" class="border-b border-gray-100 py-4 bg-white" x-transition>
         <div class="container mx-auto px-4 lg:px-8">
             <input type="text" id="desktop-search" class="w-full bg-slate-50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-brand-red" placeholder="Ketik kata kunci berita...">
             <div id="desktop-results" class="mt-2 hidden bg-white shadow-lg rounded-xl border border-slate-100 p-2"></div>
@@ -70,81 +73,72 @@
     </div>
     @endif
 
-    {{-- MAIN CONTENT --}}
-    <main class="container mx-auto px-4 lg:px-8 py-10 flex-grow">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+    {{-- MAIN CONTENT (LAYOUT 8:4) --}}
+    <main class="container mx-auto px-4 lg:px-8 py-6 flex-grow">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
             
-            {{-- KOLOM KIRI: KONTEN MEDIA GROUP --}}
+            {{-- KOLOM KIRI (KONTEN KHUSUS MEDIA GROUP) --}}
             <div class="lg:col-span-8">
                 
-                {{-- Hero Section --}}
-                <div class="text-center mb-12">
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-brand-red/10 text-brand-red text-xs font-bold tracking-widest rounded-full mb-4 uppercase">
-                        <i class="ph-fill ph-handshake"></i> Partner Resmi
-                    </span>
-                    <h1 class="font-display font-extrabold text-4xl text-brand-dark leading-tight mb-4">
-                        Jaringan Media <br> <span class="text-brand-red">Sumbawa</span>
-                    </h1>
-                    <p class="text-slate-500 max-w-lg mx-auto text-lg leading-relaxed">
-                        Sinergi media lokal terpercaya untuk menyuarakan aspirasi Sumbawa ke pentas nasional.
-                    </p>
+                {{-- Judul Halaman --}}
+                <div class="mb-10 text-center">
+                    <span class="inline-block px-3 py-1 bg-brand-red/10 text-brand-red text-xs font-bold rounded-full mb-3">OFFICIAL PARTNER</span>
+                    <h1 class="font-display font-extrabold text-3xl md:text-4xl text-brand-dark mb-4">Jaringan Media <span class="text-brand-red">Sumbawa</span></h1>
+                    <p class="text-slate-500 max-w-2xl mx-auto">Bersinergi membangun ekosistem informasi yang sehat, akurat, dan terpercaya untuk masyarakat Nusa Tenggara.</p>
                 </div>
 
-                {{-- Partner Grid --}}
+                {{-- List Partner (Grid) --}}
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
                     
                     {{-- Partner 1 --}}
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-5 group hover:shadow-lg hover:border-blue-200 transition-all duration-300">
-                        <div class="w-16 h-16 shrink-0 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 text-white flex items-center justify-center font-display font-bold text-2xl shadow-lg shadow-blue-500/20">DS</div>
-                        <div class="flex-1 min-w-0">
-                            <h3 class="font-display font-bold text-slate-800 text-lg mb-1 truncate">Dinamika Sumbawa</h3>
-                            <p class="text-sm text-slate-400 font-medium truncate">dinamikasumbawa.com</p>
+                    <div class="bg-white border border-slate-100 p-5 rounded-2xl shadow-sm hover:shadow-md transition-all flex items-center gap-4 group">
+                        <div class="w-14 h-14 rounded-xl bg-blue-600 text-white flex items-center justify-center font-display font-bold text-xl shadow-lg shadow-blue-200">DS</div>
+                        <div class="flex-1 overflow-hidden">
+                            <h3 class="font-bold text-slate-800 text-lg truncate">Dinamika Sumbawa</h3>
+                            <a href="https://dinamikasumbawa.com" target="_blank" class="text-sm text-slate-400 hover:text-blue-600 truncate block">dinamikasumbawa.com</a>
                         </div>
-                        <a href="https://dinamikasumbawa.com" target="_blank" class="w-10 h-10 rounded-full bg-slate-50 text-slate-400 flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition-colors"><i class="ph-bold ph-arrow-right"></i></a>
+                        <a href="https://dinamikasumbawa.com" target="_blank" class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-blue-600 group-hover:text-white transition"><i class="ph-bold ph-arrow-right"></i></a>
                     </div>
 
                     {{-- Partner 2 --}}
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-5 group hover:shadow-lg hover:border-red-200 transition-all duration-300">
-                        <div class="w-16 h-16 shrink-0 rounded-2xl bg-gradient-to-br from-red-500 to-red-600 text-white flex items-center justify-center font-display font-bold text-2xl shadow-lg shadow-red-500/20">LM</div>
-                        <div class="flex-1 min-w-0">
-                            <h3 class="font-display font-bold text-slate-800 text-lg mb-1 truncate">Laskar Merdeka</h3>
-                            <p class="text-sm text-slate-400 font-medium truncate">laskarmerdeka.com</p>
+                    <div class="bg-white border border-slate-100 p-5 rounded-2xl shadow-sm hover:shadow-md transition-all flex items-center gap-4 group">
+                        <div class="w-14 h-14 rounded-xl bg-red-600 text-white flex items-center justify-center font-display font-bold text-xl shadow-lg shadow-red-200">LM</div>
+                        <div class="flex-1 overflow-hidden">
+                            <h3 class="font-bold text-slate-800 text-lg truncate">Laskar Merdeka</h3>
+                            <a href="https://laskarmerdeka.com" target="_blank" class="text-sm text-slate-400 hover:text-red-600 truncate block">laskarmerdeka.com</a>
                         </div>
-                        <a href="https://laskarmerdeka.com" target="_blank" class="w-10 h-10 rounded-full bg-slate-50 text-slate-400 flex items-center justify-center group-hover:bg-red-500 group-hover:text-white transition-colors"><i class="ph-bold ph-arrow-right"></i></a>
+                        <a href="https://laskarmerdeka.com" target="_blank" class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-red-600 group-hover:text-white transition"><i class="ph-bold ph-arrow-right"></i></a>
                     </div>
 
                     {{-- Partner 3 --}}
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-5 group hover:shadow-lg hover:border-orange-200 transition-all duration-300">
-                        <div class="w-16 h-16 shrink-0 rounded-2xl bg-gradient-to-br from-orange-400 to-orange-500 text-white flex items-center justify-center font-display font-bold text-2xl shadow-lg shadow-orange-500/20">ZS</div>
-                        <div class="flex-1 min-w-0">
-                            <h3 class="font-display font-bold text-slate-800 text-lg mb-1 truncate">Zona Sumbawa</h3>
-                            <p class="text-sm text-slate-400 font-medium truncate">zonasumbawa.com</p>
+                    <div class="bg-white border border-slate-100 p-5 rounded-2xl shadow-sm hover:shadow-md transition-all flex items-center gap-4 group">
+                        <div class="w-14 h-14 rounded-xl bg-orange-500 text-white flex items-center justify-center font-display font-bold text-xl shadow-lg shadow-orange-200">ZS</div>
+                        <div class="flex-1 overflow-hidden">
+                            <h3 class="font-bold text-slate-800 text-lg truncate">Zona Sumbawa</h3>
+                            <a href="https://zonasumbawa.com" target="_blank" class="text-sm text-slate-400 hover:text-orange-600 truncate block">zonasumbawa.com</a>
                         </div>
-                        <a href="https://zonasumbawa.com" target="_blank" class="w-10 h-10 rounded-full bg-slate-50 text-slate-400 flex items-center justify-center group-hover:bg-orange-500 group-hover:text-white transition-colors"><i class="ph-bold ph-arrow-right"></i></a>
+                        <a href="https://zonasumbawa.com" target="_blank" class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-orange-500 group-hover:text-white transition"><i class="ph-bold ph-arrow-right"></i></a>
                     </div>
 
                     {{-- Partner 4 --}}
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-5 group hover:shadow-lg hover:border-purple-200 transition-all duration-300">
-                        <div class="w-16 h-16 shrink-0 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 text-white flex items-center justify-center font-display font-bold text-2xl shadow-lg shadow-purple-500/20">AM</div>
-                        <div class="flex-1 min-w-0">
-                            <h3 class="font-display font-bold text-slate-800 text-lg mb-1 truncate">Amar Media</h3>
-                            <p class="text-sm text-slate-400 font-medium truncate">amarmedia.co.id</p>
+                    <div class="bg-white border border-slate-100 p-5 rounded-2xl shadow-sm hover:shadow-md transition-all flex items-center gap-4 group">
+                        <div class="w-14 h-14 rounded-xl bg-purple-600 text-white flex items-center justify-center font-display font-bold text-xl shadow-lg shadow-purple-200">AM</div>
+                        <div class="flex-1 overflow-hidden">
+                            <h3 class="font-bold text-slate-800 text-lg truncate">Amar Media</h3>
+                            <a href="https://amarmedia.co.id" target="_blank" class="text-sm text-slate-400 hover:text-purple-600 truncate block">amarmedia.co.id</a>
                         </div>
-                        <a href="https://amarmedia.co.id" target="_blank" class="w-10 h-10 rounded-full bg-slate-50 text-slate-400 flex items-center justify-center group-hover:bg-purple-500 group-hover:text-white transition-colors"><i class="ph-bold ph-arrow-right"></i></a>
+                        <a href="https://amarmedia.co.id" target="_blank" class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-purple-600 group-hover:text-white transition"><i class="ph-bold ph-arrow-right"></i></a>
                     </div>
 
                 </div>
 
                 {{-- CTA Box --}}
-                <div class="bg-brand-dark rounded-3xl p-10 text-center relative overflow-hidden shadow-xl">
+                <div class="bg-brand-dark rounded-2xl p-8 text-center relative overflow-hidden shadow-lg">
                     <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-                    <div class="absolute top-0 right-0 -mr-10 -mt-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
-                    
                     <div class="relative z-10">
-                        <span class="inline-block px-3 py-1 bg-white/10 text-white/90 text-[10px] font-bold rounded-full mb-4 border border-white/10 uppercase tracking-wide">Open Partnership</span>
-                        <h3 class="font-display font-bold text-3xl text-white mb-4">Media Anda Belum Terdaftar?</h3>
-                        <p class="text-blue-100 mb-8 leading-relaxed max-w-xl mx-auto">Mari bergabung bersama jaringan media terbesar di Sumbawa untuk jangkauan yang lebih luas dan kolaborasi pemberitaan.</p>
-                        <a href="https://wa.me/{{ $company->phone ?? '' }}" target="_blank" class="inline-flex items-center gap-2 bg-white text-brand-dark px-8 py-3.5 rounded-xl font-bold shadow-xl hover:bg-slate-100 transition-colors transform hover:-translate-y-1">
+                        <h3 class="font-display font-bold text-2xl text-white mb-2">Media Anda Belum Terdaftar?</h3>
+                        <p class="text-blue-100 mb-6">Bergabunglah dengan jaringan kami untuk jangkauan yang lebih luas.</p>
+                        <a href="https://wa.me/{{ $company->phone ?? '' }}" target="_blank" class="inline-flex items-center gap-2 bg-white text-brand-dark hover:bg-slate-100 px-6 py-3 rounded-full font-bold transition shadow-md">
                             <i class="ph-fill ph-whatsapp-logo text-xl text-green-600"></i> Hubungi Redaksi
                         </a>
                     </div>
@@ -152,44 +146,32 @@
 
             </div>
 
-            {{-- KOLOM KANAN: SIDEBAR --}}
-            <aside class="lg:col-span-4 space-y-10 pl-0 lg:pl-6 border-l border-transparent lg:border-slate-100">
+            {{-- KOLOM KANAN: SIDEBAR (SAMA PERSIS DENGAN HOME) --}}
+            <aside class="lg:col-span-4 space-y-10 border-l border-slate-100 pl-0 lg:pl-10">
                 
-                {{-- Trending Widget --}}
+                {{-- TRENDING --}}
                 <div class="bg-slate-50 rounded-2xl p-6 border border-slate-100">
-                    <h3 class="font-display font-bold text-lg text-brand-dark mb-6 flex items-center gap-2">
-                        <i class="ph-fill ph-trend-up text-brand-red"></i> Sedang Trending
-                    </h3>
+                    <h3 class="font-bold text-lg text-brand-dark mb-6 flex items-center gap-2"><i class="ph-fill ph-trend-up text-brand-red"></i> Trending</h3>
                     <div class="flex flex-col gap-5">
-                        @if(isset($sidebarNews) && count($sidebarNews) > 0)
-                            @foreach($sidebarNews as $idx => $sNews)
-                                <a href="{{ route('news.show', $sNews->slug) }}" class="flex gap-4 group">
-                                    <span class="text-3xl font-black text-slate-200 leading-none group-hover:text-brand-red/20 transition">{{ $idx + 1 }}</span>
-                                    <div>
-                                        <h4 class="text-sm font-bold text-slate-800 leading-snug group-hover:text-brand-red transition line-clamp-2">{{ $sNews->title }}</h4>
-                                        <span class="text-[10px] text-slate-400 mt-1 block">{{ $sNews->created_at->format('d M Y') }}</span>
-                                    </div>
-                                </a>
-                            @endforeach
-                        @else
-                            <p class="text-xs text-slate-400 italic">Belum ada data trending.</p>
-                        @endif
+                        @foreach($sidebarNews as $idx => $sNews)
+                        <a href="{{ route('news.show', $sNews->slug) }}" class="flex gap-4 group">
+                            <span class="text-3xl font-black text-slate-200 leading-none group-hover:text-brand-red/20 transition">{{ $idx + 1 }}</span>
+                            <div>
+                                <h4 class="text-sm font-bold text-slate-800 leading-snug group-hover:text-brand-red transition line-clamp-2">{{ $sNews->title }}</h4>
+                            </div>
+                        </a>
+                        @endforeach
                     </div>
                 </div>
 
-                {{-- 5 SLOT IKLAN SIDEBAR --}}
+                {{-- IKLAN 5 SLOT VERTIKAL (FIXED) --}}
                 <div class="space-y-6">
                     @if(isset($sidebarAds))
                         @for ($i = 1; $i <= 5; $i++)
                             @if(isset($sidebarAds[$i]))
-                                @php 
-                                    $ad = $sidebarAds[$i]; 
-                                    $isPopup = empty($ad->link) || $ad->link === '#'; 
-                                @endphp
+                                @php $ad = $sidebarAds[$i]; $isPopup = empty($ad->link) || $ad->link === '#'; @endphp
                                 <div class="relative group">
-                                    <a href="{{ $isPopup ? 'javascript:void(0)' : $ad->link }}" 
-                                       @if($isPopup) @click.prevent="lightboxOpen = true; lightboxImage = '{{ Storage::url($ad->image) }}'" @else target="_blank" @endif 
-                                       class="block rounded-xl overflow-hidden shadow-sm hover:shadow-md transition border border-slate-100">
+                                    <a href="{{ $isPopup ? 'javascript:void(0)' : $ad->link }}" @if($isPopup) @click.prevent="lightboxOpen = true; lightboxImage = '{{ Storage::url($ad->image) }}'" @else target="_blank" @endif class="block rounded-xl overflow-hidden shadow-sm hover:shadow-md transition border border-slate-100">
                                         <span class="absolute top-0 right-0 bg-white/90 text-[9px] font-bold px-2 py-0.5 text-slate-500 rounded-bl-lg z-10">ADS #{{ $i }}</span>
                                         <img src="{{ Storage::url($ad->image) }}" class="w-full h-auto object-cover">
                                     </a>
@@ -203,7 +185,7 @@
         </div>
     </main>
 
-    {{-- FOOTER --}}
+    {{-- FOOTER (SAMA PERSIS DENGAN HOME) --}}
     <footer class="bg-brand-misty border-t border-slate-200 pt-12 pb-8 mt-12">
         <div class="container mx-auto px-4 lg:px-8 text-center">
             <p class="text-sm text-slate-500">&copy; {{ date('Y') }} {{ $company->name ?? 'Gaung Nusra' }}. All rights reserved.</p>
