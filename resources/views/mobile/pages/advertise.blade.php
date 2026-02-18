@@ -136,10 +136,9 @@
         @endif
     </div>
 
-    {{-- KONTEN UTAMA: LAYANAN IKLAN (TAMPILAN EKSKLUSIF) --}}
+    {{-- KONTEN UTAMA: LAYANAN IKLAN --}}
     <main class="flex-grow bg-slate-50 relative overflow-hidden">
         
-        {{-- Dekorasi Latar Belakang --}}
         <div class="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-brand-red/5 to-transparent z-0"></div>
         <div class="absolute -top-10 -right-10 w-40 h-40 bg-brand-dark/5 rounded-full blur-3xl z-0"></div>
 
@@ -158,7 +157,7 @@
                 </p>
             </div>
 
-            {{-- List Layanan Iklan (Card Grid Modern) --}}
+            {{-- List Layanan Iklan --}}
             <div class="grid grid-cols-2 gap-4 max-w-md mx-auto">
 
                 {{-- Iklan Header --}}
@@ -199,7 +198,7 @@
 
             </div>
 
-            {{-- CTA Box (Call to Action) --}}
+            {{-- CTA Box --}}
             <div class="mt-10 bg-brand-dark rounded-2xl p-6 text-center relative overflow-hidden shadow-lg">
                 <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
                 <div class="absolute top-0 right-0 -mr-6 -mt-6 w-24 h-24 bg-white/10 rounded-full blur-xl"></div>
