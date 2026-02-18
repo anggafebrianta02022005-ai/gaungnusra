@@ -83,15 +83,13 @@
     </style>
 </head>
 
-{{-- Tambahkan lightboxOpen di x-data body --}}
+{{-- UPDATE 1: STATE LIGHTBOX --}}
 <body class="bg-white text-slate-800 flex flex-col min-h-screen" 
       x-data="{ mobileMenu: false, searchOpen: false, lightboxOpen: false, lightboxImage: '' }">
 
     {{-- HEADER --}}
     <header class="bg-white border-b border-gray-100 py-3 md:py-4 relative z-50">
         <div class="container mx-auto px-4 lg:px-8 flex justify-between items-center relative min-h-[40px]">
-            
-            {{-- LOGO --}}
             <a href="/" class="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 flex items-center gap-3 group select-none shrink-0 z-10">
                 @if($company && $company->logo)
                     <img src="{{ Storage::url($company->logo) }}" alt="{{ $company->name }}" class="block h-8 md:h-12 w-auto object-contain">
@@ -103,7 +101,6 @@
                 @endif
             </a>
             
-            {{-- SEARCH DESKTOP --}}
             <div class="hidden md:block w-full max-w-md relative group ml-auto mr-4">
                 <div class="relative transition-all duration-300">
                     <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400"><i class="ph ph-magnifying-glass text-lg"></i></span>
@@ -112,7 +109,6 @@
                 </div>
             </div>
 
-            {{-- TOMBOL AKSI MOBILE --}}
             <div class="flex items-center gap-2 ml-auto md:hidden z-20">
                 <button @click="searchOpen = !searchOpen; if(searchOpen) $nextTick(() => $refs.mobileSearchInput.focus())" class="w-9 h-9 flex items-center justify-center rounded-full text-slate-600 hover:bg-slate-100 transition-all active:scale-95" :class="{ 'bg-brand-red/10 text-brand-red': searchOpen }">
                     <i class="ph text-xl" :class="searchOpen ? 'ph-x' : 'ph-magnifying-glass'"></i>
@@ -156,18 +152,12 @@
     {{-- SIDEBAR MOBILE MENU --}}
     <div x-show="mobileMenu" class="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm" @click="mobileMenu = false" x-transition.opacity style="display: none;"></div>
     <div x-show="mobileMenu" class="fixed top-0 right-0 h-full w-[80%] max-w-[300px] bg-white z-[70] shadow-2xl p-6 overflow-y-auto" 
-         x-transition:enter="transition transform ease-out duration-300"
-         x-transition:enter-start="translate-x-full"
-         x-transition:enter-end="translate-x-0"
-         x-transition:leave="transition transform ease-in duration-300"
-         x-transition:leave-start="translate-x-0"
-         x-transition:leave-end="translate-x-full" style="display: none;">
-        
+         x-transition:enter="transition transform ease-out duration-300" x-transition:enter-start="translate-x-full" x-transition:enter-end="translate-x-0"
+         x-transition:leave="transition transform ease-in duration-300" x-transition:leave-start="translate-x-0" x-transition:leave-end="translate-x-full" style="display: none;">
         <div class="flex justify-between items-center mb-8 border-b border-slate-100 pb-4">
             <h3 class="font-display font-bold text-lg text-brand-dark">Menu</h3>
             <button @click="mobileMenu = false" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 active:scale-95"><i class="ph-bold ph-x"></i></button>
         </div>
-        
         <div class="space-y-2">
             <a href="/" class="block px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-lg">Home</a>
             @foreach($categories as $navCat)
@@ -176,7 +166,7 @@
         </div>
     </div>
 
-    {{-- IMPLEMENTASI 2: IKLAN HEADER (LOGIKA POPUP + LINK) --}}
+    {{-- UPDATE 2: IKLAN HEADER (LOGIKA POPUP) --}}
     <div class="px-4 pt-4 pb-2">
         @if($headerAd && $headerAd->image)
             @php 
@@ -235,48 +225,28 @@
                 </div>
 
                 {{-- SHARE BUTTONS (KEMBALI KE TAMPILAN STANDARD RAPI) --}}
-<div class="mt-10 pt-8 border-t border-slate-200 mb-10">
-    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-        
-        {{-- Label --}}
-        <div class="flex items-center gap-2">
-            <span class="w-1 h-6 bg-brand-red rounded-full"></span>
-            <span class="font-display font-bold text-slate-700 text-lg">Bagikan Berita Ini:</span>
-        </div>
-
-        {{-- Tombol Baris Horizontal --}}
-        <div class="flex items-center gap-3">
-            {{-- WhatsApp --}}
-            <a href="https://api.whatsapp.com/send?text={{ urlencode($news->title . ' ' . request()->url()) }}" 
-               target="_blank" 
-               class="w-12 h-12 rounded-full bg-[#25D366]/10 text-[#25D366] flex items-center justify-center hover:bg-[#25D366] hover:text-white transition-all shadow-sm">
-                <i class="ph-fill ph-whatsapp-logo text-2xl"></i>
-            </a>
-            
-            {{-- Facebook --}}
-            <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(request()->url()) }}" 
-               target="_blank" 
-               class="w-12 h-12 rounded-full bg-[#1877F2]/10 text-[#1877F2] flex items-center justify-center hover:bg-[#1877F2] hover:text-white transition-all shadow-sm">
-                <i class="ph-fill ph-facebook-logo text-2xl"></i>
-            </a>
-
-            {{-- Instagram (Direct ke Profile/App) --}}
-            <a href="https://www.instagram.com/" 
-               target="_blank" 
-               class="w-12 h-12 rounded-full bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] text-white opacity-90 flex items-center justify-center hover:opacity-100 hover:scale-110 transition-all shadow-sm">
-                <i class="ph-fill ph-instagram-logo text-2xl"></i>
-            </a>
-
-            {{-- Copy Link --}}
-            <button onclick="copyToClipboard('Link')" 
-                    class="w-12 h-12 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center hover:bg-slate-800 hover:text-white transition-all shadow-sm"
-                    title="Salin Link">
-                <i class="ph-bold ph-link text-2xl"></i>
-            </button>
-        </div>
-
-    </div>
-</div>
+                <div class="mt-10 pt-8 border-t border-slate-200 mb-10">
+                    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                        <div class="flex items-center gap-2">
+                            <span class="w-1 h-6 bg-brand-red rounded-full"></span>
+                            <span class="font-display font-bold text-slate-700 text-lg">Bagikan Berita Ini:</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <a href="https://api.whatsapp.com/send?text={{ urlencode($news->title . ' ' . request()->url()) }}" target="_blank" class="w-12 h-12 rounded-full bg-[#25D366]/10 text-[#25D366] flex items-center justify-center hover:bg-[#25D366] hover:text-white transition-all shadow-sm">
+                                <i class="ph-fill ph-whatsapp-logo text-2xl"></i>
+                            </a>
+                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(request()->url()) }}" target="_blank" class="w-12 h-12 rounded-full bg-[#1877F2]/10 text-[#1877F2] flex items-center justify-center hover:bg-[#1877F2] hover:text-white transition-all shadow-sm">
+                                <i class="ph-fill ph-facebook-logo text-2xl"></i>
+                            </a>
+                            <a href="https://www.instagram.com/" target="_blank" class="w-12 h-12 rounded-full bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] text-white opacity-90 flex items-center justify-center hover:opacity-100 hover:scale-110 transition-all shadow-sm">
+                                <i class="ph-fill ph-instagram-logo text-2xl"></i>
+                            </a>
+                            <button onclick="copyToClipboard('Link')" class="w-12 h-12 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center hover:bg-slate-800 hover:text-white transition-all shadow-sm" title="Salin Link">
+                                <i class="ph-bold ph-link text-2xl"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
                 {{-- BERITA TERKAIT --}}
                 <div class="mt-10 md:mt-14 border-t border-slate-100 pt-8">
@@ -328,25 +298,37 @@
                 </div>
             </div>
 
-            {{-- IMPLEMENTASI 2: IKLAN SIDEBAR (LOGIKA POPUP) --}}
-            <div class="px-4 pb-8 pt-2">
-                @if($sidebarAd && $sidebarAd->image)
-                    @php 
-                        $isPopupSidebar = empty($sidebarAd->link) || $sidebarAd->link === '#'; 
-                    @endphp
+            {{-- UPDATE 3: IKLAN SIDEBAR (LOOPING 5 SLOT) --}}
+            <div class="px-4 pb-8 pt-2 space-y-4">
+                
+                @if(isset($sidebarAds))
+                    @for ($i = 1; $i <= 5; $i++)
+                        @if(isset($sidebarAds[$i]))
+                            @php 
+                                $ad = $sidebarAds[$i];
+                                $isPopup = empty($ad->link) || $ad->link === '#'; 
+                            @endphp
 
-                    <a href="{{ $isPopupSidebar ? 'javascript:void(0)' : $sidebarAd->link }}" 
-                       @if($isPopupSidebar) 
-                            @click.prevent="lightboxOpen = true; lightboxImage = '{{ Storage::url($sidebarAd->image) }}'" 
-                       @else 
-                            target="_blank" 
-                       @endif
-                       class="block relative rounded-xl overflow-hidden shadow-sm border border-slate-100 group transition-transform active:scale-95">
-                       
-                       <span class="absolute top-0 right-0 bg-brand-misty text-slate-600 text-[8px] font-bold px-2 py-0.5 rounded-bl-lg z-10 border-l border-b border-white">ADS</span>
-                       <img src="{{ Storage::url($sidebarAd->image) }}" class="w-full h-auto object-cover">
-                    </a>
+                            <div class="relative group block w-full">
+                                <a href="{{ $isPopup ? 'javascript:void(0)' : $ad->link }}" 
+                                   @if($isPopup) 
+                                        @click.prevent="lightboxOpen = true; lightboxImage = '{{ Storage::url($ad->image) }}'" 
+                                   @else 
+                                        target="_blank" 
+                                   @endif
+                                   class="block relative rounded-xl overflow-hidden shadow-sm border border-slate-100 transition-transform active:scale-95">
+                                   
+                                   <span class="absolute top-0 right-0 bg-brand-misty text-slate-600 text-[8px] font-bold px-2 py-0.5 rounded-bl-lg z-10 border-l border-b border-white">
+                                       ADS #{{ $i }}
+                                   </span>
+                                   
+                                   <img src="{{ Storage::url($ad->image) }}" class="w-full h-auto object-cover">
+                                </a>
+                            </div>
+                        @endif
+                    @endfor
                 @endif
+
             </div>
         </div>
     </main>
@@ -380,22 +362,10 @@
                     <div>
                         <h3 class="font-display font-bold text-brand-dark mb-3 text-xs tracking-wide uppercase">Layanan</h3>
                         <ul class="space-y-2 text-slate-500 text-xs font-medium">
-                        <li>
-                            <a href="{{ route('pages.advertise') }}" class="hover:text-brand-red transition-colors">
-                                Pasang Iklan
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('epaper.latest') }}" target="_blank" class="hover:text-brand-red transition-colors">
-                                Koran Cetak
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('pages.media-group') }}" class="hover:text-brand-red transition-colors">
-                                Media Group
-                            </a>
-                        </li>
-                    </ul>
+                            <li><a href="{{ route('pages.advertise') }}" class="hover:text-brand-red transition-colors">Pasang Iklan</a></li>
+                            <li><a href="{{ route('epaper.latest') }}" target="_blank" class="hover:text-brand-red transition-colors">Koran Cetak</a></li>
+                            <li><a href="{{ route('pages.media-group') }}" class="hover:text-brand-red transition-colors">Media Group</a></li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -405,7 +375,7 @@
         </div>
     </footer>
 
-    {{-- IMPLEMENTASI 4: MODAL LIGHTBOX --}}
+    {{-- UPDATE 4: MODAL LIGHTBOX --}}
     <div x-show="lightboxOpen" 
          x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
          x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"

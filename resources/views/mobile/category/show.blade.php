@@ -37,20 +37,6 @@
                     },
                     colors: {
                         brand: { red: '#D32F2F', dark: '#1E3A8A', misty: '#F1F5F9', gray: '#64748B', surface: '#FFFFFF' }
-                    },
-                    boxShadow: {
-                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
-                        'card': '0 0 0 1px rgba(0,0,0,0.03), 0 2px 8px rgba(0,0,0,0.04)',
-                        'misty-glow': '0 10px 40px -10px rgba(148, 163, 184, 0.4)', 
-                    },
-                    animation: {
-                        'fade-in-up': 'fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                    },
-                    keyframes: {
-                        fadeInUp: {
-                            '0%': { opacity: '0', transform: 'translateY(20px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
-                        }
                     }
                 }
             }
@@ -66,15 +52,13 @@
     </style>
 </head>
 
-{{-- UPDATE 1: Menambahkan State 'lightboxOpen' di body --}}
+{{-- UPDATE 1: STATE LIGHTBOX --}}
 <body class="bg-white text-slate-800 flex flex-col min-h-screen" 
       x-data="{ mobileMenu: false, searchOpen: false, lightboxOpen: false, lightboxImage: '' }">
 
     {{-- HEADER --}}
     <header class="bg-white border-b border-gray-100 py-3 md:py-4 relative z-50">
         <div class="container mx-auto px-4 lg:px-8 flex justify-between items-center relative min-h-[40px]">
-            
-            {{-- LOGO --}}
             <a href="/" class="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 flex items-center gap-3 group select-none shrink-0 z-10">
                 @if($company && $company->logo)
                     <img src="{{ Storage::url($company->logo) }}" alt="{{ $company->name }}" class="block h-8 md:h-12 w-auto object-contain">
@@ -86,16 +70,14 @@
                 @endif
             </a>
             
-            {{-- SEARCH DESKTOP --}}
             <div class="hidden md:block w-full max-w-md relative group ml-auto mr-4">
                 <div class="relative transition-all duration-300 transform origin-left">
                     <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400"><i class="ph ph-magnifying-glass text-lg"></i></span>
-                    <input type="text" id="desktop-search-input" autocomplete="off" placeholder="Cari berita..." class="w-full bg-brand-misty text-slate-800 border border-transparent rounded-full py-2.5 pl-10 pr-4 text-sm focus:bg-white focus:border-brand-red focus:ring-4 focus:ring-brand-red/10 focus:outline-none transition-all shadow-sm placeholder:text-gray-400">
+                    <input type="text" id="desktop-search-input" autocomplete="off" placeholder="Cari berita..." class="w-full bg-brand-misty text-slate-800 border border-transparent rounded-full py-2.5 pl-10 pr-4 text-sm focus:bg-white focus:border-brand-red focus:ring-4 focus:ring-brand-red/10 focus:outline-none transition-all shadow-sm">
                     <div id="desktop-search-results" class="search-results-container absolute top-full left-0 w-full mt-2 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden z-50"></div>
                 </div>
             </div>
 
-            {{-- TOMBOL AKSI MOBILE --}}
             <div class="flex items-center gap-2 ml-auto md:hidden z-20">
                 <button @click="searchOpen = !searchOpen; if(searchOpen) $nextTick(() => $refs.mobileSearchInput.focus())" class="w-9 h-9 flex items-center justify-center rounded-full text-slate-600 hover:bg-slate-100 transition-all active:scale-95" :class="{ 'bg-brand-red/10 text-brand-red': searchOpen }">
                     <i class="ph text-xl" :class="searchOpen ? 'ph-x' : 'ph-magnifying-glass'"></i>
@@ -139,12 +121,10 @@
     <div x-show="mobileMenu" class="fixed top-0 right-0 h-full w-[80%] max-w-[300px] bg-white z-[70] shadow-2xl p-6 overflow-y-auto" 
          x-transition:enter="transition transform ease-out duration-300" x-transition:enter-start="translate-x-full" x-transition:enter-end="translate-x-0"
          x-transition:leave="transition transform ease-in duration-300" x-transition:leave-start="translate-x-0" x-transition:leave-end="translate-x-full" style="display: none;">
-        
         <div class="flex justify-between items-center mb-8 border-b border-slate-100 pb-4">
             <h3 class="font-display font-bold text-lg text-brand-dark">Menu</h3>
             <button @click="mobileMenu = false" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 active:scale-95"><i class="ph-bold ph-x"></i></button>
         </div>
-        
         <div class="space-y-2">
             <a href="/" class="block px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-lg">Home</a>
             @foreach($categories as $navCat)
@@ -243,25 +223,37 @@
             </div>
         </div>
 
-        {{-- UPDATE 3: IKLAN SIDEBAR (LOGIKA POPUP) --}}
-        <div class="px-4 pb-8 pt-2">
-            @if($sidebarAd && $sidebarAd->image)
-                @php 
-                    $isPopupSidebar = empty($sidebarAd->link) || $sidebarAd->link === '#'; 
-                @endphp
+        {{-- UPDATE 3: IKLAN SIDEBAR (LOOPING 5 SLOT) --}}
+        <div class="px-4 pb-8 pt-2 space-y-4">
+            
+            @if(isset($sidebarAds))
+                @for ($i = 1; $i <= 5; $i++)
+                    @if(isset($sidebarAds[$i]))
+                        @php 
+                            $ad = $sidebarAds[$i];
+                            $isPopup = empty($ad->link) || $ad->link === '#'; 
+                        @endphp
 
-                <a href="{{ $isPopupSidebar ? 'javascript:void(0)' : $sidebarAd->link }}" 
-                   @if($isPopupSidebar) 
-                        @click.prevent="lightboxOpen = true; lightboxImage = '{{ Storage::url($sidebarAd->image) }}'" 
-                   @else 
-                        target="_blank" 
-                   @endif
-                   class="block relative rounded-xl overflow-hidden shadow-sm border border-slate-100 group transition-transform active:scale-95">
-                   
-                   <span class="absolute top-0 right-0 bg-brand-misty text-slate-600 text-[8px] font-bold px-2 py-0.5 rounded-bl-lg z-10 border-l border-b border-white">ADS</span>
-                   <img src="{{ Storage::url($sidebarAd->image) }}" class="w-full h-auto object-cover">
-                </a>
+                        <div class="relative group block w-full">
+                            <a href="{{ $isPopup ? 'javascript:void(0)' : $ad->link }}" 
+                               @if($isPopup) 
+                                    @click.prevent="lightboxOpen = true; lightboxImage = '{{ Storage::url($ad->image) }}'" 
+                               @else 
+                                    target="_blank" 
+                               @endif
+                               class="block relative rounded-xl overflow-hidden shadow-sm border border-slate-100 transition-transform active:scale-95">
+                               
+                               <span class="absolute top-0 right-0 bg-brand-misty text-slate-600 text-[8px] font-bold px-2 py-0.5 rounded-bl-lg z-10 border-l border-b border-white">
+                                   ADS #{{ $i }}
+                               </span>
+                               
+                               <img src="{{ Storage::url($ad->image) }}" class="w-full h-auto object-cover">
+                            </a>
+                        </div>
+                    @endif
+                @endfor
             @endif
+
         </div>
     </main>
 
@@ -294,22 +286,10 @@
                     <div>
                         <h3 class="font-display font-bold text-brand-dark mb-3 text-xs tracking-wide uppercase">Layanan</h3>
                         <ul class="space-y-2 text-slate-500 text-xs font-medium">
-                        <li>
-                            <a href="{{ route('pages.advertise') }}" class="hover:text-brand-red transition-colors">
-                                Pasang Iklan
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('epaper.latest') }}" target="_blank" class="hover:text-brand-red transition-colors">
-                                Koran Cetak
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('pages.media-group') }}" class="hover:text-brand-red transition-colors">
-                                Media Group
-                            </a>
-                        </li>
-                    </ul>
+                            <li><a href="{{ route('pages.advertise') }}" class="hover:text-brand-red transition-colors">Pasang Iklan</a></li>
+                            <li><a href="{{ route('epaper.latest') }}" target="_blank" class="hover:text-brand-red transition-colors">Koran Cetak</a></li>
+                            <li><a href="{{ route('pages.media-group') }}" class="hover:text-brand-red transition-colors">Media Group</a></li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -320,7 +300,7 @@
         </div>
     </footer>
 
-    {{-- UPDATE 4: MODAL LIGHTBOX (WAJIB DI BAWAH) --}}
+    {{-- UPDATE 4: MODAL LIGHTBOX --}}
     <div x-show="lightboxOpen" 
          x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
          x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
