@@ -169,22 +169,40 @@ class HomeController extends Controller
     {
         $agent = new Agent();
         
+        // 1. Data Utama
         $company = CompanyProfile::first();
         $categories = Category::where('is_active', true)->take(7)->get();
         
-        // Iklan tetap dimuat agar header/footer tidak error
+        // 2. Iklan
         $headerAd = Ad::where('position', 'header_top')->where('is_active', true)->latest()->first();
         $sidebarAd = Ad::where('position', 'sidebar_right')->where('is_active', true)->inRandomOrder()->first();
 
-        // Render khusus mobile jika user pakai HP
+        // 3. TRENDING (INI YANG KEMARIN KURANG/PENYEBAB ERROR)
+        $sidebarNews = News::where('status', 'published')
+            ->orderBy('views_count', 'desc')
+            ->take(6)
+            ->get();
+
+        // 4. Render View Mobile
         if ($agent->isMobile()) {
-            return view('mobile.pages.media-group', compact('company', 'categories', 'headerAd', 'sidebarAd'));
+            return view('mobile.pages.media-group', compact(
+                'company', 
+                'categories', 
+                'headerAd', 
+                'sidebarAd', 
+                'sidebarNews' // <-- Wajib dikirim ke view
+            ));
         }
 
-        // Tampilan Desktop (Jika belum ada, bisa diarahkan ke view yang sama atau dibuatkan view khusus)
-        return view('pages.media-group', compact('company', 'categories', 'headerAd', 'sidebarAd'));
+        // 5. Render View Desktop
+        return view('pages.media-group', compact(
+            'company', 
+            'categories', 
+            'headerAd', 
+            'sidebarAd', 
+            'sidebarNews' // <-- Wajib dikirim ke view
+        ));
     }
-
     /**
      * API Pencarian Berita (AJAX)
      */
