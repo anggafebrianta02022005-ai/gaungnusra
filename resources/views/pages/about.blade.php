@@ -153,48 +153,105 @@
     <main class="container mx-auto px-4 lg:px-8 py-10 flex-grow bg-white">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
             
+            {{-- KOLOM KIRI (KONTEN UTAMA) --}}
             <div class="lg:col-span-8 animate-fade-in-up" style="animation-delay: 0.3s;">
-                <div class="mb-8 pb-4 border-b border-slate-100">
-                    <span class="text-xs font-bold text-brand-red uppercase tracking-widest">Profil</span>
-                    <h1 class="font-display font-extrabold text-4xl text-brand-dark mt-2">Tentang {{ $company->name ?? 'Kami' }}</h1>
+                
+                {{-- Header Judul --}}
+                <div class="mb-10 pb-6 border-b border-slate-100 flex items-start justify-between">
+                    <div>
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-brand-red/10 text-brand-red text-xs font-bold rounded-full mb-3 uppercase tracking-wider">
+                            <i class="ph-fill ph-info"></i> Profil Redaksi
+                        </span>
+                        <h1 class="font-display font-extrabold text-4xl text-brand-dark leading-tight">
+                            Tentang <span class="text-brand-red">{{ $company->name ?? 'Kami' }}</span>
+                        </h1>
+                    </div>
+                    <div class="hidden md:block text-slate-100">
+                        <i class="ph-duotone ph-newspaper-clipping text-6xl"></i>
+                    </div>
                 </div>
 
-                <div class="prose prose-lg text-slate-600 max-w-none font-sans leading-relaxed mb-10">
-                    @if($company && $company->description)
-                        {!! $company->description !!}
-                    @else
-                        <p class="text-slate-400 italic bg-slate-50 p-4 rounded-lg border border-dashed border-slate-300">Deskripsi profil belum diisi di Admin Panel.</p>
-                    @endif
+                {{-- Isi Konten Profil --}}
+                <div class="prose prose-lg text-slate-600 max-w-none font-sans leading-relaxed mb-12 bg-slate-50 p-8 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-white rounded-full blur-3xl -mr-10 -mt-10 opacity-60"></div>
+                    
+                    <div class="relative z-10">
+                        @if($company && $company->description)
+                            {!! $company->description !!}
+                        @else
+                            <div class="flex flex-col items-center justify-center py-10 text-center">
+                                <i class="ph-duotone ph-file-dashed text-4xl text-slate-300 mb-3"></i>
+                                <p class="text-slate-400 italic">Deskripsi profil belum tersedia saat ini.</p>
+                            </div>
+                        @endif
+                    </div>
                 </div>
 
-                <h3 class="font-display font-bold text-2xl text-brand-dark mt-8 mb-6">Hubungi Kami</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 not-prose">
-                    <div class="p-5 bg-white border border-slate-200 rounded-xl flex items-center gap-4 shadow-sm">
-                        <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center text-2xl"><i class="ph-fill ph-envelope"></i></div>
-                        <div class="overflow-hidden">
-                            <span class="text-xs font-bold text-slate-400 uppercase">Email Redaksi</span>
-                            <p class="font-bold text-brand-dark truncate">{{ $company->email ?? '-' }}</p>
+                {{-- Bagian Kontak --}}
+                <div class="mb-8">
+                    <h3 class="font-display font-bold text-2xl text-brand-dark mb-6 flex items-center gap-2">
+                        <i class="ph-fill ph-chats-circle text-blue-600"></i> Hubungi Kami
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 not-prose">
+                        
+                        {{-- Card Email --}}
+                        <div class="group bg-white border border-slate-200 rounded-2xl p-6 hover:shadow-lg hover:border-blue-200 transition-all duration-300 hover:-translate-y-1">
+                            <div class="flex items-start gap-4">
+                                <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-2xl shadow-sm group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
+                                    <i class="ph-fill ph-envelope"></i>
+                                </div>
+                                <div class="flex-1 overflow-hidden">
+                                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 block">Email Redaksi</span>
+                                    <a href="mailto:{{ $company->email ?? '#' }}" class="font-bold text-brand-dark text-lg truncate block hover:text-blue-600 transition-colors">
+                                        {{ $company->email ?? '-' }}
+                                    </a>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="p-5 bg-white border border-slate-200 rounded-xl flex items-center gap-4 shadow-sm">
-                        <div class="w-12 h-12 bg-green-50 text-green-600 rounded-full flex items-center justify-center text-2xl"><i class="ph-fill ph-whatsapp-logo"></i></div>
-                        <div>
-                            <span class="text-xs font-bold text-slate-400 uppercase">WhatsApp / Telepon</span>
-                            <p class="font-bold text-brand-dark">{{ $company->phone ?? '-' }}</p>
+
+                        {{-- Card WhatsApp --}}
+                        <div class="group bg-white border border-slate-200 rounded-2xl p-6 hover:shadow-lg hover:border-green-200 transition-all duration-300 hover:-translate-y-1">
+                            <div class="flex items-start gap-4">
+                                <div class="w-12 h-12 bg-green-50 text-green-600 rounded-xl flex items-center justify-center text-2xl shadow-sm group-hover:bg-green-600 group-hover:text-white transition-colors duration-300">
+                                    <i class="ph-fill ph-whatsapp-logo"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 block">WhatsApp / Telepon</span>
+                                    <a href="https://wa.me/{{ $company->phone ?? '' }}" target="_blank" class="font-bold text-brand-dark text-lg hover:text-green-600 transition-colors">
+                                        {{ $company->phone ?? '-' }}
+                                    </a>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="p-5 bg-white border border-slate-200 rounded-xl flex items-center gap-4 shadow-sm md:col-span-2">
-                        <div class="w-12 h-12 bg-red-50 text-brand-red rounded-full flex items-center justify-center text-2xl"><i class="ph-fill ph-map-pin"></i></div>
-                        <div>
-                            <span class="text-xs font-bold text-slate-400 uppercase">Alamat Kantor</span>
-                            <p class="font-bold text-brand-dark">{{ $company->address ?? '-' }}</p>
+
+                        {{-- Card Alamat --}}
+                        <div class="group bg-white border border-slate-200 rounded-2xl p-6 hover:shadow-lg hover:border-red-200 transition-all duration-300 hover:-translate-y-1 md:col-span-2">
+                            <div class="flex items-start gap-4">
+                                <div class="w-12 h-12 bg-red-50 text-brand-red rounded-xl flex items-center justify-center text-2xl shadow-sm group-hover:bg-brand-red group-hover:text-white transition-colors duration-300">
+                                    <i class="ph-fill ph-map-pin"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 block">Alamat Kantor</span>
+                                    <p class="font-bold text-brand-dark text-lg leading-snug">
+                                        {{ $company->address ?? '-' }}
+                                    </p>
+                                    <a href="https://maps.google.com/?q={{ $company->address ?? '' }}" target="_blank" class="inline-flex items-center gap-1 text-xs font-bold text-blue-500 mt-2 hover:underline">
+                                        Lihat di Google Maps <i class="ph-bold ph-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
+
                     </div>
                 </div>
             </div>
 
+            {{-- KOLOM KANAN: SIDEBAR (SAMA DENGAN YG LAIN) --}}
             <aside class="lg:col-span-4 space-y-10 pl-0 lg:pl-6 border-l border-transparent lg:border-slate-100 animate-fade-in-up" style="animation-delay: 0.4s;">
                 <div class="sticky top-24 space-y-8">
+                    
+                    {{-- TRENDING WIDGET --}}
                     <div class="bg-white rounded-2xl p-6 shadow-card border border-slate-100">
                         <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-50">
                             <h3 class="font-display font-bold text-lg text-brand-dark flex items-center gap-2">
@@ -220,18 +277,19 @@
                     </div>
 
                     {{-- 5 SLOT IKLAN SIDEBAR --}}
-                <div class="space-y-6">
-                    @if(isset($sidebarAds))
-                        @for ($i = 1; $i <= 5; $i++)
-                            @if(isset($sidebarAds[$i]))
-                                @php $ad = $sidebarAds[$i]; $isPopup = empty($ad->link) || $ad->link === '#'; @endphp
-                                <a href="{{ $isPopup ? 'javascript:void(0)' : $ad->link }}" @if($isPopup) @click.prevent="lightboxOpen = true; lightboxImage = '{{ Storage::url($ad->image) }}'" @else target="_blank" @endif class="block rounded-xl overflow-hidden shadow-sm hover:shadow-md transition border border-slate-100">
-                                    <img src="{{ Storage::url($ad->image) }}" class="w-full h-auto object-cover">
-                                </a>
-                            @endif
-                        @endfor
-                    @endif
-                </div>
+                    <div class="space-y-6">
+                        @if(isset($sidebarAds))
+                            @for ($i = 1; $i <= 5; $i++)
+                                @if(isset($sidebarAds[$i]))
+                                    @php $ad = $sidebarAds[$i]; $isPopup = empty($ad->link) || $ad->link === '#'; @endphp
+                                    <a href="{{ $isPopup ? 'javascript:void(0)' : $ad->link }}" @if($isPopup) @click.prevent="lightboxOpen = true; lightboxImage = '{{ Storage::url($ad->image) }}'" @else target="_blank" @endif class="block rounded-xl overflow-hidden shadow-sm hover:shadow-md transition border border-slate-100 group">
+                                        <span class="absolute top-0 right-0 bg-white/90 text-[9px] font-bold px-2 py-0.5 text-slate-500 rounded-bl-lg z-10 border-l border-b border-slate-100">ADS #{{ $i }}</span>
+                                        <img src="{{ Storage::url($ad->image) }}" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500">
+                                    </a>
+                                @endif
+                            @endfor
+                        @endif
+                    </div>
                 </div>
             </aside>
         </div>
