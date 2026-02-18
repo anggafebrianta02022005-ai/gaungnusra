@@ -42,7 +42,7 @@
 </head>
 <body class="bg-white text-slate-800 flex flex-col min-h-screen" x-data="{ mobileMenu: false, searchOpen: false }">
 
-    {{-- HEADER (KONSISTEN) --}}
+    {{-- HEADER --}}
     <header class="bg-white border-b border-gray-100 py-3 md:py-4 relative z-50">
         <div class="container mx-auto px-4 lg:px-8 flex justify-between items-center relative min-h-[40px]">
             <a href="/" class="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 flex items-center gap-3 group select-none shrink-0 z-10">
@@ -55,8 +55,6 @@
                     </div>
                 @endif
             </a>
-            
-            {{-- Search Desktop (Hidden on Mobile) --}}
             <div class="hidden md:block w-full max-w-md relative group ml-auto mr-4">
                 <div class="relative transition-all duration-300">
                     <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400"><i class="ph ph-magnifying-glass text-lg"></i></span>
@@ -64,8 +62,6 @@
                     <div id="desktop-search-results" class="search-results-container absolute top-full left-0 w-full mt-2 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden z-50"></div>
                 </div>
             </div>
-
-            {{-- Tombol Mobile --}}
             <div class="flex items-center gap-2 ml-auto md:hidden z-20">
                 <button @click="searchOpen = !searchOpen; if(searchOpen) $nextTick(() => $refs.mobileSearchInput.focus())" class="w-9 h-9 flex items-center justify-center rounded-full text-slate-600 hover:bg-slate-100 transition-all active:scale-95" :class="{ 'bg-brand-red/10 text-brand-red': searchOpen }">
                     <i class="ph text-xl" :class="searchOpen ? 'ph-x' : 'ph-magnifying-glass'"></i>
@@ -87,7 +83,7 @@
         </div>
     </div>
 
-    {{-- NAVBAR KATEGORI (KONSISTEN) --}}
+    {{-- NAVBAR KATEGORI --}}
     <div class="bg-white border-b border-slate-100 overflow-x-auto no-scrollbar sticky top-0 z-40">
         <div class="flex items-center px-4 h-12 gap-2 min-w-max">
             <a href="/" class="px-3 py-1.5 text-xs font-medium text-slate-600 hover:text-brand-dark hover:bg-slate-50 rounded-full border border-transparent transition-all">Berita Utama</a>
@@ -116,104 +112,111 @@
         </div>
     </div>
 
-    {{-- KONTEN UTAMA: MEDIA GROUP --}}
-    <main class="flex-grow bg-slate-50">
+    {{-- KONTEN UTAMA: MEDIA GROUP (TAMPILAN EKSKLUSIF) --}}
+    <main class="flex-grow bg-slate-50 relative overflow-hidden">
         
-        {{-- Hero Section Simple --}}
-        <div class="bg-white px-4 py-8 pb-10 text-center border-b border-slate-100 rounded-b-[2rem] shadow-sm">
-            <span class="inline-block px-3 py-1 bg-brand-red/10 text-brand-red text-[10px] font-bold tracking-widest rounded-full mb-3 uppercase">Jaringan Kami</span>
-            <h1 class="font-display font-extrabold text-3xl text-brand-dark mb-2">Media Group</h1>
-            <p class="text-sm text-slate-500 leading-relaxed max-w-xs mx-auto">
-                Sinergi informasi terpercaya dari berbagai platform di bawah naungan Gaung Nusra.
-            </p>
-        </div>
+        {{-- Dekorasi Latar Belakang --}}
+        <div class="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-brand-red/5 to-transparent z-0"></div>
+        <div class="absolute -top-10 -right-10 w-40 h-40 bg-brand-dark/5 rounded-full blur-3xl z-0"></div>
 
-        {{-- Daftar Media (Grid 2 Kolom Mobile) --}}
-        <div class="px-4 -mt-6 pb-12">
-            <div class="grid grid-cols-2 gap-4">
-                
-                {{-- CARD 1: Gaung Nusra (Utama) --}}
-                <div class="bg-white p-4 rounded-xl shadow-card border border-slate-100 flex flex-col items-center text-center group hover:-translate-y-1 transition-transform duration-300">
-                    <div class="w-12 h-12 rounded-full bg-brand-misty flex items-center justify-center mb-3 text-brand-red">
-                        <i class="ph-fill ph-globe-hemisphere-east text-2xl"></i>
+        <div class="relative z-10 px-4 py-8 pb-16">
+            
+            {{-- Header Title --}}
+            <div class="text-center mb-8">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-white border border-brand-red/20 text-brand-red text-[10px] font-bold tracking-widest rounded-full mb-4 uppercase shadow-sm">
+                    <i class="ph-fill ph-handshake"></i> Partner Resmi
+                </span>
+                <h1 class="font-display font-extrabold text-3xl text-brand-dark leading-tight mb-2">
+                    Jaringan Media <br> <span class="text-brand-red">Sumbawa</span>
+                </h1>
+                <p class="text-sm text-slate-500 max-w-xs mx-auto leading-relaxed">
+                    Sinergi media lokal terpercaya untuk menyuarakan aspirasi Sumbawa ke pentas nasional.
+                </p>
+            </div>
+
+            {{-- List Media (Card Design Modern) --}}
+            <div class="flex flex-col gap-4 max-w-md mx-auto">
+
+                {{-- Partner 1: Dinamika Sumbawa --}}
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-center gap-4 group hover:shadow-md hover:border-brand-red/30 transition-all duration-300">
+                    <div class="w-14 h-14 shrink-0 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 text-white flex items-center justify-center font-display font-bold text-xl shadow-lg shadow-blue-500/20">
+                        DS
                     </div>
-                    <h3 class="font-bold text-sm text-brand-dark mb-1">Gaung Nusra</h3>
-                    <p class="text-[10px] text-slate-400 mb-3">Portal Berita Utama</p>
-                    <a href="/" class="w-full py-1.5 text-[10px] font-bold text-brand-red border border-brand-red/20 rounded-lg hover:bg-brand-red hover:text-white transition-colors">
-                        Kunjungi
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-display font-bold text-slate-800 text-base mb-0.5 truncate">Dinamika Sumbawa</h3>
+                        <p class="text-[11px] text-slate-400 font-medium truncate">dinamikasumbawa.com</p>
+                    </div>
+                    <a href="https://dinamikasumbawa.com" target="_blank" class="w-10 h-10 rounded-full bg-slate-50 text-slate-400 flex items-center justify-center group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
+                        <i class="ph-bold ph-arrow-right"></i>
                     </a>
                 </div>
 
-                {{-- CARD 2: Gaung TV (Contoh) --}}
-                <div class="bg-white p-4 rounded-xl shadow-card border border-slate-100 flex flex-col items-center text-center group hover:-translate-y-1 transition-transform duration-300">
-                    <div class="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center mb-3 text-blue-600">
-                        <i class="ph-fill ph-youtube-logo text-2xl"></i>
+                {{-- Partner 2: Laskar Merdeka --}}
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-center gap-4 group hover:shadow-md hover:border-brand-red/30 transition-all duration-300">
+                    <div class="w-14 h-14 shrink-0 rounded-xl bg-gradient-to-br from-red-500 to-red-600 text-white flex items-center justify-center font-display font-bold text-xl shadow-lg shadow-red-500/20">
+                        LM
                     </div>
-                    <h3 class="font-bold text-sm text-brand-dark mb-1">Gaung TV</h3>
-                    <p class="text-[10px] text-slate-400 mb-3">Channel Youtube</p>
-                    <a href="#" class="w-full py-1.5 text-[10px] font-bold text-blue-600 border border-blue-600/20 rounded-lg hover:bg-blue-600 hover:text-white transition-colors">
-                        Tonton
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-display font-bold text-slate-800 text-base mb-0.5 truncate">Laskar Merdeka</h3>
+                        <p class="text-[11px] text-slate-400 font-medium truncate">laskarmerdeka.com</p>
+                    </div>
+                    <a href="https://laskarmerdeka.com" target="_blank" class="w-10 h-10 rounded-full bg-slate-50 text-slate-400 flex items-center justify-center group-hover:bg-red-50 group-hover:text-red-600 transition-colors">
+                        <i class="ph-bold ph-arrow-right"></i>
                     </a>
                 </div>
 
-                {{-- CARD 3: E-Paper --}}
-                <div class="bg-white p-4 rounded-xl shadow-card border border-slate-100 flex flex-col items-center text-center group hover:-translate-y-1 transition-transform duration-300">
-                    <div class="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center mb-3 text-green-600">
-                        <i class="ph-fill ph-newspaper text-2xl"></i>
+                {{-- Partner 3: Zona Sumbawa --}}
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-center gap-4 group hover:shadow-md hover:border-brand-red/30 transition-all duration-300">
+                    <div class="w-14 h-14 shrink-0 rounded-xl bg-gradient-to-br from-orange-400 to-orange-500 text-white flex items-center justify-center font-display font-bold text-xl shadow-lg shadow-orange-500/20">
+                        ZS
                     </div>
-                    <h3 class="font-bold text-sm text-brand-dark mb-1">Koran Digital</h3>
-                    <p class="text-[10px] text-slate-400 mb-3">E-Paper Harian</p>
-                    <a href="{{ route('epaper.latest') }}" target="_blank" class="w-full py-1.5 text-[10px] font-bold text-green-600 border border-green-600/20 rounded-lg hover:bg-green-600 hover:text-white transition-colors">
-                        Baca
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-display font-bold text-slate-800 text-base mb-0.5 truncate">Zona Sumbawa</h3>
+                        <p class="text-[11px] text-slate-400 font-medium truncate">zonasumbawa.com</p>
+                    </div>
+                    <a href="https://zonasumbawa.com" target="_blank" class="w-10 h-10 rounded-full bg-slate-50 text-slate-400 flex items-center justify-center group-hover:bg-orange-50 group-hover:text-orange-500 transition-colors">
+                        <i class="ph-bold ph-arrow-right"></i>
                     </a>
                 </div>
 
-                {{-- CARD 4: Radio (Contoh) --}}
-                <div class="bg-white p-4 rounded-xl shadow-card border border-slate-100 flex flex-col items-center text-center group hover:-translate-y-1 transition-transform duration-300">
-                    <div class="w-12 h-12 rounded-full bg-purple-50 flex items-center justify-center mb-3 text-purple-600">
-                        <i class="ph-fill ph-radio text-2xl"></i>
+                {{-- Partner 4: Amar Media --}}
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-center gap-4 group hover:shadow-md hover:border-brand-red/30 transition-all duration-300">
+                    <div class="w-14 h-14 shrink-0 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 text-white flex items-center justify-center font-display font-bold text-xl shadow-lg shadow-purple-500/20">
+                        AM
                     </div>
-                    <h3 class="font-bold text-sm text-brand-dark mb-1">Radio Gaung</h3>
-                    <p class="text-[10px] text-slate-400 mb-3">Streaming Audio</p>
-                    <a href="#" class="w-full py-1.5 text-[10px] font-bold text-purple-600 border border-purple-600/20 rounded-lg hover:bg-purple-600 hover:text-white transition-colors">
-                        Dengar
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-display font-bold text-slate-800 text-base mb-0.5 truncate">Amar Media</h3>
+                        <p class="text-[11px] text-slate-400 font-medium truncate">amarmedia.co.id</p>
+                    </div>
+                    <a href="https://amarmedia.co.id" target="_blank" class="w-10 h-10 rounded-full bg-slate-50 text-slate-400 flex items-center justify-center group-hover:bg-purple-50 group-hover:text-purple-600 transition-colors">
+                        <i class="ph-bold ph-arrow-right"></i>
                     </a>
-                </div>
-
-                {{-- CARD 5: Social Media --}}
-                <div class="bg-white p-4 rounded-xl shadow-card border border-slate-100 flex flex-col items-center text-center group hover:-translate-y-1 transition-transform duration-300 col-span-2">
-                    <div class="flex gap-3 mb-3">
-                        <div class="w-10 h-10 rounded-full bg-pink-50 flex items-center justify-center text-pink-600"><i class="ph-fill ph-instagram-logo text-xl"></i></div>
-                        <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600"><i class="ph-fill ph-facebook-logo text-xl"></i></div>
-                        <div class="w-10 h-10 rounded-full bg-black/5 flex items-center justify-center text-black"><i class="ph-fill ph-tiktok-logo text-xl"></i></div>
-                    </div>
-                    <h3 class="font-bold text-sm text-brand-dark mb-1">Sosial Media</h3>
-                    <p class="text-[10px] text-slate-400 mb-0">Ikuti update terbaru kami di platform favorit Anda.</p>
                 </div>
 
             </div>
 
-            {{-- CTA Box --}}
-            <div class="mt-8 bg-brand-dark rounded-xl p-6 text-center relative overflow-hidden">
-                {{-- Dekorasi Background --}}
+            {{-- CTA Box (Call to Action) --}}
+            <div class="mt-10 bg-brand-dark rounded-2xl p-6 text-center relative overflow-hidden shadow-lg">
+                {{-- Pattern Overlay --}}
+                <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
                 <div class="absolute top-0 right-0 -mr-6 -mt-6 w-24 h-24 bg-white/10 rounded-full blur-xl"></div>
-                <div class="absolute bottom-0 left-0 -ml-6 -mb-6 w-24 h-24 bg-brand-red/20 rounded-full blur-xl"></div>
                 
                 <div class="relative z-10">
-                    <h3 class="font-display font-bold text-lg text-white mb-2">Ingin Bermitra?</h3>
-                    <p class="text-xs text-blue-100 mb-4 leading-relaxed">
-                        Perluas jangkauan bisnis Anda dengan beriklan di jaringan media kami.
+                    <span class="inline-block px-2 py-0.5 bg-white/10 text-white/80 text-[9px] font-bold rounded mb-3 border border-white/10">OPEN PARTNERSHIP</span>
+                    <h3 class="font-display font-bold text-xl text-white mb-2">Media Anda Belum Terdaftar?</h3>
+                    <p class="text-sm text-blue-100 mb-5 leading-relaxed px-2">
+                        Mari bergabung bersama jaringan media terbesar di Sumbawa untuk jangkauan yang lebih luas.
                     </p>
-                    <a href="https://wa.me/{{ $company->phone ?? '' }}" target="_blank" class="inline-flex items-center gap-2 bg-white text-brand-dark px-5 py-2.5 rounded-lg text-xs font-bold shadow-lg active:scale-95 transition-transform">
-                        <i class="ph-fill ph-whatsapp-logo text-lg text-green-500"></i> Hubungi Kami
+                    <a href="https://wa.me/{{ $company->phone ?? '' }}" target="_blank" class="inline-flex items-center gap-2 bg-white text-brand-dark px-6 py-3 rounded-xl text-sm font-bold shadow-xl active:scale-95 transition-transform hover:bg-slate-100">
+                        <i class="ph-fill ph-whatsapp-logo text-xl text-green-500"></i> Hubungi Redaksi
                     </a>
                 </div>
             </div>
-        </div>
 
+        </div>
     </main>
 
-    {{-- FOOTER (KONSISTEN) --}}
+    {{-- FOOTER --}}
     <footer class="bg-white pt-10 pb-8 border-t border-slate-200">
         <div class="container mx-auto px-6">
             <div class="text-center mb-8">
@@ -254,7 +257,7 @@
         </div>
     </footer>
 
-    {{-- SCRIPTS (SEARCH LOGIC SAJA, TIDAK PERLU LIGHTBOX DI HALAMAN INI) --}}
+    {{-- SCRIPTS (Search Logic Only) --}}
     <script>
         function initSearch(inputId, resultsId) {
             var input = $(inputId); var results = $(resultsId); var timeout = null;
