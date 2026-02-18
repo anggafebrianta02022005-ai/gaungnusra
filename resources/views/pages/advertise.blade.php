@@ -152,71 +152,115 @@
     <main class="container mx-auto px-4 lg:px-8 py-10 flex-grow bg-white">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
             
+            {{-- KOLOM KIRI --}}
             <div class="lg:col-span-8 animate-fade-in-up" style="animation-delay: 0.3s;">
-                <div class="mb-8 pb-4 border-b border-slate-100">
-                    <span class="text-xs font-bold text-brand-red uppercase tracking-widest">Layanan</span>
-                    <h1 class="font-display font-extrabold text-4xl text-brand-dark mt-2">Pasang Iklan</h1>
+                
+                {{-- Hero Section --}}
+                <div class="relative mb-12 py-8 rounded-3xl bg-slate-50 border border-slate-100 overflow-hidden text-center">
+                    <div class="absolute top-0 left-0 w-32 h-32 bg-brand-red/5 rounded-full blur-3xl -ml-10 -mt-10"></div>
+                    <div class="absolute bottom-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-3xl -mr-10 -mb-10"></div>
+                    
+                    <div class="relative z-10 px-6">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-white border border-brand-red/20 text-brand-red text-xs font-bold tracking-widest rounded-full mb-4 uppercase shadow-sm">
+                            <i class="ph-fill ph-megaphone"></i> Solusi Promosi
+                        </span>
+                        <h1 class="font-display font-extrabold text-4xl md:text-5xl text-brand-dark mb-4">
+                            Pasang Iklan <span class="text-brand-red">Premium</span>
+                        </h1>
+                        <p class="text-slate-500 max-w-2xl mx-auto text-lg leading-relaxed">
+                            Tingkatkan visibilitas bisnis Anda bersama <strong>{{ $company->name ?? 'Gaung Nusra' }}</strong>. Jangkau ribuan pembaca potensial setiap hari dengan strategi penempatan yang efektif.
+                        </p>
+                    </div>
                 </div>
 
-                <div class="prose prose-lg text-slate-600 max-w-none font-sans leading-relaxed mb-10">
-                    <p>
-                        Tingkatkan jangkauan bisnis Anda bersama <strong>{{ $company->name ?? 'Gaung Nusra' }}</strong>. Kami menawarkan slot iklan premium yang strategis untuk memaksimalkan visibilitas brand Anda kepada ribuan pembaca setia kami setiap harinya.
-                    </p>
-                </div>
-
-                <h3 class="font-display font-bold text-xl text-brand-dark mb-6 flex items-center gap-2">
-                    <i class="ph-fill ph-star text-yellow-500"></i> Mengapa Pasang Iklan di Sini?
+                {{-- Grid Layanan Iklan --}}
+                <h3 class="font-display font-bold text-xl text-brand-dark mb-6 flex items-center gap-2 px-1">
+                    <i class="ph-fill ph-star text-yellow-500"></i> Pilihan Slot Iklan
                 </h3>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-                    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 hover:shadow-md transition-all">
-                        <div class="w-12 h-12 bg-white text-brand-red rounded-xl shadow-sm border border-slate-100 flex items-center justify-center text-2xl mb-4">
+                    
+                    {{-- Card 1: Header Ads --}}
+                    <div class="group bg-white border border-slate-200 rounded-2xl p-6 hover:shadow-xl hover:border-blue-200 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 -mr-8 -mt-8 w-24 h-24 bg-blue-500/5 rounded-full blur-2xl group-hover:scale-150 transition-transform"></div>
+                        
+                        <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-3xl mb-4 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300 shadow-sm">
                             <i class="ph-fill ph-browser"></i>
                         </div>
-                        <h4 class="font-display font-bold text-lg text-brand-dark mb-2">Iklan Header (Atas)</h4>
-                        <ul class="text-sm text-slate-600 space-y-2">
-                            <li class="flex items-start gap-2"><i class="ph-bold ph-check text-green-500 mt-0.5"></i> <span><strong>Visibilitas Maksimal:</strong> Hal pertama yang dilihat pengunjung.</span></li>
-                            <li class="flex items-start gap-2"><i class="ph-bold ph-check text-green-500 mt-0.5"></i> <span><strong>Brand Awareness:</strong> Posisi premium membangun kredibilitas.</span></li>
-                            <li class="flex items-start gap-2"><i class="ph-bold ph-check text-green-500 mt-0.5"></i> <span><strong>Traffic Tinggi:</strong> Peluang klik lebih besar.</span></li>
+                        
+                        <h4 class="font-display font-bold text-xl text-brand-dark mb-3 group-hover:text-blue-600 transition-colors">Iklan Header</h4>
+                        <ul class="space-y-3 text-sm text-slate-600">
+                            <li class="flex items-start gap-2">
+                                <i class="ph-bold ph-check-circle text-blue-500 mt-0.5"></i>
+                                <span>Posisi <strong>Paling Atas</strong> & Eksklusif.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="ph-bold ph-check-circle text-blue-500 mt-0.5"></i>
+                                <span>Dilihat pertama kali oleh pengunjung.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="ph-bold ph-check-circle text-blue-500 mt-0.5"></i>
+                                <span>Cocok untuk <strong>Brand Awareness</strong>.</span>
+                            </li>
                         </ul>
                     </div>
 
-                    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 hover:shadow-md transition-all">
-                        <div class="w-12 h-12 bg-white text-blue-600 rounded-xl shadow-sm border border-slate-100 flex items-center justify-center text-2xl mb-4">
+                    {{-- Card 2: Sidebar Ads --}}
+                    <div class="group bg-white border border-slate-200 rounded-2xl p-6 hover:shadow-xl hover:border-orange-200 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 -mr-8 -mt-8 w-24 h-24 bg-orange-500/5 rounded-full blur-2xl group-hover:scale-150 transition-transform"></div>
+                        
+                        <div class="w-14 h-14 bg-orange-50 text-orange-600 rounded-xl flex items-center justify-center text-3xl mb-4 group-hover:bg-orange-600 group-hover:text-white transition-colors duration-300 shadow-sm">
                             <i class="ph-fill ph-sidebar"></i>
                         </div>
-                        <h4 class="font-display font-bold text-lg text-brand-dark mb-2">Iklan Sidebar (Samping)</h4>
-                        <ul class="text-sm text-slate-600 space-y-2">
-                            <li class="flex items-start gap-2"><i class="ph-bold ph-check text-green-500 mt-0.5"></i> <span><strong>Selalu Tampil (Sticky):</strong> Iklan tetap terlihat saat scroll.</span></li>
-                            <li class="flex items-start gap-2"><i class="ph-bold ph-check text-green-500 mt-0.5"></i> <span><strong>Targeting Tepat:</strong> Tampil berdampingan dengan berita.</span></li>
-                            <li class="flex items-start gap-2"><i class="ph-bold ph-check text-green-500 mt-0.5"></i> <span><strong>Biaya Efektif:</strong> Terjangkau dengan performa stabil.</span></li>
+                        
+                        <h4 class="font-display font-bold text-xl text-brand-dark mb-3 group-hover:text-orange-600 transition-colors">Iklan Sidebar</h4>
+                        <ul class="space-y-3 text-sm text-slate-600">
+                            <li class="flex items-start gap-2">
+                                <i class="ph-bold ph-check-circle text-orange-500 mt-0.5"></i>
+                                <span>Tampil <strong>Sticky</strong> (Tetap) saat scroll.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="ph-bold ph-check-circle text-orange-500 mt-0.5"></i>
+                                <span>Muncul di samping setiap berita.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="ph-bold ph-check-circle text-orange-500 mt-0.5"></i>
+                                <span>Biaya lebih <strong>Efektif & Terjangkau</strong>.</span>
+                            </li>
                         </ul>
                     </div>
+
                 </div>
 
-                <div class="bg-brand-dark rounded-2xl p-8 text-center relative overflow-hidden">
-                    <div class="absolute top-0 right-0 -mr-10 -mt-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
-                    <div class="absolute bottom-0 left-0 -ml-10 -mb-10 w-40 h-40 bg-brand-red/20 rounded-full blur-2xl"></div>
+                {{-- CTA Box --}}
+                <div class="bg-brand-dark rounded-3xl p-10 text-center relative overflow-hidden shadow-2xl group">
+                    {{-- Background Animation --}}
+                    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 group-hover:scale-105 transition-transform duration-1000"></div>
+                    <div class="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-white/5 rounded-full blur-3xl group-hover:bg-white/10 transition-colors"></div>
+                    <div class="absolute bottom-0 left-0 -ml-16 -mb-16 w-64 h-64 bg-brand-red/20 rounded-full blur-3xl group-hover:bg-brand-red/30 transition-colors"></div>
 
                     <div class="relative z-10">
-                        <h3 class="font-display font-bold text-2xl text-white mb-3">Tertarik Berkolaborasi?</h3>
-                        <p class="text-blue-100 mb-8 max-w-xl mx-auto">Hubungi tim marketing kami untuk mendapatkan penawaran harga terbaik.</p>
+                        <h3 class="font-display font-extrabold text-3xl text-white mb-3">Siap Mengembangkan Bisnis?</h3>
+                        <p class="text-blue-100/90 mb-8 text-lg max-w-xl mx-auto">Konsultasikan kebutuhan promosi Anda dengan tim kami dan dapatkan penawaran terbaik hari ini.</p>
                         
                         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                            <a href="https://wa.me/{{ $company->phone ?? '' }}?text=Halo%20Admin%20Gaung%20Nusra,%20saya%20tertarik%20pasang%20iklan." target="_blank" class="flex items-center justify-center gap-2 bg-green-500 text-white px-8 py-3.5 rounded-xl font-bold hover:bg-green-600 transition-all shadow-lg transform hover:-translate-y-1">
+                            <a href="https://wa.me/{{ $company->phone ?? '' }}?text=Halo%20Admin,%20saya%20tertarik%20pasang%20iklan." target="_blank" class="inline-flex items-center justify-center gap-2.5 bg-green-500 text-white px-8 py-3.5 rounded-xl font-bold shadow-lg hover:shadow-green-500/40 hover:bg-green-600 transition-all transform hover:-translate-y-1 group-active:scale-95">
                                 <i class="ph-fill ph-whatsapp-logo text-xl"></i> Chat WhatsApp
                             </a>
-                            <a href="mailto:{{ $company->email ?? '' }}?subject=Penawaran%20Pasang%20Iklan&body=Halo%20Redaksi,%20saya%20ingin%20menanyakan%20rate%20card%20iklan." class="flex items-center justify-center gap-2 bg-white text-brand-dark px-8 py-3.5 rounded-xl font-bold hover:bg-slate-50 transition-all shadow-lg transform hover:-translate-y-1">
+                            <a href="mailto:{{ $company->email ?? '' }}" class="inline-flex items-center justify-center gap-2.5 bg-white text-brand-dark px-8 py-3.5 rounded-xl font-bold shadow-lg hover:bg-slate-50 transition-all transform hover:-translate-y-1 group-active:scale-95">
                                 <i class="ph-fill ph-envelope-simple text-xl"></i> Kirim Email
                             </a>
                         </div>
                     </div>
                 </div>
+
             </div>
 
+            {{-- KOLOM KANAN: SIDEBAR --}}
             <aside class="lg:col-span-4 space-y-10 pl-0 lg:pl-6 border-l border-transparent lg:border-slate-100 animate-fade-in-up" style="animation-delay: 0.4s;">
                 <div class="sticky top-24 space-y-8">
                     
+                    {{-- TRENDING WIDGET --}}
                     <div class="bg-white rounded-2xl p-6 shadow-card border border-slate-100">
                         <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-50">
                             <h3 class="font-display font-bold text-lg text-brand-dark flex items-center gap-2">
@@ -226,10 +270,15 @@
                         <div class="space-y-6">
                             @foreach($sidebarNews as $index => $sNews)
                                 <a href="{{ route('news.show', $sNews->slug) }}" class="group flex gap-4 items-start relative">
+                                    {{-- Numbering --}}
                                     <span class="absolute -left-3 -top-3 w-7 h-7 flex items-center justify-center bg-white border border-slate-100 shadow-sm rounded-full text-xs font-bold {{ $index < 3 ? 'text-brand-red' : 'text-slate-400' }} z-10 font-display">#{{ $index + 1 }}</span>
-                                    <div class="w-24 h-24 img-wrapper rounded-xl flex-shrink-0 shadow-sm group-hover:shadow-md transition-all overflow-hidden">
+                                    
+                                    {{-- Image with Zoom --}}
+                                    <div class="w-24 h-24 img-wrapper rounded-xl flex-shrink-0 shadow-sm group-hover:shadow-md transition-all overflow-hidden border border-slate-100">
                                         <img src="{{ Storage::url($sNews->thumbnail) }}" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                                     </div>
+                                    
+                                    {{-- Text --}}
                                     <div class="flex-1 py-1">
                                         <h4 class="font-display text-sm font-bold text-brand-dark leading-snug line-clamp-3 group-hover:text-brand-red transition-colors duration-200 mb-2">{{ $sNews->title }}</h4>
                                         <div class="flex items-center gap-2 text-[10px] text-slate-400 font-medium">
@@ -242,18 +291,30 @@
                     </div>
 
                     {{-- 5 SLOT IKLAN SIDEBAR --}}
-                <div class="space-y-6">
-                    @if(isset($sidebarAds))
-                        @for ($i = 1; $i <= 5; $i++)
-                            @if(isset($sidebarAds[$i]))
-                                @php $ad = $sidebarAds[$i]; $isPopup = empty($ad->link) || $ad->link === '#'; @endphp
-                                <a href="{{ $isPopup ? 'javascript:void(0)' : $ad->link }}" @if($isPopup) @click.prevent="lightboxOpen = true; lightboxImage = '{{ Storage::url($ad->image) }}'" @else target="_blank" @endif class="block rounded-xl overflow-hidden shadow-sm hover:shadow-md transition border border-slate-100">
-                                    <img src="{{ Storage::url($ad->image) }}" class="w-full h-auto object-cover">
-                                </a>
-                            @endif
-                        @endfor
-                    @endif
-                </div>
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-2 mb-2 px-1">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Space Iklan (5 Slot)</span>
+                        </div>
+
+                        @if(isset($sidebarAds))
+                            @for ($i = 1; $i <= 5; $i++)
+                                @if(isset($sidebarAds[$i]))
+                                    {{-- IKLAN AKTIF --}}
+                                    @php $ad = $sidebarAds[$i]; $isPopup = empty($ad->link) || $ad->link === '#'; @endphp
+                                    <a href="{{ $isPopup ? 'javascript:void(0)' : $ad->link }}" @if($isPopup) @click.prevent="lightboxOpen = true; lightboxImage = '{{ Storage::url($ad->image) }}'" @else target="_blank" @endif class="block relative rounded-xl overflow-hidden shadow-sm hover:shadow-md transition border border-slate-100 group">
+                                        <span class="absolute top-0 right-0 bg-white/90 text-[9px] font-bold px-2 py-0.5 text-slate-500 rounded-bl-lg z-10 border-l border-b border-slate-100">ADS #{{ $i }}</span>
+                                        <img src="{{ Storage::url($ad->image) }}" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500">
+                                    </a>
+                                @else
+                                    {{-- SLOT KOSONG (Placeholder) --}}
+                                    <div class="w-full h-24 rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 flex flex-col items-center justify-center text-center opacity-60 hover:opacity-100 transition-opacity">
+                                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Slot #{{ $i }} Kosong</span>
+                                    </div>
+                                @endif
+                            @endfor
+                        @endif
+                    </div>
+
                 </div>
             </aside>
         </div>
