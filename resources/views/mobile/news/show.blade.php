@@ -234,40 +234,49 @@
                     {!! $news->content !!}
                 </div>
 
-                {{-- IMPLEMENTASI 3: SHARE BUTTONS TOUCH FRIENDLY --}}
-                <div class="mt-8 pt-6 border-t border-slate-100">
-                    <p class="text-sm font-bold text-slate-700 mb-4">Bagikan Berita:</p>
-                    
-                    <div class="grid grid-cols-4 gap-3">
-                        <a href="https://api.whatsapp.com/send?text={{ urlencode($news->title . ' ' . request()->url()) }}" target="_blank" class="flex flex-col items-center gap-1 group">
-                            <div class="w-12 h-12 rounded-full bg-[#25D366]/10 text-[#25D366] flex items-center justify-center group-active:bg-[#25D366] group-active:text-white transition-colors">
-                                <i class="ph-fill ph-whatsapp-logo text-2xl"></i>
-                            </div>
-                            <span class="text-[10px] text-slate-500 font-medium">WA</span>
-                        </a>
+                {{-- SHARE BUTTONS (KEMBALI KE TAMPILAN STANDARD RAPI) --}}
+<div class="mt-10 pt-8 border-t border-slate-200 mb-10">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        
+        {{-- Label --}}
+        <div class="flex items-center gap-2">
+            <span class="w-1 h-6 bg-brand-red rounded-full"></span>
+            <span class="font-display font-bold text-slate-700 text-lg">Bagikan Berita Ini:</span>
+        </div>
 
-                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(request()->url()) }}" target="_blank" class="flex flex-col items-center gap-1 group">
-                            <div class="w-12 h-12 rounded-full bg-[#1877F2]/10 text-[#1877F2] flex items-center justify-center group-active:bg-[#1877F2] group-active:text-white transition-colors">
-                                <i class="ph-fill ph-facebook-logo text-2xl"></i>
-                            </div>
-                            <span class="text-[10px] text-slate-500 font-medium">FB</span>
-                        </a>
+        {{-- Tombol Baris Horizontal --}}
+        <div class="flex items-center gap-3">
+            {{-- WhatsApp --}}
+            <a href="https://api.whatsapp.com/send?text={{ urlencode($news->title . ' ' . request()->url()) }}" 
+               target="_blank" 
+               class="w-12 h-12 rounded-full bg-[#25D366]/10 text-[#25D366] flex items-center justify-center hover:bg-[#25D366] hover:text-white transition-all shadow-sm">
+                <i class="ph-fill ph-whatsapp-logo text-2xl"></i>
+            </a>
+            
+            {{-- Facebook --}}
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(request()->url()) }}" 
+               target="_blank" 
+               class="w-12 h-12 rounded-full bg-[#1877F2]/10 text-[#1877F2] flex items-center justify-center hover:bg-[#1877F2] hover:text-white transition-all shadow-sm">
+                <i class="ph-fill ph-facebook-logo text-2xl"></i>
+            </a>
 
-                        <button onclick="copyToClipboard('Link')" class="flex flex-col items-center gap-1 group w-full">
-                            <div class="w-12 h-12 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center group-active:bg-slate-800 group-active:text-white transition-colors">
-                                <i class="ph-bold ph-link text-2xl"></i>
-                            </div>
-                            <span class="text-[10px] text-slate-500 font-medium">Salin</span>
-                        </button>
+            {{-- Instagram (Direct ke Profile/App) --}}
+            <a href="https://www.instagram.com/" 
+               target="_blank" 
+               class="w-12 h-12 rounded-full bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] text-white opacity-90 flex items-center justify-center hover:opacity-100 hover:scale-110 transition-all shadow-sm">
+                <i class="ph-fill ph-instagram-logo text-2xl"></i>
+            </a>
 
-                        <button onclick="if (navigator.share) { navigator.share({ title: '{{ $news->title }}', url: '{{ request()->url() }}' }) }" class="flex flex-col items-center gap-1 group w-full">
-                            <div class="w-12 h-12 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center group-active:bg-slate-800 group-active:text-white transition-colors">
-                                <i class="ph-bold ph-share-network text-2xl"></i>
-                            </div>
-                            <span class="text-[10px] text-slate-500 font-medium">Lainnya</span>
-                        </button>
-                    </div>
-                </div>
+            {{-- Copy Link --}}
+            <button onclick="copyToClipboard('Link')" 
+                    class="w-12 h-12 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center hover:bg-slate-800 hover:text-white transition-all shadow-sm"
+                    title="Salin Link">
+                <i class="ph-bold ph-link text-2xl"></i>
+            </button>
+        </div>
+
+    </div>
+</div>
 
                 {{-- BERITA TERKAIT --}}
                 <div class="mt-10 md:mt-14 border-t border-slate-100 pt-8">
