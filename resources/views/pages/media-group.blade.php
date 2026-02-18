@@ -309,20 +309,55 @@
     <footer class="bg-brand-misty border-t border-slate-200 pt-20 pb-10 mt-20 animate-fade-in-up" style="animation-delay: 0.5s;">
         <div class="container mx-auto px-4 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+                
                 <div class="md:col-span-1">
                     <div class="flex items-center gap-2 mb-6">
-                        @if($company && $company->logo) <img src="{{ Storage::url($company->logo) }}" alt="Logo Footer" class="h-10 w-auto object-contain">
-                        @else <h2 class="font-display font-extrabold text-2xl text-brand-dark">GAUNG<span class="text-brand-red">NUSRA</span></h2> @endif
+                        @if($company && $company->logo)
+                            <img src="{{ Storage::url($company->logo) }}" alt="Logo Footer" class="h-10 w-auto object-contain">
+                        @else
+                            <h2 class="font-display font-extrabold text-2xl text-brand-dark">GAUNG<span class="text-brand-red">NUSRA</span></h2>
+                        @endif
                     </div>
                     <div class="flex gap-3">
-                        <div class="flex space-x-4">
-                            <a href="https://www.instagram.com/gaungnusra?igsh=cDJqMmJ3Zm9pMmpt" target="_blank" class="text-slate-400 hover:text-brand-red transition-colors"><i class="ph-fill ph-instagram-logo text-lg"></i></a>
-                            <a href="https://www.facebook.com/share/1DvqTnVEtY/?mibextid=wwXIfr" target="_blank" class="text-slate-400 hover:text-blue-600 transition-colors"><i class="ph-fill ph-facebook-logo text-lg"></i></a>
-                            <a href="https://www.threads.com/@gaungnusra?igshid=NTc4MTIwNjQ2YQ==" target="_blank" class="text-slate-400 hover:text-black transition-colors"><i class="ph-fill ph-threads-logo text-lg"></i></a>
-                        </div>
+                       <div class="flex space-x-4">
+    <a href="https://www.instagram.com/gaungnusra?igsh=cDJqMmJ3Zm9pMmpt" target="_blank" class="text-slate-400 hover:text-brand-red transition-colors">
+        <i class="ph-fill ph-instagram-logo text-lg"></i>
+    </a>
+
+    <a href="https://www.facebook.com/share/1DvqTnVEtY/?mibextid=wwXIfr" target="_blank" class="text-slate-400 hover:text-blue-600 transition-colors">
+        <i class="ph-fill ph-facebook-logo text-lg"></i>
+    </a>
+
+    <a href="https://www.threads.com/@gaungnusra?igshid=NTc4MTIwNjQ2YQ==" target="_blank" class="text-slate-400 hover:text-black transition-colors">
+        <i class="ph-fill ph-threads-logo text-lg"></i>
+    </a>
+</div>
                     </div>
                 </div>
-                <ul class="space-y-4 text-slate-500 text-sm font-medium">
+
+                <div>
+                    <h3 class="font-display font-bold text-brand-dark mb-6 text-sm tracking-widest uppercase border-b-2 border-brand-red inline-block pb-1">Kategori</h3>
+                    <ul class="space-y-4 text-slate-500 text-sm font-medium">
+                        @foreach($categories->take(5) as $cat)
+                            <li>
+                                <a href="{{ route('category.show', $cat->slug) }}" class="hover:text-brand-red hover:pl-2 transition-all block">
+                                    {{ $cat->name }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="font-display font-bold text-brand-dark mb-6 text-sm tracking-widest uppercase border-b-2 border-brand-red inline-block pb-1">Tentang Kami</h3>
+                    <ul class="space-y-4 text-slate-500 text-sm font-medium">
+                        <li><a href="{{ route('pages.about') }}" class="hover:text-brand-red transition-colors">Profil Redaksi</a></li>  
+                    </ul>
+                </div>
+
+               <div>
+    <h3 class="font-display font-bold text-brand-dark mb-6 text-sm tracking-widest uppercase border-b-2 border-brand-red inline-block pb-1">Layanan</h3>
+    <ul class="space-y-4 text-slate-500 text-sm font-medium">
     <li>
         <a href="{{ route('pages.advertise') }}" class="hover:text-brand-red transition-colors">
             Pasang Iklan
@@ -342,8 +377,15 @@
         </a>
     </li>
 </ul>
+</div>
             </div>
-            <div class="border-t border-slate-200 pt-8 flex flex-col md:flex-row items-center justify-between gap-4"><p class="text-sm text-slate-500 font-medium">&copy; {{ date('Y') }} {{ $company->name ?? 'Gaung Nusra' }}. All rights reserved.</p><div class="flex items-center gap-1 text-xs text-slate-400"><span>Dibuat Oleh Udayana Digital Data</span></div></div>
+
+            <div class="border-t border-slate-200 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+                <p class="text-sm text-slate-500 font-medium">&copy; {{ date('Y') }} {{ $company->name ?? 'Gaung Nusra' }}. All rights reserved.</p>
+                <div class="flex items-center gap-1 text-xs text-slate-400">
+                    <span>Dibuat Oleh Udayana Digital Data</span>
+                </div>
+            </div>
         </div>
     </footer>
 
