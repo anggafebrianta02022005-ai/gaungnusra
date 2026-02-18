@@ -308,10 +308,23 @@
                     </div>
                     <div>
                         <h3 class="font-display font-bold text-brand-dark mb-3 text-xs tracking-wide uppercase">Layanan</h3>
-                        <ul class="space-y-2 text-slate-500 text-xs font-medium">
-                            <li><a href="{{ route('pages.advertise') }}" class="hover:text-brand-red transition-colors">Pasang Iklan</a></li>
-                            <li><a href="{{ route('epaper.latest') }}" target="_blank" class="hover:text-brand-red transition-colors">Koran Cetak</a></li>
-                        </ul>
+                       <ul class="space-y-2 text-slate-500 text-xs font-medium">
+                        <li>
+                            <a href="{{ route('pages.advertise') }}" class="hover:text-brand-red transition-colors">
+                                Pasang Iklan
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('epaper.latest') }}" target="_blank" class="hover:text-brand-red transition-colors">
+                                Koran Cetak
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('pages.media-group') }}" class="hover:text-brand-red transition-colors">
+                                Media Group
+                            </a>
+                        </li>
+                    </ul>
                     </div>
                 </div>
             </div>
