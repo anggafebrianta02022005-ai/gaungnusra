@@ -40,6 +40,7 @@
                     },
                     animation: {
                         'fade-in-up': 'fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     },
                     keyframes: {
                         fadeInUp: {
@@ -101,7 +102,7 @@
                     @foreach($categories as $navCat)
                         @php
                             $isCategoryPage = request()->url() == route('category.show', $navCat->slug);
-                            $isActive = $isCategoryPage; // Simplified check
+                            $isActive = $isCategoryPage; 
                         @endphp
                         <a href="{{ route('category.show', $navCat->slug) }}" class="relative h-full flex items-center px-3 text-[13px] whitespace-nowrap shrink-0 transition-all duration-300 group {{ $isActive ? 'font-bold text-brand-red border-b-[3px] border-brand-red bg-white/50' : 'font-medium text-slate-600 hover:text-brand-dark' }}">
                             {{ $navCat->name }}
@@ -138,83 +139,120 @@
     <main class="container mx-auto px-4 lg:px-8 py-10 flex-grow bg-white">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
             
-            {{-- KOLOM KIRI (ISI KONTEN MEDIA GROUP) --}}
+            {{-- KOLOM KIRI (KONTEN UTAMA: MEDIA GROUP) --}}
             <div class="lg:col-span-8 animate-fade-in-up" style="animation-delay: 0.3s;">
                 
-                {{-- Judul Halaman --}}
-                <div class="mb-8 pb-4 border-b border-slate-100">
-                    <span class="text-xs font-bold text-brand-red uppercase tracking-widest">Partner Resmi</span>
-                    <h1 class="font-display font-extrabold text-4xl text-brand-dark mt-2">Jaringan Media <span class="text-brand-red">Sumbawa</span></h1>
-                </div>
-
-                {{-- Deskripsi --}}
-                <div class="prose prose-lg text-slate-600 max-w-none font-sans leading-relaxed mb-10">
-                    <p>
-                        Sinergi media lokal terpercaya untuk menyuarakan aspirasi Sumbawa ke pentas nasional. Kami berkomitmen menyajikan informasi yang akurat, berimbang, dan membangun.
-                    </p>
-                </div>
-
-                {{-- Grid Partner --}}
-                <h3 class="font-display font-bold text-xl text-brand-dark mb-6 flex items-center gap-2">
-                    <i class="ph-fill ph-handshake text-blue-600"></i> Anggota Jaringan
-                </h3>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+                {{-- Hero/Judul dengan Background Blur --}}
+                <div class="relative text-center mb-16 py-10 rounded-3xl overflow-hidden bg-slate-50 border border-slate-100">
+                    {{-- Decorative Background --}}
+                    <div class="absolute -top-10 -left-10 w-40 h-40 bg-brand-red/5 rounded-full blur-3xl"></div>
+                    <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-brand-dark/5 rounded-full blur-3xl"></div>
                     
-                    {{-- Partner 1 --}}
-                    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 hover:shadow-md transition-all flex items-center gap-4 group">
-                        <div class="w-14 h-14 bg-blue-600 text-white rounded-xl shadow-sm flex items-center justify-center text-xl font-display font-bold shrink-0">DS</div>
-                        <div class="flex-1 min-w-0">
-                            <h4 class="font-display font-bold text-lg text-brand-dark mb-0.5 truncate">Dinamika Sumbawa</h4>
-                            <a href="https://dinamikasumbawa.com" target="_blank" class="text-sm text-slate-500 hover:text-blue-600 transition-colors truncate block">dinamikasumbawa.com</a>
-                        </div>
-                        <a href="https://dinamikasumbawa.com" target="_blank" class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-slate-400 group-hover:bg-blue-600 group-hover:text-white transition-all"><i class="ph-bold ph-arrow-right"></i></a>
+                    <div class="relative z-10">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-white border border-brand-red/20 text-brand-red text-xs font-bold tracking-widest rounded-full mb-4 uppercase shadow-sm animate-pulse-slow">
+                            <i class="ph-fill ph-handshake"></i> Partner Resmi
+                        </span>
+                        <h1 class="font-display font-extrabold text-4xl md:text-5xl text-brand-dark mb-4 leading-tight">
+                            Jaringan Media <span class="text-brand-red">Sumbawa</span>
+                        </h1>
+                        <p class="text-slate-500 max-w-xl mx-auto text-lg leading-relaxed px-4">
+                            Sinergi media lokal terpercaya untuk menyuarakan aspirasi Sumbawa ke pentas nasional dengan informasi yang akurat.
+                        </p>
                     </div>
+                </div>
 
-                    {{-- Partner 2 --}}
-                    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 hover:shadow-md transition-all flex items-center gap-4 group">
-                        <div class="w-14 h-14 bg-red-600 text-white rounded-xl shadow-sm flex items-center justify-center text-xl font-display font-bold shrink-0">LM</div>
-                        <div class="flex-1 min-w-0">
-                            <h4 class="font-display font-bold text-lg text-brand-dark mb-0.5 truncate">Laskar Merdeka</h4>
-                            <a href="https://laskarmerdeka.com" target="_blank" class="text-sm text-slate-500 hover:text-red-600 transition-colors truncate block">laskarmerdeka.com</a>
+                {{-- Grid Partner (Interaktif) --}}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
+                    
+                    {{-- Card Partner 1 --}}
+                    <a href="https://dinamikasumbawa.com" target="_blank" class="group relative bg-white border border-slate-200 rounded-2xl p-6 transition-all duration-300 hover:shadow-xl hover:border-blue-200 hover:-translate-y-1 overflow-hidden">
+                        <div class="absolute top-0 right-0 -mr-8 -mt-8 w-24 h-24 bg-blue-500/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
+                        
+                        <div class="relative z-10 flex items-start justify-between">
+                            <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-2xl shadow-lg shadow-blue-500/30 flex items-center justify-center text-xl font-display font-bold mb-4 shrink-0">DS</div>
+                            <div class="w-8 h-8 rounded-full bg-slate-50 text-slate-400 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all duration-300 transform group-hover:rotate-45">
+                                <i class="ph-bold ph-arrow-up-right"></i>
+                            </div>
                         </div>
-                        <a href="https://laskarmerdeka.com" target="_blank" class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-slate-400 group-hover:bg-red-600 group-hover:text-white transition-all"><i class="ph-bold ph-arrow-right"></i></a>
-                    </div>
+                        
+                        <div class="relative z-10">
+                            <h3 class="font-display font-bold text-xl text-slate-800 mb-1 group-hover:text-blue-600 transition-colors">Dinamika Sumbawa</h3>
+                            <p class="text-sm text-slate-400 font-medium">dinamikasumbawa.com</p>
+                        </div>
+                    </a>
 
-                    {{-- Partner 3 --}}
-                    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 hover:shadow-md transition-all flex items-center gap-4 group">
-                        <div class="w-14 h-14 bg-orange-500 text-white rounded-xl shadow-sm flex items-center justify-center text-xl font-display font-bold shrink-0">ZS</div>
-                        <div class="flex-1 min-w-0">
-                            <h4 class="font-display font-bold text-lg text-brand-dark mb-0.5 truncate">Zona Sumbawa</h4>
-                            <a href="https://zonasumbawa.com" target="_blank" class="text-sm text-slate-500 hover:text-orange-500 transition-colors truncate block">zonasumbawa.com</a>
+                    {{-- Card Partner 2 --}}
+                    <a href="https://laskarmerdeka.com" target="_blank" class="group relative bg-white border border-slate-200 rounded-2xl p-6 transition-all duration-300 hover:shadow-xl hover:border-red-200 hover:-translate-y-1 overflow-hidden">
+                        <div class="absolute top-0 right-0 -mr-8 -mt-8 w-24 h-24 bg-red-500/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
+                        
+                        <div class="relative z-10 flex items-start justify-between">
+                            <div class="w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 text-white rounded-2xl shadow-lg shadow-red-500/30 flex items-center justify-center text-xl font-display font-bold mb-4 shrink-0">LM</div>
+                            <div class="w-8 h-8 rounded-full bg-slate-50 text-slate-400 flex items-center justify-center group-hover:bg-red-600 group-hover:text-white transition-all duration-300 transform group-hover:rotate-45">
+                                <i class="ph-bold ph-arrow-up-right"></i>
+                            </div>
                         </div>
-                        <a href="https://zonasumbawa.com" target="_blank" class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-slate-400 group-hover:bg-orange-500 group-hover:text-white transition-all"><i class="ph-bold ph-arrow-right"></i></a>
-                    </div>
+                        
+                        <div class="relative z-10">
+                            <h3 class="font-display font-bold text-xl text-slate-800 mb-1 group-hover:text-red-600 transition-colors">Laskar Merdeka</h3>
+                            <p class="text-sm text-slate-400 font-medium">laskarmerdeka.com</p>
+                        </div>
+                    </a>
 
-                    {{-- Partner 4 --}}
-                    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 hover:shadow-md transition-all flex items-center gap-4 group">
-                        <div class="w-14 h-14 bg-purple-600 text-white rounded-xl shadow-sm flex items-center justify-center text-xl font-display font-bold shrink-0">AM</div>
-                        <div class="flex-1 min-w-0">
-                            <h4 class="font-display font-bold text-lg text-brand-dark mb-0.5 truncate">Amar Media</h4>
-                            <a href="https://amarmedia.co.id" target="_blank" class="text-sm text-slate-500 hover:text-purple-600 transition-colors truncate block">amarmedia.co.id</a>
+                    {{-- Card Partner 3 --}}
+                    <a href="https://zonasumbawa.com" target="_blank" class="group relative bg-white border border-slate-200 rounded-2xl p-6 transition-all duration-300 hover:shadow-xl hover:border-orange-200 hover:-translate-y-1 overflow-hidden">
+                        <div class="absolute top-0 right-0 -mr-8 -mt-8 w-24 h-24 bg-orange-500/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
+                        
+                        <div class="relative z-10 flex items-start justify-between">
+                            <div class="w-16 h-16 bg-gradient-to-br from-orange-400 to-orange-500 text-white rounded-2xl shadow-lg shadow-orange-500/30 flex items-center justify-center text-xl font-display font-bold mb-4 shrink-0">ZS</div>
+                            <div class="w-8 h-8 rounded-full bg-slate-50 text-slate-400 flex items-center justify-center group-hover:bg-orange-500 group-hover:text-white transition-all duration-300 transform group-hover:rotate-45">
+                                <i class="ph-bold ph-arrow-up-right"></i>
+                            </div>
                         </div>
-                        <a href="https://amarmedia.co.id" target="_blank" class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-slate-400 group-hover:bg-purple-600 group-hover:text-white transition-all"><i class="ph-bold ph-arrow-right"></i></a>
-                    </div>
+                        
+                        <div class="relative z-10">
+                            <h3 class="font-display font-bold text-xl text-slate-800 mb-1 group-hover:text-orange-600 transition-colors">Zona Sumbawa</h3>
+                            <p class="text-sm text-slate-400 font-medium">zonasumbawa.com</p>
+                        </div>
+                    </a>
+
+                    {{-- Card Partner 4 --}}
+                    <a href="https://amarmedia.co.id" target="_blank" class="group relative bg-white border border-slate-200 rounded-2xl p-6 transition-all duration-300 hover:shadow-xl hover:border-purple-200 hover:-translate-y-1 overflow-hidden">
+                        <div class="absolute top-0 right-0 -mr-8 -mt-8 w-24 h-24 bg-purple-500/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
+                        
+                        <div class="relative z-10 flex items-start justify-between">
+                            <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-2xl shadow-lg shadow-purple-500/30 flex items-center justify-center text-xl font-display font-bold mb-4 shrink-0">AM</div>
+                            <div class="w-8 h-8 rounded-full bg-slate-50 text-slate-400 flex items-center justify-center group-hover:bg-purple-600 group-hover:text-white transition-all duration-300 transform group-hover:rotate-45">
+                                <i class="ph-bold ph-arrow-up-right"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="relative z-10">
+                            <h3 class="font-display font-bold text-xl text-slate-800 mb-1 group-hover:text-purple-600 transition-colors">Amar Media</h3>
+                            <p class="text-sm text-slate-400 font-medium">amarmedia.co.id</p>
+                        </div>
+                    </a>
 
                 </div>
 
-                {{-- CTA Box --}}
-                <div class="bg-brand-dark rounded-2xl p-8 text-center relative overflow-hidden">
-                    <div class="absolute top-0 right-0 -mr-10 -mt-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
-                    <div class="absolute bottom-0 left-0 -ml-10 -mb-10 w-40 h-40 bg-brand-red/20 rounded-full blur-2xl"></div>
+                {{-- CTA Box (Interaktif) --}}
+                <div class="bg-brand-dark rounded-3xl p-10 text-center relative overflow-hidden shadow-2xl group">
+                    {{-- Animated Background --}}
+                    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 group-hover:scale-105 transition-transform duration-1000"></div>
+                    <div class="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-white/5 rounded-full blur-3xl group-hover:bg-white/10 transition-colors duration-500"></div>
+                    <div class="absolute bottom-0 left-0 -ml-16 -mb-16 w-64 h-64 bg-brand-red/20 rounded-full blur-3xl group-hover:bg-brand-red/30 transition-colors duration-500"></div>
 
                     <div class="relative z-10">
-                        <span class="inline-block px-3 py-1 bg-white/10 text-white/90 text-[10px] font-bold rounded-full mb-4 border border-white/10 uppercase tracking-wide">Open Partnership</span>
-                        <h3 class="font-display font-bold text-2xl text-white mb-3">Media Anda Belum Terdaftar?</h3>
-                        <p class="text-blue-100 mb-8 max-w-xl mx-auto">Mari bergabung bersama jaringan media terbesar di Sumbawa untuk jangkauan yang lebih luas.</p>
+                        <span class="inline-block px-4 py-1.5 bg-white/10 text-white/90 text-xs font-bold rounded-full mb-5 border border-white/10 uppercase tracking-wide backdrop-blur-sm">
+                            Open Partnership
+                        </span>
+                        <h3 class="font-display font-extrabold text-3xl md:text-4xl text-white mb-4">Media Anda Belum Terdaftar?</h3>
+                        <p class="text-blue-100/80 mb-8 text-lg max-w-2xl mx-auto leading-relaxed">
+                            Mari bergabung bersama jaringan media terbesar di Sumbawa untuk jangkauan yang lebih luas, kolaborasi berita, dan pertumbuhan bersama.
+                        </p>
                         
-                        <a href="https://wa.me/{{ $company->phone ?? '' }}" target="_blank" class="inline-flex items-center justify-center gap-2 bg-white text-brand-dark px-8 py-3.5 rounded-xl font-bold hover:bg-slate-50 transition-all shadow-lg transform hover:-translate-y-1">
-                            <i class="ph-fill ph-whatsapp-logo text-xl text-green-600"></i> Hubungi Redaksi
+                        <a href="https://wa.me/{{ $company->phone ?? '' }}" target="_blank" class="inline-flex items-center gap-3 bg-green-500 text-white px-8 py-4 rounded-full font-bold shadow-lg hover:shadow-green-500/30 hover:bg-green-600 transition-all transform hover:-translate-y-1 group-active:scale-95">
+                            <i class="ph-fill ph-whatsapp-logo text-2xl"></i> 
+                            <span>Hubungi Redaksi</span>
                         </a>
                     </div>
                 </div>
@@ -277,11 +315,13 @@
                         @if($company && $company->logo) <img src="{{ Storage::url($company->logo) }}" alt="Logo Footer" class="h-10 w-auto object-contain">
                         @else <h2 class="font-display font-extrabold text-2xl text-brand-dark">GAUNG<span class="text-brand-red">NUSRA</span></h2> @endif
                     </div>
-                    <div class="flex space-x-4">
-                        <a href="https://www.instagram.com/gaungnusra?igsh=cDJqMmJ3Zm9pMmpt" target="_blank" class="text-slate-400 hover:text-brand-red transition-colors"><i class="ph-fill ph-instagram-logo text-lg"></i></a>
-                        <a href="https://www.facebook.com/share/1DvqTnVEtY/?mibextid=wwXIfr" target="_blank" class="text-slate-400 hover:text-blue-600 transition-colors"><i class="ph-fill ph-facebook-logo text-lg"></i></a>
-                        <a href="https://www.threads.com/@gaungnusra?igshid=NTc4MTIwNjQ2YQ==" target="_blank" class="text-slate-400 hover:text-black transition-colors"><i class="ph-fill ph-threads-logo text-lg"></i></a>
-                        <a href="#" class="text-slate-400 hover:text-black transition-colors"><i class="ph-fill ph-x-logo text-lg"></i></a>
+                    <div class="flex gap-3">
+                        <div class="flex space-x-4">
+                            <a href="https://www.instagram.com/gaungnusra?igsh=cDJqMmJ3Zm9pMmpt" target="_blank" class="text-slate-400 hover:text-brand-red transition-colors"><i class="ph-fill ph-instagram-logo text-lg"></i></a>
+                            <a href="https://www.facebook.com/share/1DvqTnVEtY/?mibextid=wwXIfr" target="_blank" class="text-slate-400 hover:text-blue-600 transition-colors"><i class="ph-fill ph-facebook-logo text-lg"></i></a>
+                            <a href="https://www.threads.com/@gaungnusra?igshid=NTc4MTIwNjQ2YQ==" target="_blank" class="text-slate-400 hover:text-black transition-colors"><i class="ph-fill ph-threads-logo text-lg"></i></a>
+                            <a href="#" class="text-slate-400 hover:text-black transition-colors"><i class="ph-fill ph-x-logo text-lg"></i></a>
+                        </div>
                     </div>
                 </div>
                 <div><h3 class="font-display font-bold text-brand-dark mb-6 text-sm tracking-widest uppercase border-b-2 border-brand-red inline-block pb-1">Kategori</h3><ul class="space-y-4 text-slate-500 text-sm font-medium">@foreach($categories->take(5) as $cat)<li><a href="{{ route('category.show', $cat->slug) }}" class="hover:text-brand-red hover:pl-2 transition-all block">{{ $cat->name }}</a></li>@endforeach</ul></div>
