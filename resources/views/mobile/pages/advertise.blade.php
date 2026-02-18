@@ -251,8 +251,9 @@
                 </div>
             </div>
 
-            {{-- UPDATE: IKLAN SIDEBAR (LOOPING 5 SLOT) --}}
+             {{-- UPDATE: IKLAN SIDEBAR (LOOPING 5 SLOT) --}}
             <div class="px-4 pb-8 pt-2 space-y-4"> 
+                
                 @if(isset($sidebarAds))
                     @for ($i = 1; $i <= 5; $i++)
                         @if(isset($sidebarAds[$i]))
@@ -280,10 +281,22 @@
                         @endif
                     @endfor
                 @elseif(isset($sidebarAd) && $sidebarAd->image)
-                    {{-- FALLBACK SINGLE --}}
-                    @php $isPopup = empty($sidebarAd->link) || $sidebarAd->link === '#'; @endphp
-                    <a href="{{ $isPopup ? 'javascript:void(0)' : $sidebarAd->link }}" @if($isPopup) @click.prevent="lightboxOpen = true; lightboxImage = '{{ Storage::url($sidebarAd->image) }}'" @else target="_blank" @endif class="block relative rounded-xl overflow-hidden shadow-sm border border-slate-100"><img src="{{ Storage::url($sidebarAd->image) }}" class="w-full h-auto object-cover"></a>
+                    {{-- FALLBACK OLD SINGLE AD --}}
+                    @php 
+                        $isPopup = empty($sidebarAd->link) || $sidebarAd->link === '#'; 
+                    @endphp
+                    <a href="{{ $isPopup ? 'javascript:void(0)' : $sidebarAd->link }}" 
+                       @if($isPopup) 
+                            @click.prevent="lightboxOpen = true; lightboxImage = '{{ Storage::url($sidebarAd->image) }}'" 
+                       @else 
+                            target="_blank" 
+                       @endif
+                       class="block relative rounded-xl overflow-hidden shadow-sm border border-slate-100">
+                       <span class="absolute top-0 right-0 bg-brand-misty text-slate-600 text-[8px] font-bold px-2 py-0.5 rounded-bl-lg z-10 border-l border-b border-white">ADS</span>
+                       <img src="{{ Storage::url($sidebarAd->image) }}" class="w-full h-auto object-cover">
+                    </a>
                 @endif
+
             </div>
 
         </div>
