@@ -41,7 +41,7 @@
     </style>
 </head>
 
-{{-- STATE LIGHTBOX DITAMBAHKAN --}}
+{{-- STATE LIGHTBOX --}}
 <body class="bg-white text-slate-800 flex flex-col min-h-screen" 
       x-data="{ mobileMenu: false, searchOpen: false, lightboxOpen: false, lightboxImage: '' }">
 
@@ -158,7 +158,7 @@
                 </p>
             </div>
 
-            {{-- List Layanan Iklan (Card Grid Modern - INTERAKTIF) --}}
+            {{-- List Layanan Iklan (Card Grid Modern) --}}
             <div class="grid grid-cols-2 gap-4 max-w-md mx-auto">
 
                 {{-- Iklan Header --}}
@@ -203,7 +203,6 @@
             <div class="mt-10 bg-brand-dark rounded-2xl p-6 text-center relative overflow-hidden shadow-lg">
                 <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
                 <div class="absolute top-0 right-0 -mr-6 -mt-6 w-24 h-24 bg-white/10 rounded-full blur-xl"></div>
-                <div class="absolute bottom-0 left-0 -ml-6 -mb-6 w-24 h-24 bg-brand-red/20 rounded-full blur-xl"></div>
                 
                 <div class="relative z-10">
                     <h3 class="font-display font-bold text-xl text-white mb-2">Konsultasi Harga?</h3>
@@ -253,24 +252,38 @@
                 </div>
             </div>
 
-            {{-- IKLAN SIDEBAR (LOGIKA POPUP) --}}
-            <div class="px-4 pb-8 pt-2">
-                @if($sidebarAd && $sidebarAd->image)
-                    @php 
-                        $isPopupSidebar = empty($sidebarAd->link) || $sidebarAd->link === '#'; 
-                    @endphp
+            {{-- UPDATE: IKLAN SIDEBAR (LOOPING 5 SLOT) --}}
+            <div class="px-4 pb-8 pt-2 space-y-4"> 
+                @if(isset($sidebarAds))
+                    @for ($i = 1; $i <= 5; $i++)
+                        @if(isset($sidebarAds[$i]))
+                            @php 
+                                $ad = $sidebarAds[$i];
+                                $isPopup = empty($ad->link) || $ad->link === '#'; 
+                            @endphp
 
-                    <a href="{{ $isPopupSidebar ? 'javascript:void(0)' : $sidebarAd->link }}" 
-                       @if($isPopupSidebar) 
-                            @click.prevent="lightboxOpen = true; lightboxImage = '{{ Storage::url($sidebarAd->image) }}'" 
-                       @else 
-                            target="_blank" 
-                       @endif
-                       class="block relative rounded-xl overflow-hidden shadow-sm border border-slate-100 group transition-transform active:scale-95">
-                       
-                       <span class="absolute top-0 right-0 bg-brand-misty text-slate-600 text-[8px] font-bold px-2 py-0.5 rounded-bl-lg z-10 border-l border-b border-white">ADS</span>
-                       <img src="{{ Storage::url($sidebarAd->image) }}" class="w-full h-auto object-cover">
-                    </a>
+                            <div class="relative group block w-full">
+                                <a href="{{ $isPopup ? 'javascript:void(0)' : $ad->link }}" 
+                                   @if($isPopup) 
+                                        @click.prevent="lightboxOpen = true; lightboxImage = '{{ Storage::url($ad->image) }}'" 
+                                   @else 
+                                        target="_blank" 
+                                   @endif
+                                   class="block relative rounded-xl overflow-hidden shadow-sm border border-slate-100 transition-transform active:scale-95">
+                                   
+                                   <span class="absolute top-0 right-0 bg-brand-misty text-slate-600 text-[8px] font-bold px-2 py-0.5 rounded-bl-lg z-10 border-l border-b border-white">
+                                       ADS #{{ $i }}
+                                   </span>
+                                   
+                                   <img src="{{ Storage::url($ad->image) }}" class="w-full h-auto object-cover">
+                                </a>
+                            </div>
+                        @endif
+                    @endfor
+                @elseif(isset($sidebarAd) && $sidebarAd->image)
+                    {{-- FALLBACK SINGLE --}}
+                    @php $isPopup = empty($sidebarAd->link) || $sidebarAd->link === '#'; @endphp
+                    <a href="{{ $isPopup ? 'javascript:void(0)' : $sidebarAd->link }}" @if($isPopup) @click.prevent="lightboxOpen = true; lightboxImage = '{{ Storage::url($sidebarAd->image) }}'" @else target="_blank" @endif class="block relative rounded-xl overflow-hidden shadow-sm border border-slate-100"><img src="{{ Storage::url($sidebarAd->image) }}" class="w-full h-auto object-cover"></a>
                 @endif
             </div>
 
@@ -321,7 +334,7 @@
         </div>
     </footer>
 
-    {{-- MODAL LIGHTBOX (WAJIB DI BAWAH) --}}
+    {{-- MODAL LIGHTBOX --}}
     <div x-show="lightboxOpen" 
          x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
          x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
