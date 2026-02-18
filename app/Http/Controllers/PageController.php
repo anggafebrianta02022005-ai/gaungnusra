@@ -15,8 +15,7 @@ class PageController extends Controller
     {
         $agent = new Agent();
         
-        // Cek apakah file view mobile ada? Kalau belum ada, fallback ke desktop
-        // Ini untuk mencegah error "View Not Found" kalau Mas belum sempat bikin file mobile-nya
+        // Cek view mobile
         if ($agent->isMobile() && view()->exists('mobile.pages.about')) {
             $view = 'mobile.pages.about';
         } else {
@@ -41,7 +40,6 @@ class PageController extends Controller
 
     /**
      * Fungsi Privasi untuk mengambil data yang sama (Menu, Iklan, Sidebar)
-     * Agar kodingan lebih rapi dan tidak diulang-ulang.
      */
     private function getSharedData()
     {
@@ -49,12 +47,10 @@ class PageController extends Controller
             // 1. DATA PERUSAHAAN
             'company' => CompanyProfile::first(),
 
-            // 2. NAVIGASI (PENTING: Harus sama logic-nya dengan HomeController)
-            // Ambil kategori aktif, limit 7 biar navbar rapi
+            // 2. NAVIGASI
             'categories' => Category::where('is_active', true)->take(7)->get(),
 
             // 3. BERITA TRENDING (SIDEBAR)
-            // Urutkan berdasarkan views_count terbanyak
             'sidebarNews' => News::where('status', 'published')
                             ->orderBy('views_count', 'desc') 
                             ->take(6)
@@ -66,11 +62,14 @@ class PageController extends Controller
                             ->latest()
                             ->first(),
 
-            // 5. IKLAN SIDEBAR (Samping)
-            'sidebarAd' => Ad::where('position', 'sidebar_right')
-                            ->where('is_active', 1)
-                            ->inRandomOrder() // Acak biar iklannya ganti-ganti dikit
-                            ->first(),
+            // 5. [UPDATE] IKLAN SIDEBAR (5 Slot Vertikal)
+            // Mengambil semua iklan sidebar aktif, urutkan slot, dan jadikan slot sebagai key array
+            'sidebarAds' => Ad::where('position', 'sidebar_right')
+                            ->where('is_active', true)
+                            ->whereNotNull('slot_number')
+                            ->orderBy('slot_number')
+                            ->get()
+                            ->keyBy('slot_number'),
         ];
     }
 }
