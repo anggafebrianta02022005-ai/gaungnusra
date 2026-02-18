@@ -139,10 +139,12 @@
     <div x-show="mobileMenu" class="fixed top-0 right-0 h-full w-[80%] max-w-[300px] bg-white z-[70] shadow-2xl p-6 overflow-y-auto" 
          x-transition:enter="transition transform ease-out duration-300" x-transition:enter-start="translate-x-full" x-transition:enter-end="translate-x-0"
          x-transition:leave="transition transform ease-in duration-300" x-transition:leave-start="translate-x-0" x-transition:leave-end="translate-x-full" style="display: none;">
+        
         <div class="flex justify-between items-center mb-8 border-b border-slate-100 pb-4">
             <h3 class="font-display font-bold text-lg text-brand-dark">Menu</h3>
             <button @click="mobileMenu = false" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 active:scale-95"><i class="ph-bold ph-x"></i></button>
         </div>
+        
         <div class="space-y-2">
             <a href="/" class="block px-3 py-2.5 text-sm font-bold rounded-lg {{ request()->is('/') ? 'text-brand-red bg-red-50' : 'text-slate-700 hover:bg-slate-50' }}">Berita Utama</a>
             @foreach($categories as $navCat)
@@ -151,7 +153,7 @@
         </div>
     </div>
 
-    {{-- IKLAN HEADER --}}
+    {{-- IKLAN HEADER (DENGAN LOGIKA POPUP) --}}
     <div class="px-4 pt-4 pb-2">
         @if($headerAd && $headerAd->image)
             @php 
@@ -164,7 +166,7 @@
                @else 
                     target="_blank" 
                @endif
-               class="block relative rounded-xl overflow-hidden shadow-sm border border-slate-100 group">
+               class="block relative rounded-xl overflow-hidden shadow-sm border border-slate-100 group transition-transform active:scale-95">
                
                <div class="absolute top-0 right-0 bg-brand-misty text-slate-600 text-[8px] font-bold px-2 py-0.5 rounded-bl-lg z-10 border-l border-b border-white">SPONSORED</div>
                <img src="{{ Storage::url($headerAd->image) }}" class="w-full h-auto object-cover max-h-[250px]">
@@ -174,6 +176,7 @@
 
     {{-- KONTEN UTAMA --}}
     <main class="flex-grow bg-white">
+        
         <div class="px-4 py-4">
             <div class="flex items-center gap-2 mb-4">
                 <div class="w-1 h-5 bg-brand-red rounded-full"></div>
@@ -230,9 +233,11 @@
                 @foreach($sidebarNews as $index => $sNews)
                     <a href="{{ route('news.show', $sNews->slug) }}" class="flex gap-4 items-center group">
                         <span class="text-2xl font-black text-slate-200 w-6 text-center group-hover:text-brand-red/50 transition-colors">{{ $index + 1 }}</span>
+                        
                         <div class="flex-1">
                             <h4 class="text-sm font-bold text-slate-800 leading-snug line-clamp-2 mb-1 group-hover:text-brand-red transition-colors">{{ $sNews->title }}</h4>
                         </div>
+                        
                         <div class="w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-slate-100">
                             <img src="{{ Storage::url($sNews->thumbnail) }}" class="w-full h-full object-cover">
                         </div>
@@ -241,10 +246,10 @@
             </div>
         </div>
 
-        {{-- UPDATE 4: IKLAN SIDEBAR / BAWAH (LOOPING 5 SLOT) --}}
-        {{-- Menggunakan Loop 1-5 untuk menampilkan iklan berdasarkan slot_number --}}
+        {{-- IKLAN SIDEBAR / BAWAH (LOOPING 5 SLOT) --}}
         <div class="px-4 pb-8 pt-2 space-y-4"> 
             
+            {{-- Loop 5 Slot --}}
             @if(isset($sidebarAds))
                 @for ($i = 1; $i <= 5; $i++)
                     @if(isset($sidebarAds[$i]))
@@ -253,7 +258,7 @@
                             $isPopup = empty($ad->link) || $ad->link === '#'; 
                         @endphp
 
-                        <div class="relative group">
+                        <div class="relative group block w-full">
                             <a href="{{ $isPopup ? 'javascript:void(0)' : $ad->link }}" 
                                @if($isPopup) 
                                     @click.prevent="lightboxOpen = true; lightboxImage = '{{ Storage::url($ad->image) }}'" 
@@ -271,21 +276,6 @@
                         </div>
                     @endif
                 @endfor
-            @elseif(isset($sidebarAd) && $sidebarAd->image)
-                {{-- FALLBACK: Jika Controller belum diupdate, pakai logic lama --}}
-                @php 
-                    $isPopup = empty($sidebarAd->link) || $sidebarAd->link === '#'; 
-                @endphp
-                <a href="{{ $isPopup ? 'javascript:void(0)' : $sidebarAd->link }}" 
-                   @if($isPopup) 
-                        @click.prevent="lightboxOpen = true; lightboxImage = '{{ Storage::url($sidebarAd->image) }}'" 
-                   @else 
-                        target="_blank" 
-                   @endif
-                   class="block relative rounded-xl overflow-hidden shadow-sm border border-slate-100">
-                   <span class="absolute top-0 right-0 bg-brand-misty text-slate-600 text-[8px] font-bold px-2 py-0.5 rounded-bl-lg z-10 border-l border-b border-white">ADS</span>
-                   <img src="{{ Storage::url($sidebarAd->image) }}" class="w-full h-auto object-cover">
-                </a>
             @endif
 
         </div>
@@ -346,12 +336,21 @@
         </div>
     </footer>
 
-    {{-- MODAL LIGHTBOX --}}
+    {{-- MODAL LIGHTBOX (WAJIB DI BAWAH) --}}
     <div x-show="lightboxOpen" 
-         x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-         x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-         class="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4" x-cloak>
-        <button @click="lightboxOpen = false" class="absolute top-6 right-6 text-white hover:text-brand-red transition-colors p-2 bg-black/50 rounded-full"><i class="ph-bold ph-x text-3xl"></i></button>
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         class="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4" 
+         x-cloak>
+        
+        <button @click="lightboxOpen = false" class="absolute top-6 right-6 text-white hover:text-brand-red transition-colors p-2 bg-black/50 rounded-full">
+            <i class="ph-bold ph-x text-3xl"></i>
+        </button>
+
         <div class="relative max-w-5xl w-full flex justify-center" @click.away="lightboxOpen = false">
             <img :src="lightboxImage" class="max-w-full max-h-[90vh] object-contain shadow-2xl rounded-lg">
         </div>

@@ -40,26 +40,30 @@ class HomeController extends Controller
         $categories = Category::where('is_active', true)->take(7)->get();
         $headerAd = Ad::where('position', 'header_top')->where('is_active', true)->latest()->first();
         
-        // Mengambil Iklan Sidebar (Logic 5 Slot untuk Mobile, atau Random untuk Desktop)
-        // Jika Anda sudah migrasi 5 slot, pakai logika keyBy('slot_number') di sini.
-        // Untuk saat ini saya pakai random dulu sesuai kode awal agar tidak error.
-        $sidebarAd = Ad::where('position', 'sidebar_right')->where('is_active', true)->inRandomOrder()->first();
+        // 4. IKLAN SIDEBAR (LOGIKA 5 SLOT)
+        // Mengambil semua iklan aktif, diurutkan slot 1-5, dan dijadikan Key Array
+        $sidebarAds = Ad::where('position', 'sidebar_right')
+            ->where('is_active', true)
+            ->whereNotNull('slot_number')
+            ->orderBy('slot_number')
+            ->get()
+            ->keyBy('slot_number');
 
-        // 4. TRENDING
+        // 5. TRENDING
         $sidebarNews = News::where('status', 'published')
             ->orderBy('views_count', 'desc')
             ->take(6)
             ->get();
 
-        // 5. RENDER VIEW
+        // 6. RENDER VIEW
         if ($agent->isMobile()) {
             return view('mobile.home', compact(
-                'company', 'categories', 'headerAd', 'sidebarAd', 'latestNews', 'sidebarNews'
+                'company', 'categories', 'headerAd', 'sidebarAds', 'latestNews', 'sidebarNews'
             ));
         }
 
         return view('home', compact(
-            'company', 'categories', 'headerAd', 'sidebarAd', 'latestNews', 'sidebarNews'
+            'company', 'categories', 'headerAd', 'sidebarAds', 'latestNews', 'sidebarNews'
         ));
     }
 
@@ -89,7 +93,14 @@ class HomeController extends Controller
         $company = CompanyProfile::first();
         $categories = Category::where('is_active', true)->take(7)->get();
         $headerAd = Ad::where('position', 'header_top')->where('is_active', true)->latest()->first();
-        $sidebarAd = Ad::where('position', 'sidebar_right')->where('is_active', true)->inRandomOrder()->first();
+        
+        // IKLAN SIDEBAR 5 SLOT
+        $sidebarAds = Ad::where('position', 'sidebar_right')
+            ->where('is_active', true)
+            ->whereNotNull('slot_number')
+            ->orderBy('slot_number')
+            ->get()
+            ->keyBy('slot_number');
 
         $sidebarNews = News::where('status', 'published')
             ->orderBy('views_count', 'desc')
@@ -98,12 +109,12 @@ class HomeController extends Controller
 
         if ($agent->isMobile()) {
             return view('mobile.category.show', compact(
-                'category', 'news', 'company', 'categories', 'headerAd', 'sidebarAd', 'sidebarNews'
+                'category', 'news', 'company', 'categories', 'headerAd', 'sidebarAds', 'sidebarNews'
             ));
         }
 
         return view('category.show', compact(
-            'category', 'news', 'company', 'categories', 'headerAd', 'sidebarAd', 'sidebarNews'
+            'category', 'news', 'company', 'categories', 'headerAd', 'sidebarAds', 'sidebarNews'
         ));
     }
 
@@ -123,7 +134,14 @@ class HomeController extends Controller
         $company = CompanyProfile::first();
         $categories = Category::where('is_active', true)->take(7)->get();
         $headerAd = Ad::where('position', 'header_top')->where('is_active', true)->latest()->first();
-        $sidebarAd = Ad::where('position', 'sidebar_right')->where('is_active', true)->inRandomOrder()->first();
+        
+        // IKLAN SIDEBAR 5 SLOT
+        $sidebarAds = Ad::where('position', 'sidebar_right')
+            ->where('is_active', true)
+            ->whereNotNull('slot_number')
+            ->orderBy('slot_number')
+            ->get()
+            ->keyBy('slot_number');
 
         $sidebarNews = News::where('status', 'published')
             ->orderBy('views_count', 'desc')
@@ -142,13 +160,13 @@ class HomeController extends Controller
         if ($agent->isMobile()) {
             if (view()->exists('mobile.news.show')) {
                 return view('mobile.news.show', compact(
-                    'news', 'company', 'categories', 'headerAd', 'sidebarAd', 'sidebarNews', 'relatedNews'
+                    'news', 'company', 'categories', 'headerAd', 'sidebarAds', 'sidebarNews', 'relatedNews'
                 ));
             }
         }
 
         return view('news.show', compact(
-            'news', 'company', 'categories', 'headerAd', 'sidebarAd', 'sidebarNews', 'relatedNews'
+            'news', 'company', 'categories', 'headerAd', 'sidebarAds', 'sidebarNews', 'relatedNews'
         ));
     }
 
@@ -161,9 +179,15 @@ class HomeController extends Controller
         
         $company = CompanyProfile::first();
         $categories = Category::where('is_active', true)->take(7)->get();
-        
         $headerAd = Ad::where('position', 'header_top')->where('is_active', true)->latest()->first();
-        $sidebarAd = Ad::where('position', 'sidebar_right')->where('is_active', true)->inRandomOrder()->first();
+        
+        // IKLAN SIDEBAR 5 SLOT
+        $sidebarAds = Ad::where('position', 'sidebar_right')
+            ->where('is_active', true)
+            ->whereNotNull('slot_number')
+            ->orderBy('slot_number')
+            ->get()
+            ->keyBy('slot_number');
 
         $sidebarNews = News::where('status', 'published')
             ->orderBy('views_count', 'desc')
@@ -172,17 +196,17 @@ class HomeController extends Controller
 
         if ($agent->isMobile()) {
             return view('mobile.pages.media-group', compact(
-                'company', 'categories', 'headerAd', 'sidebarAd', 'sidebarNews'
+                'company', 'categories', 'headerAd', 'sidebarAds', 'sidebarNews'
             ));
         }
 
         return view('pages.media-group', compact(
-            'company', 'categories', 'headerAd', 'sidebarAd', 'sidebarNews'
+            'company', 'categories', 'headerAd', 'sidebarAds', 'sidebarNews'
         ));
     }
 
     /**
-     * [BARU] Menampilkan Halaman Pasang Iklan
+     * Menampilkan Halaman Pasang Iklan
      */
     public function advertise()
     {
@@ -190,26 +214,29 @@ class HomeController extends Controller
         
         $company = CompanyProfile::first();
         $categories = Category::where('is_active', true)->take(7)->get();
-        
         $headerAd = Ad::where('position', 'header_top')->where('is_active', true)->latest()->first();
-        $sidebarAd = Ad::where('position', 'sidebar_right')->where('is_active', true)->inRandomOrder()->first();
+        
+        // IKLAN SIDEBAR 5 SLOT
+        $sidebarAds = Ad::where('position', 'sidebar_right')
+            ->where('is_active', true)
+            ->whereNotNull('slot_number')
+            ->orderBy('slot_number')
+            ->get()
+            ->keyBy('slot_number');
 
         $sidebarNews = News::where('status', 'published')
             ->orderBy('views_count', 'desc')
             ->take(6)
             ->get();
 
-        // Jika Mobile, arahkan ke file view mobile yang baru kita buat
         if ($agent->isMobile()) {
-            // Pastikan Anda menyimpan file tadi di: resources/views/mobile/pages/advertise.blade.php
             return view('mobile.pages.advertise', compact(
-                'company', 'categories', 'headerAd', 'sidebarAd', 'sidebarNews'
+                'company', 'categories', 'headerAd', 'sidebarAds', 'sidebarNews'
             ));
         }
 
-        // Jika Desktop (Fallback ke halaman page biasa jika belum ada view khusus)
         return view('pages.advertise', compact(
-            'company', 'categories', 'headerAd', 'sidebarAd', 'sidebarNews'
+            'company', 'categories', 'headerAd', 'sidebarAds', 'sidebarNews'
         ));
     }
 
