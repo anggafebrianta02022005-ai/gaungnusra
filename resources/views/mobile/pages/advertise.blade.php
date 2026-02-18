@@ -158,43 +158,43 @@
                 </p>
             </div>
 
-            {{-- List Layanan Iklan (Card Grid Modern) --}}
+            {{-- List Layanan Iklan (Card Grid Modern - INTERAKTIF) --}}
             <div class="grid grid-cols-2 gap-4 max-w-md mx-auto">
 
                 {{-- Iklan Header --}}
-                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex flex-col items-center text-center group hover:-translate-y-1 transition-transform duration-300">
-                    <div class="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center mb-3 text-blue-600 shadow-blue-100">
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center text-center group hover:shadow-lg hover:border-blue-200 transition-all duration-300 hover:-translate-y-1">
+                    <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center mb-4 text-blue-600 shadow-sm group-hover:bg-blue-600 group-hover:text-white transition-colors">
                         <i class="ph-fill ph-browser text-2xl"></i>
                     </div>
-                    <h3 class="font-display font-bold text-slate-800 text-sm mb-1">Header Utama</h3>
-                    <p class="text-[10px] text-slate-400 mb-0">Posisi Paling Atas</p>
+                    <h3 class="font-display font-bold text-slate-800 text-sm mb-1 group-hover:text-blue-600 transition-colors">Header Utama</h3>
+                    <p class="text-[10px] text-slate-400 mb-0 leading-tight">Posisi paling atas, terlihat semua pengunjung.</p>
                 </div>
 
                 {{-- Iklan Sidebar --}}
-                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex flex-col items-center text-center group hover:-translate-y-1 transition-transform duration-300">
-                    <div class="w-12 h-12 rounded-full bg-orange-50 flex items-center justify-center mb-3 text-orange-600 shadow-orange-100">
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center text-center group hover:shadow-lg hover:border-orange-200 transition-all duration-300 hover:-translate-y-1">
+                    <div class="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center mb-4 text-orange-600 shadow-sm group-hover:bg-orange-600 group-hover:text-white transition-colors">
                         <i class="ph-fill ph-sidebar text-2xl"></i>
                     </div>
-                    <h3 class="font-display font-bold text-slate-800 text-sm mb-1">Sidebar Sticky</h3>
-                    <p class="text-[10px] text-slate-400 mb-0">Tampil di Samping Berita</p>
+                    <h3 class="font-display font-bold text-slate-800 text-sm mb-1 group-hover:text-orange-600 transition-colors">Sidebar Sticky</h3>
+                    <p class="text-[10px] text-slate-400 mb-0 leading-tight">Selalu tampil di sisi kanan saat scroll berita.</p>
                 </div>
 
                 {{-- Advertorial --}}
-                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex flex-col items-center text-center group hover:-translate-y-1 transition-transform duration-300">
-                    <div class="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center mb-3 text-green-600 shadow-green-100">
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center text-center group hover:shadow-lg hover:border-green-200 transition-all duration-300 hover:-translate-y-1">
+                    <div class="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center mb-4 text-green-600 shadow-sm group-hover:bg-green-600 group-hover:text-white transition-colors">
                         <i class="ph-fill ph-article text-2xl"></i>
                     </div>
-                    <h3 class="font-display font-bold text-slate-800 text-sm mb-1">Advertorial</h3>
-                    <p class="text-[10px] text-slate-400 mb-0">Berita Promosi Khusus</p>
+                    <h3 class="font-display font-bold text-slate-800 text-sm mb-1 group-hover:text-green-600 transition-colors">Advertorial</h3>
+                    <p class="text-[10px] text-slate-400 mb-0 leading-tight">Artikel khusus untuk mengulas produk/jasa Anda.</p>
                 </div>
 
                 {{-- Sosmed Promo --}}
-                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex flex-col items-center text-center group hover:-translate-y-1 transition-transform duration-300">
-                    <div class="w-12 h-12 rounded-full bg-purple-50 flex items-center justify-center mb-3 text-purple-600 shadow-purple-100">
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center text-center group hover:shadow-lg hover:border-purple-200 transition-all duration-300 hover:-translate-y-1">
+                    <div class="w-12 h-12 rounded-xl bg-purple-50 flex items-center justify-center mb-4 text-purple-600 shadow-sm group-hover:bg-purple-600 group-hover:text-white transition-colors">
                         <i class="ph-fill ph-share-network text-2xl"></i>
                     </div>
-                    <h3 class="font-display font-bold text-slate-800 text-sm mb-1">Sosmed Blast</h3>
-                    <p class="text-[10px] text-slate-400 mb-0">Post IG/FB/Story</p>
+                    <h3 class="font-display font-bold text-slate-800 text-sm mb-1 group-hover:text-purple-600 transition-colors">Sosmed Blast</h3>
+                    <p class="text-[10px] text-slate-400 mb-0 leading-tight">Promosi di IG Story & Feed Gaung Nusra.</p>
                 </div>
 
             </div>
@@ -203,6 +203,7 @@
             <div class="mt-10 bg-brand-dark rounded-2xl p-6 text-center relative overflow-hidden shadow-lg">
                 <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
                 <div class="absolute top-0 right-0 -mr-6 -mt-6 w-24 h-24 bg-white/10 rounded-full blur-xl"></div>
+                <div class="absolute bottom-0 left-0 -ml-6 -mb-6 w-24 h-24 bg-brand-red/20 rounded-full blur-xl"></div>
                 
                 <div class="relative z-10">
                     <h3 class="font-display font-bold text-xl text-white mb-2">Konsultasi Harga?</h3>
@@ -299,6 +300,10 @@
                     </ul>
                 </div>
                 <div class="space-y-6">
+                    <div>
+                        <h3 class="font-display font-bold text-brand-dark mb-3 text-xs tracking-wide uppercase">Redaksi</h3>
+                        <ul class="space-y-2 text-slate-500 text-xs font-medium"><li><a href="{{ route('pages.about') }}" class="hover:text-brand-red transition-colors">Profil Redaksi</a></li></ul>
+                    </div>
                     <div>
                         <h3 class="font-display font-bold text-brand-dark mb-3 text-xs tracking-wide uppercase">Layanan</h3>
                         <ul class="space-y-2 text-slate-500 text-xs font-medium">
